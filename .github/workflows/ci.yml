@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 20
           cache: 'yarn'
-
+      - run: corepack enable
       - run: yarn ci
       - run: npx cypress install
 
@@ -38,6 +38,6 @@ jobs:
       # - run: npx nx-cloud record -- echo Hello World
       # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: npx nx run-many -t lint test build e2e
-      # Nx Cloud recommends fixess for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
+      # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()
