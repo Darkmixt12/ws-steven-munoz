@@ -25,13 +25,10 @@ jobs:
       # Uncomment this line to enable task distribution
       # - run: npx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
 
-      # Cache node_modules
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - run: npm ci
+      - name: Enable Corepack for Yarn v2+ PnP
+        run: corepack enable 
+      - name: Install dependencies
+        run: yarn install --immutable
       - run: npx cypress install
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
