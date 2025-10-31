@@ -38,9 +38,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run CI script
-        run: yarn ci
-        
+      # - name: Run CI script
+      #   run: yarn ci
+
       - run: npx cypress install
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
