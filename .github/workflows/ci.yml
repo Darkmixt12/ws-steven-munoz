@@ -35,6 +35,9 @@ jobs:
       - name: Enable Corepack for Yarn v2+ PnP
         run: corepack enable   
 
+      - name: Yarn install
+        run : yarn install
+        
       - run: yarn ci
       - run: npx cypress install
 
