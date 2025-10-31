@@ -19,6 +19,7 @@ jobs:
         with:
           filter: tree:0
           fetch-depth: 0
+          
 
       # This enables task distribution via Nx Cloud
       # Run this command as early as possible, before dependencies are installed
@@ -27,10 +28,6 @@ jobs:
       # - run: npx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
 
       # Cache node_modules
-      - uses: actions/checkout@v4
-        with:
-          node-version: 20
-
 
       - name: Enable Corepack for Yarn v2+ PnP
         run: corepack enable   
@@ -38,12 +35,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      # - name: Run CI script
-      #   run: yarn ci
-
+      - name: Run CI script
+        run: yarn ci
+        
       - run: npx cypress install
 
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
+      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloudq
       # - run: npx nx-cloud record -- echo Hello World
       # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: npx nx run-many -t lint test build e2e
