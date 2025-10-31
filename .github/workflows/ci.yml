@@ -30,8 +30,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           node-version: 20
-          cache: 'yarn'
-      - run: corepack enable
+
+
+      - name: Enable Corepack for Yarn v2+ PnP
+        run: corepack enable   
+
       - run: yarn ci
       - run: npx cypress install
 
