@@ -2,7 +2,9 @@
   "name": "@ws-steven-munoz/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "s": "yarn && npx nx lint steven-munoz && npx nx build steven-munoz && npx nx run-many -t test && npx nx serve steven-munoz"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.3.0",
@@ -54,5 +56,6 @@
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0"
-  }
+  },
+  "packageManager": "yarn@4.10.3"
 }
