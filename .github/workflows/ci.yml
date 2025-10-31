@@ -35,10 +35,12 @@ jobs:
       - name: Enable Corepack for Yarn v2+ PnP
         run: corepack enable   
 
-      - name: Yarn install
-        run : yarn install --inmutable
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      - run: yarn ci
+      - name: Run CI script
+        run: yarn ci
+        
       - run: npx cypress install
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
