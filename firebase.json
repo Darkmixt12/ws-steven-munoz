@@ -1,11 +1,7 @@
 {
   "hosting": {
     "public": "dist/apps/steven-munoz/browser",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
