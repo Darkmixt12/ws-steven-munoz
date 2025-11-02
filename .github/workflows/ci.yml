@@ -27,8 +27,6 @@ jobs:
 
       - name: Enable Corepack for Yarn v2+ PnP
         run: corepack enable 
-      - name: Prepare Yarn version
-        run: corepack prepare yarn@4.10.3 --activate
       - name: Install dependencies
         run: yarn install --immutable
       - run: npx cypress install
