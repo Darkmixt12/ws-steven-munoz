@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
+import { Layout } from './components/layout/layout';
 
-// export const stevenMunozDashboardRoutes: Route[] = [
-//   { path: '', component: StevenMunozDashboard },
-// ];
+export const DashboardRoutes: Route[] = [{ path: '', component: Layout }];
