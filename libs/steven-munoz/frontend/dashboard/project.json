@@ -1,0 +1,21 @@
+{
+  "name": "steven-munoz-dashboard",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/steven-munoz/frontend/dashboard/src",
+  "prefix": "steven-munoz",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/steven-munoz/frontend/dashboard/jest.config.ts",
+        "tsConfig": "libs/steven-munoz/frontend/dashboard/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
