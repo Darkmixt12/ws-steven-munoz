@@ -1,1 +1,14 @@
-<p>dashboardRoute works!</p>
+<div class="max-w-[1000px] mx-auto my-24">
+<div class="flex">
+    @for ( column of columns(); track column.id) {
+      <steven-munoz-dashboard-kanban-column class="flex-1 p-8 border-r">
+        <h2 class="text-2xl font-bold"> {{column.title}} </h2>
+
+        @for (ticket of column.tickets ; track ticket.id) {
+          <steven-munoz-dashboard-kanban-item [item]="ticket" class="mb-8 last:mb-0"></steven-munoz-dashboard-kanban-item>
+        }
+      </steven-munoz-dashboard-kanban-column>
+    }
+</div>
+
+</div>
