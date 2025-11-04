@@ -1,0 +1,18 @@
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.columnsDisplay {
+  display: flex;
+  justify-content: space-around
+}
+
+.testingDiv {
+    max-width: 1000px; /* límite máximo de ancho */
+    margin-left: auto; /* centra horizontalmente */
+    margin-right: auto;
+    margin-top: 1rem; /* Tailwind 'my-24' = 6rem (24 * 0.25rem) */
+    margin-bottom: 6rem;
+  
+}
