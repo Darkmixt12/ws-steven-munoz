@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { DashboardKanbanColumn } from '../../dashboardKanbanColumn/dashboardKanbanColumn';
 import { DashboardKanbanItem } from '../../dashboardKanbanItem/dashboardKanbanItem';
-import { KanbanColumn } from '../../../interfaces/kanban.interface';
+import { KanbanColumn, KanbanItem } from '../../../interfaces/kanban.interface';
+import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, DragDropModule, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop"
 
 @Component({
   selector: 'steven-munoz-dashboard-route',
-  imports: [DashboardKanbanColumn, DashboardKanbanItem],
+  imports: [DashboardKanbanColumn, DashboardKanbanItem, CdkDrag, CdkDropList, CdkDropListGroup, DragDropModule],
   templateUrl: './dashboardRoute.html',
   styleUrl: './dashboardRoute.scss',
 })
@@ -104,5 +105,23 @@ export class DashboardRoute {
 
   ])
 
+  drop(event: CdkDragDrop<KanbanItem[]>){
 
+    const {previousIndex, currentIndex, container, previousContainer} = event
+
+    if( container === previousContainer) {
+    moveItemInArray(container.data, previousIndex, currentIndex);
+    } else{
+      transferArrayItem(previousContainer.data, container.data, previousIndex ,currentIndex)
+    }
+  }
+
+
+  listDrop(event: CdkDragDrop<undefined>){
+
+    
+    const { previousIndex, currentIndex } = event
+
+    moveItemInArray(this.columns(), previousIndex, currentIndex)
+  }
 }

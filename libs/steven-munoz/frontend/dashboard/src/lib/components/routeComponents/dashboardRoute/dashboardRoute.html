@@ -1,14 +1,30 @@
 <div class="testingDiv max-w-[1000px] mx-auto my-24">
-<div class="columnsDisplay flex">
+  <div
+    class="columnsDisplay"
+    cdkDropListGroup
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="listDrop($event)"
+
+  >
     @for ( column of columns(); track column.id) {
-      <steven-munoz-dashboard-kanban-column class="flex-1 p-8 border-r">
-        <h1 class="text-5xl font-bold"> {{column.title}} </h1>
+    <steven-munoz-dashboard-kanban-column
+      cdkDrag
+      class="flex-1 p-8 border-r"
+      cdkDropList
+      [cdkDropListData]="column.tickets"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <h1 class="text-5xl font-bold">{{column.title}}</h1>
 
-        @for (ticket of column.tickets ; track ticket.id) {
-          <steven-munoz-dashboard-kanban-item [item]="ticket" class="mb-8 last:mb-0"></steven-munoz-dashboard-kanban-item>
-        }
-      </steven-munoz-dashboard-kanban-column>
+      @for (ticket of column.tickets ; track ticket.id) {
+      <steven-munoz-dashboard-kanban-item
+        cdkDrag
+        [item]="ticket"
+        class="mb-8 last:mb-0"
+      ></steven-munoz-dashboard-kanban-item>
+      }
+    </steven-munoz-dashboard-kanban-column>
     }
-</div>
-
+  </div>
 </div>
