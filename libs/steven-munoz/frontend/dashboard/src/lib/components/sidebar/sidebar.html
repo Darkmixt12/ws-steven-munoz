@@ -1,1 +1,16 @@
-<p>sidebar works!</p>
+<mat-toolbar class="mat-elevation-z3">
+  <button type="button" matIconButton class="example-icon" aria-label="Example icon-button with menu icon" (click)="collapsed.set(!collapsed())">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+        <steven-munoz-custom-side-nav-component [collapsed]="collapsed()"></steven-munoz-custom-side-nav-component>
+    </mat-sidenav>
+
+        <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+            <router-outlet></router-outlet>
+            hellow
+        </mat-sidenav-content>
+</mat-sidenav-container>
+

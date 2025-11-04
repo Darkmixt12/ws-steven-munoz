@@ -305,6 +305,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular/animations@npm:^20.3.9":
+  version: 20.3.9
+  resolution: "@angular/animations@npm:20.3.9"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/core": 20.3.9
+  checksum: 10c0/f178fc1714ac0625a5713b5d3d06bc254a2c9394f84a2edb87a03b7c0fc1ea6f5e0db0a3b3c544b7042defef6c53e66229e6e775ed607952f08a9cc500a4008b
+  languageName: node
+  linkType: hard
+
 "@angular/build@npm:~20.3.0":
   version: 20.3.8
   resolution: "@angular/build@npm:20.3.8"
@@ -382,6 +393,20 @@ __metadata:
     vitest:
       optional: true
   checksum: 10c0/95a6f654eb5e232ede06250968b122c0ffa43a702a1e303bbfd3de14a9df3a1bd2ebf7b38bd28024b402882d5d4879aaedaea7f66f494c84c3f661b4f2346e07
+  languageName: node
+  linkType: hard
+
+"@angular/cdk@npm:^20.2.11":
+  version: 20.2.11
+  resolution: "@angular/cdk@npm:20.2.11"
+  dependencies:
+    parse5: "npm:^8.0.0"
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ^20.0.0 || ^21.0.0
+    "@angular/core": ^20.0.0 || ^21.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: 10c0/03179f291f0eef54c72561683b989e69f228ac0b3058c1cde763c9eb1a5532aa83062a3c2b07f37e129bd3cd7bacc753ffa0e99029d6b04e4966f57c6bbc43f6
   languageName: node
   linkType: hard
 
@@ -495,6 +520,22 @@ __metadata:
   version: 20.3.9
   resolution: "@angular/language-service@npm:20.3.9"
   checksum: 10c0/4f2b81330067c2bdcfd4e69bb6b7bbfa0dd2600a9f96ca503d322ccaaf25ddf1c4c0fe4682b23e10fca5e1ea5603f1ef63a3670a5e2ddcb3362dd98a8c5c9519
+  languageName: node
+  linkType: hard
+
+"@angular/material@npm:^20.2.11":
+  version: 20.2.11
+  resolution: "@angular/material@npm:20.2.11"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/cdk": 20.2.11
+    "@angular/common": ^20.0.0 || ^21.0.0
+    "@angular/core": ^20.0.0 || ^21.0.0
+    "@angular/forms": ^20.0.0 || ^21.0.0
+    "@angular/platform-browser": ^20.0.0 || ^21.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: 10c0/d8cfde9a16d5b860bcb75f471f2ca6dc75305390313e83066c1a30f20fafb115fedea98b559f1639b1ae13bb29d666b2262f94d1494bbc02edc6cd96edad9d6d
   languageName: node
   linkType: hard
 
@@ -5420,6 +5461,50 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@primeng/themes@npm:^20.3.0":
+  version: 20.3.0
+  resolution: "@primeng/themes@npm:20.3.0"
+  dependencies:
+    "@primeuix/styled": "npm:^0.7.4"
+    "@primeuix/themes": "npm:^1.2.5"
+  checksum: 10c0/1a158b90189cf910ccb4dda506b6a1ff0b69b32c9476fedfa092263c7fba14b708fda31e1fda0645804b693b24e625a0f0d91af25890155985b04a8e8b1a5c27
+  languageName: node
+  linkType: hard
+
+"@primeuix/styled@npm:^0.7.3, @primeuix/styled@npm:^0.7.4":
+  version: 0.7.4
+  resolution: "@primeuix/styled@npm:0.7.4"
+  dependencies:
+    "@primeuix/utils": "npm:^0.6.1"
+  checksum: 10c0/e1ed3e6c4a36bd5a6722b8fcd3e79d9fd60a36f174e5d822fd2fa0ecace49508c548228462ff8033961e1aa1bece6ec87c04879097c3691044314629120e968c
+  languageName: node
+  linkType: hard
+
+"@primeuix/styles@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "@primeuix/styles@npm:1.2.5"
+  dependencies:
+    "@primeuix/styled": "npm:^0.7.3"
+  checksum: 10c0/49d8f5fca435e095c13bc7004187ee1d741004cf2696ed615e6a72d6732d928c55670f0f98700c3e040058746669d11abc7906f16c9b2f5631635d1260d01212
+  languageName: node
+  linkType: hard
+
+"@primeuix/themes@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "@primeuix/themes@npm:1.2.5"
+  dependencies:
+    "@primeuix/styled": "npm:^0.7.3"
+  checksum: 10c0/695c78e179b2c1d453ca18e3ddcbc3821231b151c5d3c7f6e491738a821b59baa539a5dfa5a8c88919bc16184a4ceaec429f4143657c2a49cf1c1389e8855ede
+  languageName: node
+  linkType: hard
+
+"@primeuix/utils@npm:^0.6.1, @primeuix/utils@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@primeuix/utils@npm:0.6.2"
+  checksum: 10c0/15014eac0a3c62a5d154fd5ba730417099643645545f04a01d107cd11e8c8578d8696c7901d6154dd9185c760073cd2336527744920e24ba148028b0fb8369b9
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -7241,7 +7326,9 @@ __metadata:
   dependencies:
     "@angular-devkit/core": "npm:~20.3.0"
     "@angular-devkit/schematics": "npm:~20.3.0"
+    "@angular/animations": "npm:^20.3.9"
     "@angular/build": "npm:~20.3.0"
+    "@angular/cdk": "npm:^20.2.11"
     "@angular/cli": "npm:~20.3.0"
     "@angular/common": "npm:~20.3.0"
     "@angular/compiler": "npm:~20.3.0"
@@ -7249,6 +7336,7 @@ __metadata:
     "@angular/core": "npm:~20.3.0"
     "@angular/forms": "npm:~20.3.0"
     "@angular/language-service": "npm:~20.3.0"
+    "@angular/material": "npm:^20.2.11"
     "@angular/platform-browser": "npm:~20.3.0"
     "@angular/platform-browser-dynamic": "npm:~20.3.0"
     "@angular/router": "npm:~20.3.0"
@@ -7261,6 +7349,8 @@ __metadata:
     "@nx/js": "npm:22.0.2"
     "@nx/web": "npm:22.0.2"
     "@nx/workspace": "npm:22.0.2"
+    "@primeng/themes": "npm:^20.3.0"
+    "@primeuix/themes": "npm:^1.2.5"
     "@schematics/angular": "npm:~20.3.0"
     "@swc-node/register": "npm:~1.9.1"
     "@swc/core": "npm:~1.5.7"
@@ -7280,6 +7370,8 @@ __metadata:
     jest-util: "npm:^29.7.0"
     nx: "npm:22.0.2"
     prettier: "npm:^2.6.2"
+    primeicons: "npm:^7.0.0"
+    primeng: "npm:^20.3.0"
     rxjs: "npm:~7.8.0"
     ts-jest: "npm:^29.1.0"
     ts-node: "npm:10.9.1"
@@ -17515,6 +17607,34 @@ __metadata:
     ansi-styles: "npm:^5.0.0"
     react-is: "npm:^18.0.0"
   checksum: 10c0/edc5ff89f51916f036c62ed433506b55446ff739358de77207e63e88a28ca2894caac6e73dcb68166a606e51c8087d32d400473e6a9fdd2dbe743f46c9c0276f
+  languageName: node
+  linkType: hard
+
+"primeicons@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "primeicons@npm:7.0.0"
+  checksum: 10c0/a7f6344d6db49e785d2040b35f8cae761d15bb8f8ee70ade8981d45438245414e913fe7235921122aade2b0a11a032c98b44dc527be2da11aa791ff145099c06
+  languageName: node
+  linkType: hard
+
+"primeng@npm:^20.3.0":
+  version: 20.3.0
+  resolution: "primeng@npm:20.3.0"
+  dependencies:
+    "@primeuix/styled": "npm:^0.7.4"
+    "@primeuix/styles": "npm:^1.2.5"
+    "@primeuix/utils": "npm:^0.6.2"
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/animations": ^20.0.4
+    "@angular/cdk": ^20.0.3
+    "@angular/common": ^20.0.4
+    "@angular/core": ^20.0.4
+    "@angular/forms": ^20.0.4
+    "@angular/platform-browser": ^20.0.4
+    "@angular/router": ^20.0.4
+    rxjs: ^6.0.0 || ^7.8.1
+  checksum: 10c0/e9b63282a755f0340760f7e33e8791f88b4202791cf71fd98298cd9c079107cc8a2f441005928e4f747737d2e3a0d7de281073d6922b7ffb3130736b6b17650a
   languageName: node
   linkType: hard
 
