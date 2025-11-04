@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, Input, signal } from '@an
 import { MatListModule } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon'
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
 
 
 export type MenuItem = {
@@ -12,7 +14,7 @@ export type MenuItem = {
 
 @Component({
   selector: 'steven-munoz-custom-side-nav-component',
-  imports: [MatListModule, MatIconModule, CommonModule],
+  imports: [MatListModule, MatIconModule, CommonModule, RouterModule],
   templateUrl: './CustomSideNavComponent.html',
   styleUrl: './CustomSideNavComponent.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +30,7 @@ export class CustomSideNavComponent {
     {
       icon: 'dashboard',
       label: 'Dashboard',
-      route: 'dashboard'
+      route: 'board'
     },
     {
       icon: 'video_library',
