@@ -3,10 +3,11 @@ import { DashboardKanbanColumn } from '../../dashboardKanbanColumn/dashboardKanb
 import { DashboardKanbanItem } from '../../dashboardKanbanItem/dashboardKanbanItem';
 import { KanbanColumn, KanbanItem } from '../../../interfaces/kanban.interface';
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, DragDropModule, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop"
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'steven-munoz-dashboard-route',
-  imports: [DashboardKanbanColumn, DashboardKanbanItem, CdkDrag, CdkDropList, CdkDropListGroup, DragDropModule],
+  imports: [DashboardKanbanColumn, DashboardKanbanItem, CdkDrag, CdkDropList, CdkDropListGroup, DragDropModule, RouterModule],
   templateUrl: './dashboardRoute.html',
   styleUrl: './dashboardRoute.scss',
 })

@@ -5,7 +5,7 @@
   "scripts": {
     "s": "yarn && npx nx lint steven-munoz && npx nx build steven-munoz && npx nx run-many -t test && npx nx serve steven-munoz",
     "build": " yarn && npx nx build steven-munoz && npx nx run-many -t test",
-    "r": "npx nx serve steven-munoz" 
+    "r": "npx nx serve steven-munoz"
   },
   "private": true,
   "dependencies": {

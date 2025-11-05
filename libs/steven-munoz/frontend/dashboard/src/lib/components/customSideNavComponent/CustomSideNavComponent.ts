@@ -14,6 +14,7 @@ export type MenuItem = {
 
 @Component({
   selector: 'steven-munoz-custom-side-nav-component',
+  standalone: true,
   imports: [MatListModule, MatIconModule, CommonModule, RouterModule],
   templateUrl: './CustomSideNavComponent.html',
   styleUrl: './CustomSideNavComponent.scss',

@@ -13,7 +13,8 @@ import { CustomSideNavComponent } from '../customSideNavComponent/CustomSideNavC
 
 @Component({
   selector: 'steven-munoz-sidebar',
-  imports: [DrawerModule,CustomSideNavComponent, ButtonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, RouterModule],
+  standalone: true,
+  imports: [DrawerModule,CustomSideNavComponent, RouterModule, ButtonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
