@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DashboardRoute } from './dashboardRoute';
+import { SideNavComponent } from './side-nav.component';
 import { provideRouter, RouterModule } from '@angular/router';
 
-describe('DashboardRoute', () => {
-  let component: DashboardRoute;
-  let fixture: ComponentFixture<DashboardRoute>;
+describe('SideNav', () => {
+  let component: SideNavComponent;
+  let fixture: ComponentFixture<SideNavComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardRoute,RouterModule],
-      providers: [provideRouter([])]
+      imports: [SideNavComponent, RouterModule],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardRoute);
+    fixture = TestBed.createComponent(SideNavComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

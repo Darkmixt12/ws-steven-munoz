@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CustomSideNavComponent } from './CustomSideNavComponent';
+import { KanbanTable } from './kanban-table.component';
 import { provideRouter, RouterModule } from '@angular/router';
 
-describe('CustomSideNavComponent', () => {
-  let component: CustomSideNavComponent;
-  let fixture: ComponentFixture<CustomSideNavComponent>;
+describe('KanbanTable', () => {
+  let component: KanbanTable;
+  let fixture: ComponentFixture<KanbanTable>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomSideNavComponent, RouterModule],
+      imports: [KanbanTable, RouterModule],
       providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CustomSideNavComponent);
+    fixture = TestBed.createComponent(KanbanTable);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
