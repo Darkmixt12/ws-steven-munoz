@@ -145,4 +145,5 @@ export class KanbanTable {
 
     moveItemInArray(this.columns(), previousIndex, currentIndex);
   }
+  
 }

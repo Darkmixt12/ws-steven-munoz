@@ -22,7 +22,7 @@ h1 {
   
 }
 
-.cdk-drag-preview {
+.cdk-drag-preview > div {
   /* Add your custom styles here */
   border: 2px solid rgb(0, 204, 255);
   scrollbar-width: none;

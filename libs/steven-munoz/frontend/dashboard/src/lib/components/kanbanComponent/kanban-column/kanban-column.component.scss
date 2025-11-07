@@ -1,5 +1,12 @@
+button {
+  border: none;
+  background: none;
+}
+.testing {
+  display: flex;
+}
 
-.testing{
-    display: flex;
-    
+.columnasItem {
+  display: flex;
+  flex-direction: column;
 }
