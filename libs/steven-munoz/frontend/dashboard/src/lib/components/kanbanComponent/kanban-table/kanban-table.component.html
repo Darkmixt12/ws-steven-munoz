@@ -7,7 +7,7 @@
       (cdkDropListDropped)="listDrop($event)"
 
   >
-    @for ( column of columns(); track column.id) {
+    @for ( column of testResource.value(); track column.id) {
     <steven-munoz-kanban-column
       cdkDrag
       class="flex-1 p-8 border-r"

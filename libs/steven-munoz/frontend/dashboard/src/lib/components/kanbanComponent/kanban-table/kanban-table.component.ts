@@ -7,11 +7,28 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { KanbanColumnComponent } from '../kanban-column/kanban-column.component';
 import { KanbanItemComponent } from '../kanban-item/kanban-item.component';
 import { RouterModule } from '@angular/router';
-import { KanbanColumn, KanbanItem } from '../../../types/kanban.interface';
+import {
+  FireStoreKanbanColumn,
+  KanbanColumn,
+  KanbanItem,
+} from '../../../types/kanban.interface';
+import {
+  collection,
+  collectionData,
+  CollectionReference,
+  Firestore,
+} from '@angular/fire/firestore';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -22,14 +39,29 @@ import { KanbanColumn, KanbanItem } from '../../../types/kanban.interface';
     CdkDropListGroup,
     DragDropModule,
     KanbanColumnComponent,
-    KanbanItemComponent
-
+    KanbanItemComponent,
   ],
   templateUrl: './kanban-table.component.html',
   styleUrl: './kanban-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanTable {
+  firestore = inject(Firestore);
+
+  testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
+    stream: () => {
+      const ref = collection(this.firestore,'board2/columns/title')as CollectionReference<FireStoreKanbanColumn>;
+      return collectionData(ref, { idField: 'id'} )
+    },
+    defaultValue: null
+  });
+
+  constructor() {
+    effect(() => {
+      console.log('Datos de Firestore:', this.testResource.value());
+    });
+  }
+
   columns = signal<KanbanColumn[]>([
     {
       id: '1',
@@ -145,5 +177,4 @@ export class KanbanTable {
 
     moveItemInArray(this.columns(), previousIndex, currentIndex);
   }
-  
 }
