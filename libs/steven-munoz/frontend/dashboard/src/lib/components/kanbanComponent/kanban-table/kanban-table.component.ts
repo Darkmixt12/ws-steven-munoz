@@ -50,7 +50,7 @@ export class KanbanTable {
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
-      const ref = collection(this.firestore,'board2/columns/title')as CollectionReference<FireStoreKanbanColumn>;
+      const ref = collection(this.firestore,'board2')as CollectionReference<FireStoreKanbanColumn>;
       return collectionData(ref, { idField: 'id'} )
     },
     defaultValue: null
