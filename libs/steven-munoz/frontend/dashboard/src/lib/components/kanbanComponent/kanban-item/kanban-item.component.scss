@@ -1,43 +1,38 @@
-/* Contenedor principal */
 div.bg-white {
-  background-color: white;      /* Fondo blanco */
-  padding: 1rem;                /* p-4 → 1rem (16px) */
-  border-radius: 0.5rem;        /* rounded-lg → 8px */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
-  cursor: pointer;   
-  margin-bottom: 15px;   
-  max-width: 260px;        /* cursor-pointer */
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-bottom: 15px;
+  max-width: 260px;
 }
 
-/* Título */
 .titletest {
-  font-weight: 600;             /* font-semibold */
-  margin-bottom: 1rem;          /* mb-4 → 16px */
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
-/* Descripción */
 .text-sm {
-  font-size: 0.875rem;          /* text-sm → 14px */
+  font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
-/* Contenedor del estado */
 .flex {
-  display: flex;                /* flex */
+  display: flex;
 }
 
 .justify-end {
-  justify-content: flex-end;    /* justify-end */
+  justify-content: flex-end;
 }
 
-/* Estado */
 div.px-4.py-1 {
-  padding-left: 1rem;           /* px-4 → 16px */
+  padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.25rem;         /* py-1 → 4px */
+  padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  border-radius: 9999px;        /* rounded-full → completamente redondeado */
-  margin-top: 1rem;             /* mt-4 → 16px */
+  border-radius: 9999px;
+  margin-top: 1rem;
 }
 
 .bg-green {
