@@ -58,7 +58,6 @@ export class KanbanTable {
       const ref = doc(this.firestore, 'board2/scrum');
       return docData(ref);
     },
-    defaultValue: null,
   });
 
   constructor() {
@@ -165,13 +164,16 @@ export class KanbanTable {
   drop(event: CdkDragDrop<KanbanItem[]>) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
-    if (container === previousContainer) 
-      return moveItemInArray(container.data, previousIndex, currentIndex)
+    if (container === previousContainer)
+      return moveItemInArray(container.data, previousIndex, currentIndex);
 
-    return transferArrayItem(previousContainer.data,container.data,previousIndex,currentIndex)
+    transferArrayItem(
+      previousContainer.data,
+      container.data,
+      previousIndex,
+      currentIndex
+    );
   }
-
-  
 
   async listDrop(event: CdkDragDrop<undefined>) {
     const { previousIndex, currentIndex } = event;
@@ -181,8 +183,8 @@ export class KanbanTable {
       currentIndex
     );
 
-  const ref = doc(this.firestore, 'board2', 'scrum');
-  const columns = this.testResource.value()?.columns;
-  await updateDoc(ref, {columns});
+    const ref = doc(this.firestore, 'board2', 'scrum');
+    const columns = this.testResource.value()?.columns;
+    await updateDoc(ref, { columns });
   }
 }
