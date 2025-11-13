@@ -26,7 +26,12 @@ import {
   collection,
   collectionData,
   CollectionReference,
+  doc,
+  docData,
   Firestore,
+  getDoc,
+  setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
 
@@ -50,10 +55,10 @@ export class KanbanTable {
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
-      const ref = collection(this.firestore,'board2')as CollectionReference<FireStoreKanbanColumn>;
-      return collectionData(ref, { idField: 'id'} )
+      const ref = doc(this.firestore, 'board2/scrum');
+      return docData(ref);
     },
-    defaultValue: null
+    defaultValue: null,
   });
 
   constructor() {
@@ -160,21 +165,24 @@ export class KanbanTable {
   drop(event: CdkDragDrop<KanbanItem[]>) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
-    if (container === previousContainer) {
-      moveItemInArray(container.data, previousIndex, currentIndex);
-    } else {
-      transferArrayItem(
-        previousContainer.data,
-        container.data,
-        previousIndex,
-        currentIndex
-      );
-    }
+    if (container === previousContainer) 
+      return moveItemInArray(container.data, previousIndex, currentIndex)
+
+    return transferArrayItem(previousContainer.data,container.data,previousIndex,currentIndex)
   }
 
-  listDrop(event: CdkDragDrop<undefined>) {
-    const { previousIndex, currentIndex } = event;
+  
 
-    moveItemInArray(this.columns(), previousIndex, currentIndex);
+  async listDrop(event: CdkDragDrop<undefined>) {
+    const { previousIndex, currentIndex } = event;
+    moveItemInArray(
+      this.testResource.value()?.columns,
+      previousIndex,
+      currentIndex
+    );
+
+  const ref = doc(this.firestore, 'board2', 'scrum');
+  const columns = this.testResource.value()?.columns;
+  await updateDoc(ref, {columns});
   }
 }
