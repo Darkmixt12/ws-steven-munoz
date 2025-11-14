@@ -1,10 +1,11 @@
 export interface KanbanColumn {
   id: string;
   title: string;
-  tickets: KanbanItem[];
+
 }
 
 export interface KanbanItem {
+  columnId: string;
   id: string;
   title: string;
   description: string;
