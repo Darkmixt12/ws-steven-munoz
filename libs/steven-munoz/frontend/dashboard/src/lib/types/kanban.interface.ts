@@ -1,7 +1,11 @@
 export interface KanbanColumn {
   id: string;
   title: string;
+}
 
+export interface Board {
+  columns: KanbanColumn[];
+  tickets: KanbanItem[];
 }
 
 export interface KanbanItem {
@@ -13,7 +17,6 @@ export interface KanbanItem {
   priority: 'High' | 'Medium' | 'Low';
 }
 
-
 // Interfaces para el FIREBASE BOARD
 export interface FireStoreKanbanColumn {
   id: number;
@@ -24,14 +27,12 @@ export interface FireStoreKanbanColumn {
   ticket: KanbanItem[];
 }
 
-
 export interface FireStoreKanbanItem {
   id: number;
   title: string;
   description: string;
   assignee: string;
-  client: string,
-  proposal: number
-  ranking: 'Bueno' | 'Medio' | 'Malo'
+  client: string;
+  proposal: number;
+  ranking: 'Bueno' | 'Medio' | 'Malo';
 }
-

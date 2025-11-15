@@ -18,19 +18,16 @@ import { KanbanColumnComponent } from '../kanban-column/kanban-column.component'
 import { KanbanItemComponent } from '../kanban-item/kanban-item.component';
 import { RouterModule } from '@angular/router';
 import {
+  Board,
   FireStoreKanbanColumn,
   KanbanColumn,
   KanbanItem,
 } from '../../../types/kanban.interface';
 import {
-  collection,
-  collectionData,
-  CollectionReference,
   doc,
   docData,
   Firestore,
-  getDoc,
-  setDoc,
+  runTransaction,
   updateDoc,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -71,7 +68,7 @@ export class KanbanTable {
       id: '1',
       title: 'To Do',
     },
-        {
+    {
       id: '2',
       title: 'To Progress',
     },
@@ -81,7 +78,7 @@ export class KanbanTable {
     },
   ]);
 
-    items = signal<KanbanItem[]>([
+  items = signal<KanbanItem[]>([
     {
       columnId: '1',
       assignee: 'Laura Gómez',
@@ -108,7 +105,7 @@ export class KanbanTable {
     },
   ]);
 
-  drop(event: CdkDragDrop<KanbanItem[]>, columnId: string) {
+  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: string) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
     if (container === previousContainer)
@@ -124,11 +121,29 @@ export class KanbanTable {
     const movedItem = container.data[currentIndex];
     movedItem.columnId = columnId;
 
+    const boardRef = doc(this.firestore, 'board2/scrum');
+
+    await runTransaction(this.firestore, async (transaction) => {
+      const boardSnap = await transaction.get(boardRef);
+
+      if (!boardSnap.exists()) return;
+
+      const board = boardSnap.data() as Board;
+
+      const updatedTickets = board.tickets.map((t: KanbanItem) =>
+        t.id === movedItem.id ? { ...t, columnId } : t
+      );
+
+      // ACTUALIZA DENTRO DE LA TRANSACCIÓN
+      transaction.update(boardRef, { tickets: updatedTickets });
+    });
   }
 
   getItemsByColumn(columnId: string) {
-  return this.items().filter(item => item.columnId === columnId);
-}
+    return (this.testResource.value()?.tickets ?? []).filter(
+      (item: KanbanItem) => item.columnId === columnId
+    );
+  }
 
   async listDrop(event: CdkDragDrop<undefined>) {
     const { previousIndex, currentIndex } = event;
