@@ -8,6 +8,11 @@
     "r": "npx nx serve steven-munoz"
   },
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*",
+    "libs/steven-munoz/backend/functions"
+  ],
   "dependencies": {
     "@angular/animations": "^20.3.9",
     "@angular/cdk": "^20.2.11",
