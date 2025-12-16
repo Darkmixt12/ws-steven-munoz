@@ -2,6 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LayoutComponent } from './layout.component';
 import { provideRouter, RouterModule } from '@angular/router';
 
+jest.mock('@angular/fire/firestore', () => ({
+  collection: jest.fn(),
+  collectionData: jest.fn(),
+  Firestore: jest.fn(),
+}));
 describe('Layout', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
