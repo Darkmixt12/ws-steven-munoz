@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CustomSideNavComponent } from './CustomSideNavComponent';
+import { provideRouter, RouterModule } from '@angular/router';
 
 describe('CustomSideNavComponent', () => {
   let component: CustomSideNavComponent;
@@ -7,7 +8,9 @@ describe('CustomSideNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomSideNavComponent],
+      imports: [CustomSideNavComponent, RouterModule],
+      providers: [provideRouter([])]
+
     }).compileComponents();
 
     fixture = TestBed.createComponent(CustomSideNavComponent);
