@@ -28,9 +28,9 @@ import {
   docData,
   Firestore,
   runTransaction,
-  updateDoc,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { DocumentsStore } from '../../../stores/scrumboardStore';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -49,6 +49,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 })
 export class KanbanTable {
   firestore = inject(Firestore);
+  store = inject(DocumentsStore)
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
@@ -155,6 +156,7 @@ export class KanbanTable {
 
     const ref = doc(this.firestore, 'board2', 'scrum');
     const columns = this.testResource.value()?.columns;
-    await updateDoc(ref, { columns });
+
+    this.store.updateDoc({ref, data: columns})
   }
 }

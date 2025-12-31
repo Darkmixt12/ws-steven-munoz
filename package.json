@@ -25,6 +25,8 @@
     "@angular/platform-browser": "~20.3.0",
     "@angular/platform-browser-dynamic": "~20.3.0",
     "@angular/router": "~20.3.0",
+    "@ngrx/signals": "^21.0.0",
+    "@ngrx/store": "^21.0.0",
     "@primeng/themes": "^20.3.0",
     "@primeuix/themes": "^1.2.5",
     "firebase": "^12.5.0",
