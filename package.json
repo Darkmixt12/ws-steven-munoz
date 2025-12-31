@@ -4,18 +4,26 @@
   "license": "MIT",
   "scripts": {
     "s": "yarn && npx nx lint steven-munoz && npx nx build steven-munoz && npx nx run-many -t test && npx nx serve steven-munoz",
-    "build": " yarn && npx nx build steven-munoz && npx nx run-many -t test"
+    "build": " yarn && npx nx build steven-munoz && npx nx run-many -t test",
+    "r": "npx nx serve steven-munoz" 
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.3.9",
+    "@angular/cdk": "^20.2.11",
     "@angular/common": "~20.3.0",
     "@angular/compiler": "~20.3.0",
     "@angular/core": "~20.3.0",
     "@angular/forms": "~20.3.0",
+    "@angular/material": "^20.2.11",
     "@angular/platform-browser": "~20.3.0",
     "@angular/platform-browser-dynamic": "~20.3.0",
     "@angular/router": "~20.3.0",
+    "@primeng/themes": "^20.3.0",
+    "@primeuix/themes": "^1.2.5",
     "firebase-tools": "^14.23.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^20.3.0",
     "rxjs": "~7.8.0",
     "zone.js": "~0.15.0"
   },

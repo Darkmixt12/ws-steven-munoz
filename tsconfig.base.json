@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "steven-munoz/dashboard": [
+        "libs/steven-munoz/frontend/dashboard/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
