@@ -1,0 +1,15 @@
+<mat-toolbar class="mat-elevation-z3">
+  <button type="button" matIconButton class="example-icon" aria-label="Example icon-button with menu icon" (click)="collapsed.set(!collapsed())">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav  opened mode="side" [style.width]="sidenavWidth()">
+        <steven-munoz-side-nav [collapsed]="collapsed()"></steven-munoz-side-nav>
+    </mat-sidenav>
+
+        <mat-sidenav-content [style.margin-left]="sidenavWidth()">
+          <router-outlet></router-outlet>
+        </mat-sidenav-content>
+</mat-sidenav-container>
+

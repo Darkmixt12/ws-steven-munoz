@@ -1,0 +1,13 @@
+  <div class="bg-white p-4 rounded-lg shadow-md cursor-pointer">
+      @let ticket = item();
+
+      <p class="titletest font-semibold mb-4">{{ ticket.title }}</p>
+
+      <p class="text-sm">{{ ticket.description }}</p>
+
+      <div class="flex justify-end">
+        <div [class]="color()" class="px-4 py-1 rounded-full mt-4">
+          <span>{{ statusText() }}</span>
+        </div>
+      </div>
+    </div>

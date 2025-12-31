@@ -1,19 +1,15 @@
 import { Route } from '@angular/router';
-import { Layout } from './components/layout/layout';
-import { DashboardRoute } from './components/routeComponents/dashboardRoute/dashboardRoute';
-import { ContentRoute } from './components/routeComponents/contentRoute/contentRoute';
-import { AnalyticsRoute } from './components/routeComponents/analyticsRoute/analyticsRoute';
-import { CommentsRoute } from './components/routeComponents/commentsRoute/commentsRoute';
+
+import { LayoutComponent } from './components/layout/layout.component';
+import { KanbanTable } from './components/kanbanComponent/kanban-table/kanban-table.component';
 
 export const DashboardRoutes: Route[] = [
   {
     path: '',
-    component: Layout,
+    component: LayoutComponent,
     children: [
-      { path: 'board', component: DashboardRoute },
-      { path: 'content', component: ContentRoute },
-      { path: 'analytics', component: AnalyticsRoute },
-      { path: 'comments', component: CommentsRoute },
+      { path: 'kanban', component: KanbanTable },
+      {path: '',redirectTo: 'board', pathMatch: 'full'}
     ],
   },
 ];

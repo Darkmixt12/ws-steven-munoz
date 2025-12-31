@@ -1,0 +1,51 @@
+div.bg-white {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-bottom: 15px;
+  max-width: 260px;
+}
+
+.titletest {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+div.px-4.py-1 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 9999px;
+  margin-top: 1rem;
+}
+
+.bg-green {
+  background-color: #22c55e; /* verde Tailwind */
+  color: white;
+}
+
+.bg-yellow {
+  background-color: #eab308; /* amarillo Tailwind */
+  color: white;
+}
+
+.bg-red {
+  background-color: #ef4444; /* rojo Tailwind */
+  color: white;
+}
