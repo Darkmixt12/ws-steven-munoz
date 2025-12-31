@@ -8,6 +8,7 @@ describe('KanbanItem', () => {
 
     const mockItem: KanbanItem = {
     assignee: 'Test Steven',
+    columnId: '1',
     description: 'Study',
     id: '1',
     priority: 'High',

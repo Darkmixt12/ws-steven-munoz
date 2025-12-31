@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  signal,
+} from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
 
 const statusMapperColors = {
@@ -13,7 +19,6 @@ const statusMapperText = {
   Low: 'Baja',
 };
 
-
 @Component({
   selector: 'steven-munoz-kanban-item',
   imports: [],
@@ -23,7 +28,7 @@ const statusMapperText = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemComponent {
-    item = input.required<KanbanItem>();
+  item = input.required<KanbanItem>();
 
   color = computed(() => {
     return statusMapperColors[this.item().priority];
@@ -32,4 +37,6 @@ export class KanbanItemComponent {
   statusText = computed(() => {
     return statusMapperText[this.item().priority];
   });
+
+
 }
