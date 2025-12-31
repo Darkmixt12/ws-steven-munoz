@@ -6564,6 +6564,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ngrx/signals@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "@ngrx/signals@npm:21.0.0"
+  dependencies:
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/core": ^21.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  peerDependenciesMeta:
+    rxjs:
+      optional: true
+  checksum: 10c0/0e7c4baad3675a20b2ec3f82522b0b41fe17d99a9966e865bc5a55e82051a26100ea0364cb4a6ff5dfd5d773505e14289358d47d7fb21687aa4b77ecf7d2758f
+  languageName: node
+  linkType: hard
+
+"@ngrx/store@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "@ngrx/store@npm:21.0.0"
+  dependencies:
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    "@angular/core": ^21.0.0
+    rxjs: ^6.5.3 || ^7.5.0
+  checksum: 10c0/a4b75e9c3f9ac87030d593960716581bbbda4cd3786998141a5e8420bfd275be1a92af57a820d218b9075815bc54dba4a557026ab238afde8f9adc9589e24af6
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -9811,6 +9838,8 @@ __metadata:
     "@angular/platform-browser-dynamic": "npm:~20.3.0"
     "@angular/router": "npm:~20.3.0"
     "@eslint/js": "npm:^9.8.0"
+    "@ngrx/signals": "npm:^21.0.0"
+    "@ngrx/store": "npm:^21.0.0"
     "@nx/angular": "npm:22.0.2"
     "@nx/cypress": "npm:22.0.2"
     "@nx/eslint": "npm:22.0.2"
