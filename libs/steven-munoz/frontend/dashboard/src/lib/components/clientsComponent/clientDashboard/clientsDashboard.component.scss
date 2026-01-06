@@ -1,0 +1,41 @@
+.header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around; /* mejor para header */
+}
+
+.header-btns {
+  display: flex;          /* 👈 CLAVE */
+  gap: 1rem;              /* separación entre botones */
+}
+
+.table-search{
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.material-scope {
+
+  border: 1px solid #000000; 
+  border-radius: 5px;       
+  overflow: hidden;         
+  width: 80%;              
+  max-width: 500px;         
+  margin: 0 auto;   
+}
+
+.card-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.card-wrapper p-card {
+  width: fit-content;
+  min-width: 600px;     /* opcional */
+  max-width: 1000px;    /* opcional */
+}
+
+
+

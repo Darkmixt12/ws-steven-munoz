@@ -5,7 +5,7 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
-
+@import "primeicons/primeicons.css";
 html {
   @include mat.theme((
     color: (
@@ -36,3 +36,7 @@ body {
 // @import "primeicons/primeicons.css";
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; --primary-color: #cc0000 }
+
+:root {
+  --p-primary-color: #3b82f6;
+}

@@ -7370,13 +7370,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeng/themes@npm:^20.3.0":
-  version: 20.4.0
-  resolution: "@primeng/themes@npm:20.4.0"
+"@primeng/themes@npm:^21.0.2":
+  version: 21.0.2
+  resolution: "@primeng/themes@npm:21.0.2"
   dependencies:
     "@primeuix/styled": "npm:^0.7.4"
-    "@primeuix/themes": "npm:^1.2.5"
-  checksum: 10c0/3c01846388ef26f71908948f61b2d8b5e2cb98ce4882d4a279a3502d873e3d31eb03d10c0593cc68d1747551e6258f1c3a8a79c2ec7f53b0957c1b6e124e0237
+    "@primeuix/themes": "npm:^2.0.2"
+  checksum: 10c0/bfa5301acfbf5053a8570aece901fb951a122369f7272c096fe867b34fd89fed88d1d4e6b3ca8d35dec9bea41b21d90323d06b2564e7c089a5f408789610d772
   languageName: node
   linkType: hard
 
@@ -7404,6 +7404,15 @@ __metadata:
   dependencies:
     "@primeuix/styled": "npm:^0.7.3"
   checksum: 10c0/695c78e179b2c1d453ca18e3ddcbc3821231b151c5d3c7f6e491738a821b59baa539a5dfa5a8c88919bc16184a4ceaec429f4143657c2a49cf1c1389e8855ede
+  languageName: node
+  linkType: hard
+
+"@primeuix/themes@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@primeuix/themes@npm:2.0.2"
+  dependencies:
+    "@primeuix/styled": "npm:^0.7.4"
+  checksum: 10c0/a79a6d8121de206a280316a2bf4da433d2e4a7c858ea2055f99287c2d7f95f756e950a61544d7e99f0cb7552656fdc0cf8d8b487ca8caf8b4108d6b8ebcb15da
   languageName: node
   linkType: hard
 
@@ -9848,7 +9857,7 @@ __metadata:
     "@nx/js": "npm:22.0.2"
     "@nx/web": "npm:22.0.2"
     "@nx/workspace": "npm:22.0.2"
-    "@primeng/themes": "npm:^20.3.0"
+    "@primeng/themes": "npm:^21.0.2"
     "@primeuix/themes": "npm:^1.2.5"
     "@schematics/angular": "npm:~20.3.0"
     "@swc-node/register": "npm:~1.9.1"

@@ -1,0 +1,20 @@
+.dialog-form {
+  display: flex;
+  justify-content: center;
+}
+
+.dialog-form form {
+  width: 100%;
+  max-width: 420px; /* 🔥 tamaño ideal CRM */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Botones */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
