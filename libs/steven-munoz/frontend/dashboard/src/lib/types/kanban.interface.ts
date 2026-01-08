@@ -12,6 +12,7 @@ export interface KanbanItem {
   columnId: string;
   id: string;
   title: string;
+  proposal: number;
   description: string;
   assignee: string;
   priority: 'High' | 'Medium' | 'Low';

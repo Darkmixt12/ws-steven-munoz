@@ -32,6 +32,9 @@ import {
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DocumentsStore } from '../../../stores/scrumboardStore';
 
+
+import { ButtonModule } from 'primeng/button';
+
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
@@ -42,6 +45,7 @@ import { DocumentsStore } from '../../../stores/scrumboardStore';
     DragDropModule,
     KanbanColumnComponent,
     KanbanItemComponent,
+    ButtonModule
   ],
   templateUrl: './kanban-table.component.html',
   styleUrl: './kanban-table.component.scss',
@@ -76,33 +80,6 @@ export class KanbanTable {
     {
       id: '3',
       title: 'To End',
-    },
-  ]);
-
-  items = signal<KanbanItem[]>([
-    {
-      columnId: '1',
-      assignee: 'Laura Gómez',
-      description: 'Actualizar el diseño del panel principal.',
-      id: '1',
-      priority: 'High',
-      title: 'Revisión de interfaz',
-    },
-    {
-      columnId: '2',
-      assignee: 'Carlos Rivera',
-      description: 'Corregir errores en el formulario de registro.',
-      id: '2',
-      priority: 'Medium',
-      title: 'Bug en registro de usuarios',
-    },
-    {
-      columnId: '3',
-      assignee: 'Andrea López',
-      description: 'Agregar validación al campo de correo electrónico.',
-      id: '3',
-      priority: 'Low',
-      title: 'Validación pendiente',
     },
   ]);
 

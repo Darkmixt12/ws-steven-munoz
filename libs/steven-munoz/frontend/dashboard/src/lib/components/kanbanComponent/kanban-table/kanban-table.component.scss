@@ -1,25 +1,23 @@
 h1 {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .columnsDisplay {
   display: flex;
-  justify-content: space-around
+  justify-content: center;
+  gap : 1.5rem
 }
 
 .testingDiv {
-    max-width: 1000px; /* límite máximo de ancho */
-    margin-left: auto; /* centra horizontalmente */
-    margin-right: auto;
-    margin-top: 1rem; /* Tailwind 'my-24' = 6rem (24 * 0.25rem) */
-    margin-bottom: 5rem;
-  
+  margin-left: auto; 
+  margin-right: auto;
+  margin-top: 1rem; 
+  margin-bottom: 5rem;
 }
 
 .cdk-drag-placeholder {
   opacity: 0;
-  
 }
 
 .cdk-drag-preview > div {
@@ -28,11 +26,65 @@ h1 {
   scrollbar-width: none;
   border-radius: 5px;
   box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drop-list-dragging .cdk-drag {
-  transition: transform 500ms cubic-bezier(0,0,0.2,1)
+  transition: transform 500ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+// SCRUMBOARD HEADER //
+
+.header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.header-btns {
+  display: flex;
+  gap: 1rem;
+}
+
+.kanban-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+// testeo de escalas
+
+.kanban-space {
+  margin-top: 2rem; /* espacio base */
+}
+
+/* Board escalado */
+.columnsDisplay {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  transform: scale(var(--kanban-scale));
+  transform-origin: top center;
+}
+
+/* Compensación automática según escala */
+@media (min-width: 1600px) {
+  .kanban-space {
+    margin-top: 2rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .kanban-space {
+    margin-top: 4rem;
+  }
+}
+
+@media (min-width: 2560px) {
+  .kanban-space {
+    margin-top: 6rem;
+  }
+}
+
+
 

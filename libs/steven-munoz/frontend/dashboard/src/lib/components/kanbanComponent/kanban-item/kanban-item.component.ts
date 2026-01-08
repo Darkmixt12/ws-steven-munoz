@@ -3,9 +3,10 @@ import {
   Component,
   computed,
   input,
-  signal,
 } from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
+import { CommonModule } from '@angular/common';
+import { ChipModule } from 'primeng/chip';
 
 const statusMapperColors = {
   Medium: 'bg-yellow-200',
@@ -21,7 +22,7 @@ const statusMapperText = {
 
 @Component({
   selector: 'steven-munoz-kanban-item',
-  imports: [],
+  imports: [CommonModule, ChipModule ],
   standalone: true,
   templateUrl: './kanban-item.component.html',
   styleUrl: './kanban-item.component.scss',
@@ -38,5 +39,13 @@ export class KanbanItemComponent {
     return statusMapperText[this.item().priority];
   });
 
+
+  priorityColor(priority: 'Low' | 'Medium' | 'High') {
+  return {
+    Low: 'priority-low',
+    Medium: 'priority-medium',
+    High: 'priority-high',
+  }[priority];
+}
 
 }

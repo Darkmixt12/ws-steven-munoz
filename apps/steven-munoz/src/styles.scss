@@ -37,6 +37,33 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; --primary-color: #cc0000 }
 
+
+
+
 :root {
-  --p-primary-color: #3b82f6;
+  --kanban-scale: 1;
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --kanban-scale: 1;
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --kanban-scale: 1;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --kanban-scale: 1;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --kanban-scale: 1.2;
+  }
 }
