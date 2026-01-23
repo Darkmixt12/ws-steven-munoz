@@ -1,0 +1,58 @@
+
+<div class="priority-form">
+  <form [formGroup]="exampleForm" (ngSubmit)="submit()">
+<p-autoComplete
+  formControlName="client"
+  [suggestions]="filteredClients()"
+  field="name"
+  optionLabel="name"
+  optionValue="name"
+  (completeMethod)="searchClients($event)"
+  [dropdown]="true"
+  appendTo="body"
+>
+
+  <ng-template pTemplate="item" let-client>
+    {{ client.name }}
+  </ng-template>
+
+    <ng-template pTemplate="selectedItem" let-client>
+    {{ client?.name }}
+  </ng-template>
+</p-autoComplete>
+
+
+<p-inputnumber placeholder="Amount" formControlName="proposal"  inputId="currency-us" mode="currency" currency="USD" locale="en-US" />
+
+<input type="text" formControlName="title" pInputText placeholder="Title" />
+
+<input type="text" formControlName="description" pInputText placeholder="Description" />
+
+
+    <div class="flex flex-wrap gap-4">
+      @for (category of categories; track category.key) {
+        <div class="flex items-center gap-2">
+          <p-radioButton
+            formControlName="priority"
+            name="selectedCategory"          
+            [inputId]="category.key"
+            [value]="category.key" />      
+
+          <label [for]="category.key">
+            {{ category.name }}
+          </label>
+        </div>
+      }
+    </div>
+
+    @if (isInvalid('selectedCategory')) {
+      <p-message severity="error" size="small" variant="simple">
+        At least one ingredient must be selected.
+      </p-message>
+    }
+
+    <p-button type="submit" label="Crear Item" severity="warn" ></p-button>
+
+
+  </form>
+</div>

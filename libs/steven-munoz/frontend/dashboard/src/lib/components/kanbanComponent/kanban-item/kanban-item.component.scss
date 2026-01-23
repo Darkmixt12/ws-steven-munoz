@@ -92,4 +92,13 @@ div.px-4.py-1 {
   background-color: #ef4444; /* rojo */
 }
 
+.title-btn{
+  display: flex;
+  justify-content: space-between;
+}
+
+::ng-deep .trash-btn {
+  width: 2rem;
+  height: 2rem;
+}
 

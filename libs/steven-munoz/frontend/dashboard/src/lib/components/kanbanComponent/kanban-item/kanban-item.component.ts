@@ -2,11 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  EventEmitter,
+  Input,
   input,
+  Output,
 } from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
 import { CommonModule } from '@angular/common';
 import { ChipModule } from 'primeng/chip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+
 
 const statusMapperColors = {
   Medium: 'bg-yellow-200',
@@ -22,7 +30,7 @@ const statusMapperText = {
 
 @Component({
   selector: 'steven-munoz-kanban-item',
-  imports: [CommonModule, ChipModule ],
+  imports: [CommonModule, ChipModule, ConfirmDialogModule, ToastModule, ButtonModule],
   standalone: true,
   templateUrl: './kanban-item.component.html',
   styleUrl: './kanban-item.component.scss',
@@ -30,6 +38,8 @@ const statusMapperText = {
 })
 export class KanbanItemComponent {
   item = input.required<KanbanItem>();
+  
+
 
   color = computed(() => {
     return statusMapperColors[this.item().priority];
@@ -47,5 +57,23 @@ export class KanbanItemComponent {
     High: 'priority-high',
   }[priority];
 }
+
+@Input() ticket!: KanbanItem
+@Output() delete = new EventEmitter<{event: Event, id: number | undefined}>()
+
+
+
+
+//! CONFIRMATION DIALOG 
+
+    confirmDelete(event: Event, id: number | undefined){
+        this.delete.emit({event, id: this.ticket.id})
+    }
+
+
+
+
+
+
 
 }

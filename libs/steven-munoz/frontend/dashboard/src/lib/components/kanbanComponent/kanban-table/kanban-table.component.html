@@ -1,10 +1,11 @@
 
 <div>
+      <p-toast  position="bottom-center"  />
 
     <div class="header-card">
       <h2>Scrumboard</h2>
       <div class="header-btns">
-      <p-button label="Crear Tarjeta" severity="warn" />
+      <p-button label="Crear Tarjeta" severity="warn" (onClick)="show()" />
       </div>
 
     </div>
@@ -33,6 +34,8 @@
 
       @for (ticket of getItemsByColumn(column.id); track ticket.id) {
       <steven-munoz-kanban-item
+        [ticket]="ticket"
+        (delete)="openDeleteDialog($event)"
         cdkDrag
         [item]="ticket"
         class="mb-8 last:mb-0"

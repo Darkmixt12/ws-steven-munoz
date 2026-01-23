@@ -34,6 +34,11 @@ import { DocumentsStore } from '../../../stores/scrumboardStore';
 
 
 import { ButtonModule } from 'primeng/button';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { KanbanItemCreateComponent } from '../kanban-item-create/kanban-item.create.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -45,8 +50,10 @@ import { ButtonModule } from 'primeng/button';
     DragDropModule,
     KanbanColumnComponent,
     KanbanItemComponent,
-    ButtonModule
+    ButtonModule,
+    ToastModule
   ],
+  providers: [DialogService, MessageService, ConfirmationService],
   templateUrl: './kanban-table.component.html',
   styleUrl: './kanban-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,6 +61,13 @@ import { ButtonModule } from 'primeng/button';
 export class KanbanTable {
   firestore = inject(Firestore);
   store = inject(DocumentsStore)
+  dialogService = inject(DialogService)
+  ref: DynamicDialogRef | null = null;
+  readonly scrumboardStore = inject(DocumentsStore);
+  readonly messageService = inject(MessageService)
+  readonly confirmationService = inject(ConfirmationService)
+
+
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
@@ -83,7 +97,7 @@ export class KanbanTable {
     },
   ]);
 
-  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: string) {
+  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
     if (container === previousContainer)
@@ -117,7 +131,7 @@ export class KanbanTable {
     });
   }
 
-  getItemsByColumn(columnId: string) {
+  getItemsByColumn(columnId: number) {
     return (this.testResource.value()?.tickets ?? []).filter(
       (item: KanbanItem) => item.columnId === columnId
     );
@@ -136,4 +150,55 @@ export class KanbanTable {
 
     this.store.updateDoc({ref, data: columns})
   }
+
+
+    show() {
+          this.ref = this.dialogService.open(KanbanItemCreateComponent, { 
+            header: 'Crear Nuevo Item',
+            width: '20vw',
+            height: '50vh',
+            closable: true,
+            modal: true,
+            
+          });
+      }
+
+
+openDeleteDialog(payload: { event: Event, id: number | undefined }) {
+  this.confirmationService.confirm({
+    target: payload.event.target as EventTarget,
+    message: 'Realmente quiere eliminar este registro?',
+    header: 'Cuidado',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    rejectButtonProps: {
+      label: 'Cancelar',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptButtonProps: {
+      label: 'Eliminar',
+      severity: 'danger'
+    },
+    accept: () => {
+      this.scrumboardStore.firestoreService.deleteScrumboardItem(payload.id)
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Confirmado',
+        detail: 'Has eliminado el ticket con exito'
+      });
+
+    },
+    reject: () => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Rechazado',
+        detail: 'Has rechazado la eliminación'
+      });
+    }
+  });
+}
+
+
+
 }

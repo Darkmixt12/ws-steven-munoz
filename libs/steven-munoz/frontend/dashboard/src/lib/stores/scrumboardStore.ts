@@ -9,6 +9,7 @@ import {
 import { FirestoreService } from '../services/firestore.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap } from 'rxjs';
+import { KanbanItem } from '../types/kanban.interface';
 
 export const DocumentsStore = signalStore(
   { providedIn: 'root' },
@@ -30,6 +31,10 @@ export const DocumentsStore = signalStore(
       pipe(
         switchMap( ({ref,data}) => store.firestoreService.updateDoc(ref,data))
       )
-    )
+    ),
+
+    deleteScrumItem: (id: number | undefined) => store.firestoreService.deleteScrumboardItem(id),
+
+    newScrumItem: (scrumItem: KanbanItem) => store.firestoreService.createScrumboardItem(scrumItem)
   }))
 );

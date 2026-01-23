@@ -1,7 +1,24 @@
-<div class="bg-white p-4 rounded-lg shadow-md cursor-pointer">
-  @let ticket = item();
 
-  <h3 class="titletest font-semibold mb-4">{{ ticket.title }}</h3>
+<div class="bg-white p-4 rounded-lg shadow-md cursor-pointer">
+@let ticket = item();
+
+
+  <div class="title-btn">
+    <h3 class="titletest font-semibold mb-4">{{ ticket.title }}</h3>
+    <div>
+      <p-confirmdialog />
+      <p-button
+        icon="pi pi-trash"
+        (click)="confirmDelete($event, ticket.id)"
+        size="small"
+        severity="danger"
+        variant="text"
+        styleClass="trash-btn"
+        
+      >
+      </p-button>
+    </div>
+  </div>
 
   <p class="text-sm">{{ ticket.description }}</p>
 
@@ -20,4 +37,5 @@
       <span class="label">{{ ticket.priority }}</span>
     </div>
   </div>
+
 </div>
