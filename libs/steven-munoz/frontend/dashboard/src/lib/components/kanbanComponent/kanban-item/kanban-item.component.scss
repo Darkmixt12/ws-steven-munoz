@@ -102,3 +102,24 @@ div.px-4.py-1 {
   height: 2rem;
 }
 
+
+// ANGULAR POPOVER PARA EDIT Y ELIMINAR DEL SCRUMBOARD
+
+.menu-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.ticket-popover .menu-option:hover {
+  background-color: var(--p-surface-hover, #f3f4f6);
+}
+
+.ticket-popover .menu-option.danger {
+  color: var(--p-red-500, #ef4444);
+}
+
+

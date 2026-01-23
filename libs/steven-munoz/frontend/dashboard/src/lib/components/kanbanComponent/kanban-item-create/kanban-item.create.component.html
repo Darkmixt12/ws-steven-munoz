@@ -51,7 +51,7 @@
       </p-message>
     }
 
-    <p-button type="submit" label="Crear Item" severity="warn" ></p-button>
+    <p-button type="submit" [label]="isEditMode ? 'Actualizar Item' : 'Crear Item'" severity="warn" ></p-button>
 
 
   </form>

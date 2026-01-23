@@ -32,13 +32,11 @@ import {
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DocumentsStore } from '../../../stores/scrumboardStore';
 
-
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { KanbanItemCreateComponent } from '../kanban-item-create/kanban-item.create.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -51,7 +49,7 @@ import { ToastModule } from 'primeng/toast';
     KanbanColumnComponent,
     KanbanItemComponent,
     ButtonModule,
-    ToastModule
+    ToastModule,
   ],
   providers: [DialogService, MessageService, ConfirmationService],
   templateUrl: './kanban-table.component.html',
@@ -60,14 +58,12 @@ import { ToastModule } from 'primeng/toast';
 })
 export class KanbanTable {
   firestore = inject(Firestore);
-  store = inject(DocumentsStore)
-  dialogService = inject(DialogService)
+  store = inject(DocumentsStore);
+  dialogService = inject(DialogService);
   ref: DynamicDialogRef | null = null;
   readonly scrumboardStore = inject(DocumentsStore);
-  readonly messageService = inject(MessageService)
-  readonly confirmationService = inject(ConfirmationService)
-
-
+  readonly messageService = inject(MessageService);
+  readonly confirmationService = inject(ConfirmationService);
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
@@ -148,57 +144,62 @@ export class KanbanTable {
     const ref = doc(this.firestore, 'board2', 'scrum');
     const columns = this.testResource.value()?.columns;
 
-    this.store.updateDoc({ref, data: columns})
+    this.store.updateDoc({ ref, data: columns });
   }
 
+  openCreateDialog() {
+    this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      data: { item: null },
+      header: 'Crear Nuevo Item',
+      width: '20vw',
+      height: '50vh',
+      closable: true,
+      modal: true,
+    });
+  }
 
-    show() {
-          this.ref = this.dialogService.open(KanbanItemCreateComponent, { 
-            header: 'Crear Nuevo Item',
-            width: '20vw',
-            height: '50vh',
-            closable: true,
-            modal: true,
-            
-          });
-      }
+  openEditDialog(payload: { event: Event; id: KanbanItem }) {
+    this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      data: { item: payload.id },
+      header: 'Editar Item',
+      width: '20vw',
+      height: '50vh',
+      closable: true,
+      modal: true,
+    });
+  }
 
-
-openDeleteDialog(payload: { event: Event, id: number | undefined }) {
-  this.confirmationService.confirm({
-    target: payload.event.target as EventTarget,
-    message: 'Realmente quiere eliminar este registro?',
-    header: 'Cuidado',
-    icon: 'pi pi-info-circle',
-    rejectLabel: 'Cancel',
-    rejectButtonProps: {
-      label: 'Cancelar',
-      severity: 'secondary',
-      outlined: true
-    },
-    acceptButtonProps: {
-      label: 'Eliminar',
-      severity: 'danger'
-    },
-    accept: () => {
-      this.scrumboardStore.firestoreService.deleteScrumboardItem(payload.id)
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Confirmado',
-        detail: 'Has eliminado el ticket con exito'
-      });
-
-    },
-    reject: () => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Rechazado',
-        detail: 'Has rechazado la eliminación'
-      });
-    }
-  });
-}
-
-
-
+  openDeleteDialog(payload: { event: Event; id: number | undefined }) {
+    this.confirmationService.confirm({
+      target: payload.event.target as EventTarget,
+      message: 'Realmente quiere eliminar este registro?',
+      header: 'Cuidado',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.scrumboardStore.firestoreService.deleteScrumboardItem(payload.id);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Confirmado',
+          detail: 'Has eliminado el ticket con exito',
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rechazado',
+          detail: 'Has rechazado la eliminación',
+        });
+      },
+    });
+  }
 }

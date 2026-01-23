@@ -74,6 +74,41 @@ export class FirestoreService {
     }
   }
 
+  async updateScrumboardTicket(updatedTicket: KanbanItem){
+
+    const scrumRef = doc(this.firestore, 'board2', 'scrum');
+    
+    await runTransaction(this.firestore, async (transaction) => {
+      const snap = await transaction.get(scrumRef)
+
+      if (!snap.exists()){
+        throw new Error('El documento no existe')
+      }
+
+      const tickets = snap.data()?.['tickets'] as KanbanItem[] ?? []
+
+      const updatedTickets = tickets.map( ticket => ticket.id === updatedTicket.id ? { ...ticket, ...updatedTicket} : ticket)
+
+      transaction.update(scrumRef, {tickets: updatedTickets})
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   deleteDoc(ref: DocumentReference<any>) {
     return deleteDoc(ref);
   }

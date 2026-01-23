@@ -5,7 +5,7 @@
     <div class="header-card">
       <h2>Scrumboard</h2>
       <div class="header-btns">
-      <p-button label="Crear Tarjeta" severity="warn" (onClick)="show()" />
+      <p-button label="Crear Tarjeta" severity="warn" (onClick)="openCreateDialog()" />
       </div>
 
     </div>
@@ -36,6 +36,8 @@
       <steven-munoz-kanban-item
         [ticket]="ticket"
         (delete)="openDeleteDialog($event)"
+        (edit)="openEditDialog($event)"
+
         cdkDrag
         [item]="ticket"
         class="mb-8 last:mb-0"

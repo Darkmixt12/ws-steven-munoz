@@ -35,6 +35,8 @@ export const DocumentsStore = signalStore(
 
     deleteScrumItem: (id: number | undefined) => store.firestoreService.deleteScrumboardItem(id),
 
+    updateScrumItem: (scrumItem: KanbanItem) => store.firestoreService.updateScrumboardTicket(scrumItem),
+
     newScrumItem: (scrumItem: KanbanItem) => store.firestoreService.createScrumboardItem(scrumItem)
   }))
 );

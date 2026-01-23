@@ -11,18 +11,13 @@ import { ClientsStore } from '../../../stores/clientsStore';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  NgForm,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
 import { DocumentsStore } from '../../../stores/scrumboardStore';
 import { KanbanForm, KanbanItem } from '../../../types/kanban.interface';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
   query: string;
@@ -59,9 +54,20 @@ export class KanbanItemCreateComponent {
   ingredient!: string;
   formSubmitted: boolean = false;
 
+  // FORMULARIO PARA CREAR Y EDITAR EN UNO SOLO
+  isEditMode = false;
+  editingItem?: KanbanItem;
+  readonly dialogConfig = inject(DynamicDialogConfig);
+  readonly dialogRef = inject(DynamicDialogRef);
+
   constructor() {
     effect(() => {
-      console.log('Clientes cargados:', this.clientsStore());
+      this.editingItem = this.dialogConfig.data?.item;
+      this.isEditMode = !!this.editingItem;
+
+      if (this.isEditMode) {
+        this.exampleForm.patchValue(this.editingItem!);
+      }
     });
   }
 
@@ -94,11 +100,21 @@ export class KanbanItemCreateComponent {
   }
 
   submit() {
-    let id = 1;
-    const newItem: KanbanItem = {
+    this.formSubmitted = true;
+    if (this.exampleForm.invalid) return;
+
+    const payload: KanbanItem = {
+      ...this.editingItem, // conserva id y cosas no editables
       ...this.exampleForm.getRawValue(),
-      id,
     };
-    this.Scrumstore.newScrumItem(newItem);
+
+    this.isEditMode
+      ? this.Scrumstore.updateScrumItem(payload)
+      : this.Scrumstore.newScrumItem({
+          ...payload,
+          id: 1,
+        });
+
+    this.dialogRef.close(true);
   }
 }

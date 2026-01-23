@@ -14,7 +14,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
-
+import { PopoverModule } from 'primeng/popover';
 
 const statusMapperColors = {
   Medium: 'bg-yellow-200',
@@ -30,13 +30,16 @@ const statusMapperText = {
 
 @Component({
   selector: 'steven-munoz-kanban-item',
-  imports: [CommonModule, ChipModule, ConfirmDialogModule, ToastModule, ButtonModule],
+  imports: [CommonModule, ChipModule, ConfirmDialogModule, ToastModule, ButtonModule, PopoverModule],
   standalone: true,
   templateUrl: './kanban-item.component.html',
   styleUrl: './kanban-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemComponent {
+
+
+
   item = input.required<KanbanItem>();
   
 
@@ -60,8 +63,19 @@ export class KanbanItemComponent {
 
 @Input() ticket!: KanbanItem
 @Output() delete = new EventEmitter<{event: Event, id: number | undefined}>()
+@Output() edit = new EventEmitter<{event: Event, id: KanbanItem}>()
 
 
+
+onEdit(popover: any, event: Event, item: KanbanItem) {
+  popover.hide();
+  this.edit.emit({event, id: item})
+}
+
+onDelete(popover: any, event: Event, id: number | undefined) {
+  popover.hide();
+  this.confirmDelete(event,id)
+}
 
 
 //! CONFIRMATION DIALOG 
@@ -69,6 +83,9 @@ export class KanbanItemComponent {
     confirmDelete(event: Event, id: number | undefined){
         this.delete.emit({event, id: this.ticket.id})
     }
+
+
+
 
 
 

@@ -67,3 +67,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; --primary-c
     --kanban-scale: 1.2;
   }
 }
+
+.ticket-popover .p-popover-content {
+  padding: 0.25rem;
+}
+
+.ticket-popover .menu-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.ticket-popover .menu-option:hover {
+  background-color: var(--p-surface-hover);
+}
+
+.ticket-popover .menu-option.danger {
+  color: var(--p-red-500);
+}
+
+
