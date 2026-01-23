@@ -12,7 +12,6 @@ import {
   Component,
   effect,
   inject,
-  signal,
 } from '@angular/core';
 import { KanbanColumnComponent } from '../kanban-column/kanban-column.component';
 import { KanbanItemComponent } from '../kanban-item/kanban-item.component';
@@ -37,10 +36,12 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { KanbanItemCreateComponent } from '../kanban-item-create/kanban-item.create.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
+    CommonModule,
     RouterModule,
     CdkDrag,
     CdkDropList,
@@ -50,8 +51,9 @@ import { ToastModule } from 'primeng/toast';
     KanbanItemComponent,
     ButtonModule,
     ToastModule,
+    ConfirmDialogModule,
   ],
-  providers: [DialogService, MessageService, ConfirmationService],
+  providers: [DialogService, MessageService],
   templateUrl: './kanban-table.component.html',
   styleUrl: './kanban-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,31 +75,32 @@ export class KanbanTable {
   });
 
   constructor() {
+    console.log('ConfirmationService instance', this.confirmationService);
     effect(() => {
       console.log('Datos de Firestore:', this.testResource.value());
     });
   }
-
-  columns = signal<KanbanColumn[]>([
-    {
-      id: '1',
-      title: 'To Do',
-    },
-    {
-      id: '2',
-      title: 'To Progress',
-    },
-    {
-      id: '3',
-      title: 'To End',
-    },
-  ]);
 
   async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
     if (container === previousContainer)
       return moveItemInArray(container.data, previousIndex, currentIndex);
+
+    const board = this.testResource.value();
+    const targetColumn = board?.columns.find((c: KanbanItem) => c.id === columnId);
+    const wipLimit = targetColumn?.wipLimit;
+
+    const itemsInTargetColumn = container.data.length;
+
+    if (wipLimit && itemsInTargetColumn + 1 > wipLimit) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Límite WIP excedido',
+        detail: `Esta columna permite máximo ${wipLimit} items`,
+        life: 3000,
+      });
+    }
 
     transferArrayItem(
       previousContainer.data,
@@ -149,6 +152,7 @@ export class KanbanTable {
 
   openCreateDialog() {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      transitionOptions: '300ms ease-in-out',
       data: { item: null },
       header: 'Crear Nuevo Item',
       width: '20vw',
@@ -160,6 +164,7 @@ export class KanbanTable {
 
   openEditDialog(payload: { event: Event; id: KanbanItem }) {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      transitionOptions: '300ms ease-in-out',
       data: { item: payload.id },
       header: 'Editar Item',
       width: '20vw',
@@ -171,20 +176,19 @@ export class KanbanTable {
 
   openDeleteDialog(payload: { event: Event; id: number | undefined }) {
     this.confirmationService.confirm({
-      target: payload.event.target as EventTarget,
       message: 'Realmente quiere eliminar este registro?',
       header: 'Cuidado',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'Cancel',
+
+      rejectLabel: 'Cancelar',
       rejectButtonProps: {
-        label: 'Cancelar',
         severity: 'secondary',
         outlined: true,
       },
       acceptButtonProps: {
-        label: 'Eliminar',
         severity: 'danger',
       },
+
       accept: () => {
         this.scrumboardStore.firestoreService.deleteScrumboardItem(payload.id);
         this.messageService.add({
@@ -193,13 +197,35 @@ export class KanbanTable {
           detail: 'Has eliminado el ticket con exito',
         });
       },
+
       reject: () => {
         this.messageService.add({
-          severity: 'error',
-          summary: 'Rechazado',
-          detail: 'Has rechazado la eliminación',
+          severity: 'info',
+          summary: 'Cancelado',
+          detail: 'Has cancelado la eliminación',
         });
       },
     });
   }
+
+  //! WIP LIMITE DE ITEMS POR COLUMNA
+
+  getItemsCount(columnId: number): number {
+    return this.testResource
+      .value()
+      .filter((item: KanbanItem) => item.columnId === columnId).length;
+  }
+
+isWipExceeded(columnId: number): boolean {
+  const column = this.testResource
+    .value()
+    ?.columns.find((c: KanbanItem) => c.id === columnId);
+
+  if (!column?.wipLimit) return false;
+
+  return this.getItemsByColumn(columnId).length > column.wipLimit;
+}
+
+
+  
 }

@@ -57,6 +57,7 @@ export class KanbanItemCreateComponent {
   // FORMULARIO PARA CREAR Y EDITAR EN UNO SOLO
   isEditMode = false;
   editingItem?: KanbanItem;
+  saving = false;
   readonly dialogConfig = inject(DynamicDialogConfig);
   readonly dialogRef = inject(DynamicDialogRef);
 
@@ -103,11 +104,14 @@ export class KanbanItemCreateComponent {
     this.formSubmitted = true;
     if (this.exampleForm.invalid) return;
 
+    this.saving= true;
+
     const payload: KanbanItem = {
       ...this.editingItem, // conserva id y cosas no editables
       ...this.exampleForm.getRawValue(),
     };
 
+setTimeout(()=> {
     this.isEditMode
       ? this.Scrumstore.updateScrumItem(payload)
       : this.Scrumstore.newScrumItem({
@@ -116,5 +120,9 @@ export class KanbanItemCreateComponent {
         });
 
     this.dialogRef.close(true);
+
+}, 400)
+
+
   }
 }

@@ -4,9 +4,9 @@
   <div class="title-btn">
     <h3 class="titletest font-semibold mb-4">{{ ticket.title }}</h3>
     <div>
-      <p-confirmdialog />
+   
 
-      <div>
+      <div (click)="$event.stopPropagation()">
         <p-button
           severity="info"
           icon="pi pi-ellipsis-v"
@@ -16,12 +16,15 @@
         </p-button>
 
         <p-popover #popover panelStyleClass="ticket-popover">
-          <div class="menu-option" (click)="onEdit(popover,  $event, ticket)">
+          <div class="menu-option" (click)="onEdit(popover, $event, ticket)">
             <i class="pi pi-pencil"></i>
             Editar
           </div>
 
-          <div class="menu-option danger" (click)="onDelete(popover, $event, ticket.id)">
+          <div
+            class="menu-option danger"
+            (click)="onDelete(popover, $event, ticket.id)"
+          >
             <i class="pi pi-trash"></i>
             Eliminar
           </div>

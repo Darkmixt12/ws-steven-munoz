@@ -1,6 +1,7 @@
 export interface KanbanColumn {
-  id: string;
+  id: number;
   title: string;
+  wipLimit?: number;
 }
 
 export interface Board {

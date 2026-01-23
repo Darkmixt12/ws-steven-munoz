@@ -10,7 +10,6 @@ import {
 import { KanbanItem } from '../../../types/kanban.interface';
 import { CommonModule } from '@angular/common';
 import { ChipModule } from 'primeng/chip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
@@ -30,19 +29,20 @@ const statusMapperText = {
 
 @Component({
   selector: 'steven-munoz-kanban-item',
-  imports: [CommonModule, ChipModule, ConfirmDialogModule, ToastModule, ButtonModule, PopoverModule],
+  imports: [
+    CommonModule,
+    ChipModule,
+    ToastModule,
+    ButtonModule,
+    PopoverModule,
+  ],
   standalone: true,
   templateUrl: './kanban-item.component.html',
   styleUrl: './kanban-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemComponent {
-
-
-
   item = input.required<KanbanItem>();
-  
-
 
   color = computed(() => {
     return statusMapperColors[this.item().priority];
@@ -52,45 +52,30 @@ export class KanbanItemComponent {
     return statusMapperText[this.item().priority];
   });
 
-
   priorityColor(priority: 'Low' | 'Medium' | 'High') {
-  return {
-    Low: 'priority-low',
-    Medium: 'priority-medium',
-    High: 'priority-high',
-  }[priority];
-}
+    return {
+      Low: 'priority-low',
+      Medium: 'priority-medium',
+      High: 'priority-high',
+    }[priority];
+  }
 
-@Input() ticket!: KanbanItem
-@Output() delete = new EventEmitter<{event: Event, id: number | undefined}>()
-@Output() edit = new EventEmitter<{event: Event, id: KanbanItem}>()
+  @Input() ticket!: KanbanItem;
+  @Output() delete = new EventEmitter<{
+    event: Event;
+    id: number | undefined;
+  }>();
+  @Output() edit = new EventEmitter<{ event: Event; id: KanbanItem }>();
 
+  onEdit(popover: any, event: Event, item: KanbanItem) {
+    popover.hide();
+    this.edit.emit({ event, id: item });
+  }
 
-
-onEdit(popover: any, event: Event, item: KanbanItem) {
-  popover.hide();
-  this.edit.emit({event, id: item})
-}
-
-onDelete(popover: any, event: Event, id: number | undefined) {
-  popover.hide();
-  this.confirmDelete(event,id)
-}
-
-
-//! CONFIRMATION DIALOG 
-
-    confirmDelete(event: Event, id: number | undefined){
-        this.delete.emit({event, id: this.ticket.id})
-    }
-
-
-
-
-
-
-
-
-
-
+  onDelete(popover: any, event: Event, id: number | undefined) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.delete.emit({ event, id });
+    popover.hide();
+  }
 }
