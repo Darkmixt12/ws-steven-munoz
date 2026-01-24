@@ -42,6 +42,10 @@
             {{ getItemsByColumn(column.id).length }}/ {{ column.wipLimit }}
           </span>
           }
+          <span class="amount-total">
+             $ {{ getColumnTotalProposal(column.id) | number : '1.0-0' }}
+          </span>
+          
         </h1>
 
         @for (ticket of getItemsByColumn(column.id); track ticket.id) {

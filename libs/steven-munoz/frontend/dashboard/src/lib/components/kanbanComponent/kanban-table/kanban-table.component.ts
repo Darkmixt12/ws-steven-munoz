@@ -19,7 +19,6 @@ import { RouterModule } from '@angular/router';
 import {
   Board,
   FireStoreKanbanColumn,
-  KanbanColumn,
   KanbanItem,
 } from '../../../types/kanban.interface';
 import {
@@ -59,13 +58,15 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanTable {
-  firestore = inject(Firestore);
-  store = inject(DocumentsStore);
-  dialogService = inject(DialogService);
-  ref: DynamicDialogRef | null = null;
+  readonly confirmationService = inject(ConfirmationService);
   readonly scrumboardStore = inject(DocumentsStore);
   readonly messageService = inject(MessageService);
-  readonly confirmationService = inject(ConfirmationService);
+  dialogService = inject(DialogService);
+  store = inject(DocumentsStore);
+  firestore = inject(Firestore);
+
+  ref: DynamicDialogRef | null = null;
+
 
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
@@ -81,14 +82,36 @@ export class KanbanTable {
     });
   }
 
-  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
+
+
+  getItemsByColumn(columnId: number) {
+    return (this.testResource.value()?.tickets ?? []).filter(
+      (item: KanbanItem) => item.columnId === columnId
+    );
+  }
+
+  async listDrop(event: CdkDragDrop<undefined>) {
+    const { previousIndex, currentIndex } = event;
+    moveItemInArray(
+      this.testResource.value()?.columns,
+      previousIndex,
+      currentIndex
+    );
+    const ref = doc(this.firestore, 'board2', 'scrum');
+    const columns = this.testResource.value()?.columns;
+    this.store.updateDoc({ ref, data: columns });
+  }
+
+    async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
     const { previousIndex, currentIndex, container, previousContainer } = event;
 
     if (container === previousContainer)
       return moveItemInArray(container.data, previousIndex, currentIndex);
 
     const board = this.testResource.value();
-    const targetColumn = board?.columns.find((c: KanbanItem) => c.id === columnId);
+    const targetColumn = board?.columns.find(
+      (c: KanbanItem) => c.id === columnId
+    );
     const wipLimit = targetColumn?.wipLimit;
 
     const itemsInTargetColumn = container.data.length;
@@ -130,26 +153,6 @@ export class KanbanTable {
     });
   }
 
-  getItemsByColumn(columnId: number) {
-    return (this.testResource.value()?.tickets ?? []).filter(
-      (item: KanbanItem) => item.columnId === columnId
-    );
-  }
-
-  async listDrop(event: CdkDragDrop<undefined>) {
-    const { previousIndex, currentIndex } = event;
-    moveItemInArray(
-      this.testResource.value()?.columns,
-      previousIndex,
-      currentIndex
-    );
-
-    const ref = doc(this.firestore, 'board2', 'scrum');
-    const columns = this.testResource.value()?.columns;
-
-    this.store.updateDoc({ ref, data: columns });
-  }
-
   openCreateDialog() {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
       transitionOptions: '300ms ease-in-out',
@@ -160,7 +163,7 @@ export class KanbanTable {
       closable: true,
       modal: true,
     });
-  }
+}
 
   openEditDialog(payload: { event: Event; id: KanbanItem }) {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
@@ -216,16 +219,20 @@ export class KanbanTable {
       .filter((item: KanbanItem) => item.columnId === columnId).length;
   }
 
-isWipExceeded(columnId: number): boolean {
-  const column = this.testResource
-    .value()
-    ?.columns.find((c: KanbanItem) => c.id === columnId);
+  isWipExceeded(columnId: number): boolean {
+    const column = this.testResource
+      .value()
+      ?.columns.find((c: KanbanItem) => c.id === columnId);
 
-  if (!column?.wipLimit) return false;
+    if (!column?.wipLimit) return false;
 
-  return this.getItemsByColumn(columnId).length > column.wipLimit;
-}
+    return this.getItemsByColumn(columnId).length > column.wipLimit;
+  }
 
-
-  
+  getColumnTotalProposal(columnId: number): number {
+    return this.getItemsByColumn(columnId).reduce(
+      (total: number, item: KanbanItem) => total + (item.proposal ?? 0),
+      0
+    );
+  }
 }
