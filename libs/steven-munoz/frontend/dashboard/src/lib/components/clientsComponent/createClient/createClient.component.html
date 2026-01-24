@@ -1,0 +1,58 @@
+<div class="dialog-form">
+  <form [formGroup]="myFormName" (ngSubmit)="submit()">
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-user" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Nombre del Cliente"
+        formControlName="name"
+      />
+    </p-iconField>
+
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-mobile" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Número de Teléfono"
+        formControlName="tel"
+      />
+    </p-iconField>
+
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-envelope" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Correo Electrónico"
+        formControlName="email"
+      />
+    </p-iconField>
+
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-address-book" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Usuario a Cargo"
+        formControlName="user_owner"
+      />
+    </p-iconField>
+
+    <div class="form-actions">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        type="button"
+        (onClick)="myFormName.reset()"
+      />
+
+      <p-button
+        label="Guardar"
+        type="submit"
+        [disabled]="myFormName.invalid"
+      />
+    </div>
+  </form>
+</div>
