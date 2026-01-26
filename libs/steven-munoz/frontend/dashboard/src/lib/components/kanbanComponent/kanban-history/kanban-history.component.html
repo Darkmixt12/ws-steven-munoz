@@ -1,0 +1,18 @@
+<div *ngIf="history$ | async as history; else empty" class="history-panel">
+  <div class="history-row" *ngFor="let h of history">
+    <span
+      class="history-dot"
+      [class.amount]="h.field === 'proposal'"
+      [class.column]="h.field === 'columnId'"
+    ></span>
+
+    <div class="history-text">
+      <strong>{{ h.label }}</strong>
+      <small>{{ h.changedAt.toDate() | date : 'short' }}</small>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <p class="history-empty">No hay historial para este ticket.</p>
+</ng-template>

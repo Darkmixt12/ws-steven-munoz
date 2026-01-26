@@ -22,10 +22,12 @@ import {
   KanbanItem,
 } from '../../../types/kanban.interface';
 import {
+  collection,
   doc,
   docData,
   Firestore,
   runTransaction,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DocumentsStore } from '../../../stores/scrumboardStore';
@@ -37,6 +39,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule } from '@angular/common';
+import { KanbanHistoryComponent } from '../kanban-history/kanban-history.component';
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
@@ -67,7 +70,6 @@ export class KanbanTable {
 
   ref: DynamicDialogRef | null = null;
 
-
   testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
     stream: () => {
       const ref = doc(this.firestore, 'board2/scrum');
@@ -81,8 +83,6 @@ export class KanbanTable {
       console.log('Datos de Firestore:', this.testResource.value());
     });
   }
-
-
 
   getItemsByColumn(columnId: number) {
     return (this.testResource.value()?.tickets ?? []).filter(
@@ -102,56 +102,72 @@ export class KanbanTable {
     this.store.updateDoc({ ref, data: columns });
   }
 
-    async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
-    const { previousIndex, currentIndex, container, previousContainer } = event;
+async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
+  const { previousIndex, currentIndex, container, previousContainer } = event;
 
-    if (container === previousContainer)
-      return moveItemInArray(container.data, previousIndex, currentIndex);
 
-    const board = this.testResource.value();
-    const targetColumn = board?.columns.find(
-      (c: KanbanItem) => c.id === columnId
-    );
-    const wipLimit = targetColumn?.wipLimit;
+  if (container === previousContainer) {
+    moveItemInArray(container.data, previousIndex, currentIndex);
+    return;
+  }
 
-    const itemsInTargetColumn = container.data.length;
+  const board = this.testResource.value();
+  if (!board) return;
 
-    if (wipLimit && itemsInTargetColumn + 1 > wipLimit) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Límite WIP excedido',
-        detail: `Esta columna permite máximo ${wipLimit} items`,
-        life: 3000,
-      });
-    }
+  const targetColumn = board.columns.find( (c: KanbanItem) => c.id === columnId);
+  const wipLimit = targetColumn?.wipLimit;
 
-    transferArrayItem(
-      previousContainer.data,
-      container.data,
-      previousIndex,
-      currentIndex
-    );
 
-    const movedItem = container.data[currentIndex];
-    movedItem.columnId = columnId;
-
-    const boardRef = doc(this.firestore, 'board2/scrum');
-
-    await runTransaction(this.firestore, async (transaction) => {
-      const boardSnap = await transaction.get(boardRef);
-
-      if (!boardSnap.exists()) return;
-
-      const board = boardSnap.data() as Board;
-
-      const updatedTickets = board.tickets.map((t: KanbanItem) =>
-        t.id === movedItem.id ? { ...t, columnId } : t
-      );
-
-      // ACTUALIZA DENTRO DE LA TRANSACCIÓN
-      transaction.update(boardRef, { tickets: updatedTickets });
+  if (wipLimit && container.data.length + 1 > wipLimit) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Límite WIP excedido',
+      detail: `Máximo permitido: ${wipLimit}`,
+      life: 3000,
     });
   }
+
+  // Movimiento visual inmediato
+  transferArrayItem(
+    previousContainer.data,
+    container.data,
+    previousIndex,
+    currentIndex
+  );
+
+  const movedItem = container.data[currentIndex];
+  const previousColumnId = movedItem.columnId;
+
+  if (previousColumnId === columnId) return;
+
+  movedItem.columnId = columnId;
+
+  const boardRef = doc(this.firestore, 'board2/scrum');
+  const historyRef = collection(this.firestore, 'ticketHistory');
+
+  await runTransaction(this.firestore, async transaction => {
+    const boardSnap = await transaction.get(boardRef);
+    if (!boardSnap.exists()) return;
+
+    const boardData = boardSnap.data() as Board;
+
+    // 🔄 Actualizar ticket
+    const updatedTickets = boardData.tickets.map(t =>
+      t.id === movedItem.id ? { ...t, columnId } : t
+    );
+
+    transaction.update(boardRef, { tickets: updatedTickets });
+
+    transaction.set(doc(historyRef), {
+      ticketId: movedItem.id,
+      boardId: 'scrum',
+      field: 'columnId',
+      oldValue: previousColumnId,
+      newValue: columnId,
+      changedAt: Timestamp.now(),
+    });
+  });
+}
 
   openCreateDialog() {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
@@ -163,7 +179,7 @@ export class KanbanTable {
       closable: true,
       modal: true,
     });
-}
+  }
 
   openEditDialog(payload: { event: Event; id: KanbanItem }) {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
@@ -208,6 +224,18 @@ export class KanbanTable {
           detail: 'Has cancelado la eliminación',
         });
       },
+    });
+  }
+
+  openHistoryDialog(payload: { event: Event; id: number | undefined }) {
+    this.ref = this.dialogService.open(KanbanHistoryComponent, {
+      transitionOptions: '300ms ease-in-out',
+      data: { item: payload.id, columns: this.testResource.value().columns ?? []},
+      header: 'History Item',
+      width: '20vw',
+      height: '50vh',
+      closable: true,
+      modal: true,
     });
   }
 

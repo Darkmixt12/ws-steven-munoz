@@ -29,13 +29,7 @@ const statusMapperText = {
 
 @Component({
   selector: 'steven-munoz-kanban-item',
-  imports: [
-    CommonModule,
-    ChipModule,
-    ToastModule,
-    ButtonModule,
-    PopoverModule,
-  ],
+  imports: [CommonModule, ChipModule, ToastModule, ButtonModule, PopoverModule],
   standalone: true,
   templateUrl: './kanban-item.component.html',
   styleUrl: './kanban-item.component.scss',
@@ -66,6 +60,10 @@ export class KanbanItemComponent {
     id: number | undefined;
   }>();
   @Output() edit = new EventEmitter<{ event: Event; id: KanbanItem }>();
+  @Output() history = new EventEmitter<{
+    event: Event;
+    id: number | undefined;
+  }>();
 
   onEdit(popover: any, event: Event, item: KanbanItem) {
     popover.hide();
@@ -76,6 +74,13 @@ export class KanbanItemComponent {
     event.stopPropagation();
     event.preventDefault();
     this.delete.emit({ event, id });
+    popover.hide();
+  }
+
+  onHistory(popover: any, event: Event, id: number | undefined) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.history.emit({ event, id });
     popover.hide();
   }
 }

@@ -1,3 +1,4 @@
+
 export interface KanbanColumn {
   id: number;
   title: string;
@@ -17,6 +18,7 @@ export interface KanbanItem {
   description: string;
   assignee: string;
   priority: 'High' | 'Medium' | 'Low';
+
 }
 
 export type KanbanForm = Omit<KanbanItem, 'id'> & {

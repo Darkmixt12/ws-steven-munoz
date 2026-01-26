@@ -17,6 +17,12 @@ import { ButtonModule } from 'primeng/button';
 import { DocumentsStore } from '../../../stores/scrumboardStore';
 import { KanbanForm, KanbanItem } from '../../../types/kanban.interface';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {
+  addDoc,
+  collection,
+  Firestore,
+  serverTimestamp,
+} from '@angular/fire/firestore';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -43,6 +49,7 @@ interface AutoCompleteCompleteEvent {
 export class KanbanItemCreateComponent {
   clientstore = inject(ClientsStore);
   Scrumstore = inject(DocumentsStore);
+  readonly firestore = inject(Firestore);
 
   clientsStore = this.clientstore.getClientsSignal();
   readonly fb = inject(FormBuilder);
@@ -100,29 +107,58 @@ export class KanbanItemCreateComponent {
     return control?.invalid && this.formSubmitted;
   }
 
-  submit() {
+  async submit() {
     this.formSubmitted = true;
     if (this.exampleForm.invalid) return;
 
-    this.saving= true;
+    this.saving = true;
 
     const payload: KanbanItem = {
-      ...this.editingItem, // conserva id y cosas no editables
+      ...this.editingItem,
       ...this.exampleForm.getRawValue(),
     };
 
-setTimeout(()=> {
-    this.isEditMode
-      ? this.Scrumstore.updateScrumItem(payload)
-      : this.Scrumstore.newScrumItem({
-          ...payload,
-          id: 1,
-        });
+    if (this.isEditMode && this.editingItem) {
+      await this.trackChanges(this.editingItem, payload);
+    }
 
-    this.dialogRef.close(true);
+    setTimeout(() => {
+      this.isEditMode
+        ? this.Scrumstore.updateScrumItem(payload)
+        : this.Scrumstore.newScrumItem({
+            ...payload,
+            id: 1,
+          });
 
-}, 400)
+      this.dialogRef.close(true);
+    }, 400);
+  }
 
+  private async trackChanges(oldItem: KanbanItem, newItem: KanbanItem) {
+    const historyRef = collection(this.firestore, 'ticketHistory');
 
+    if (oldItem.columnId !== newItem.columnId) {
+      await addDoc(historyRef, {
+        boardId: 'scrum',
+        ticketId: oldItem.id,
+        field: 'columnId',
+        oldValue: oldItem.columnId,
+        newValue: newItem.columnId,
+        changedAt: serverTimestamp(),
+        userId: 'steven',
+      });
+    }
+
+    if (oldItem.proposal !== newItem.proposal) {
+      await addDoc(historyRef, {
+        boardId: 'scrum',
+        ticketId: oldItem.id,
+        field: 'proposal',
+        oldValue: oldItem.proposal,
+        newValue: newItem.proposal,
+        changedAt: serverTimestamp(),
+        userId: 'steven',
+      });
+    }
   }
 }

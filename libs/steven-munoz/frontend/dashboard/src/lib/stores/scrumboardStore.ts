@@ -37,6 +37,8 @@ export const DocumentsStore = signalStore(
 
     updateScrumItem: (scrumItem: KanbanItem) => store.firestoreService.updateScrumboardTicket(scrumItem),
 
-    newScrumItem: (scrumItem: KanbanItem) => store.firestoreService.createScrumboardItem(scrumItem)
+    newScrumItem: (scrumItem: KanbanItem) => store.firestoreService.createScrumboardItem(scrumItem),
+
+    getHistoryTickets: (ticketId: string, columnMap: Map<number,string>) => store.firestoreService.getHistoryTickets(ticketId, columnMap)
   }))
 );
