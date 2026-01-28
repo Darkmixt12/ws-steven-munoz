@@ -97,7 +97,7 @@ div.px-4.py-1 {
   justify-content: space-between;
 }
 
-::ng-deep .trash-btn {
+:host ::ng-deep .trash-btn {
   width: 2rem;
   height: 2rem;
 }

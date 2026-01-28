@@ -3,8 +3,8 @@ import {
   Component,
   computed,
   EventEmitter,
-  Input,
   input,
+  output,
   Output,
 } from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
@@ -54,16 +54,10 @@ export class KanbanItemComponent {
     }[priority];
   }
 
-  @Input() ticket!: KanbanItem;
-  @Output() delete = new EventEmitter<{
-    event: Event;
-    id: number | undefined;
-  }>();
-  @Output() edit = new EventEmitter<{ event: Event; id: KanbanItem }>();
-  @Output() history = new EventEmitter<{
-    event: Event;
-    id: number | undefined;
-  }>();
+  ticket = input<KanbanItem>;
+  delete = output<{event: Event;id: number | undefined}>();
+  edit = output<{event: Event;id: KanbanItem}>();
+  history = output<{event: Event;id: number | undefined}>();
 
   onEdit(popover: any, event: Event, item: KanbanItem) {
     popover.hide();

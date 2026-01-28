@@ -33,9 +33,8 @@ export class CreateClientComponent {
     if (this.myFormName.invalid) return;
     console.log(this.myFormName.value)
     this.clientsStore.createClient(this.myFormName.value)
-      .then(() => {
-        this.myFormName.reset();
-      });
+    this.myFormName.reset();
+ 
   }
 
 

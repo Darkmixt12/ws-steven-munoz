@@ -29,11 +29,7 @@ export class ClientsDashboardComponent {
   displayedColumns: string[] = ['position', 'name', 'email',];
   clients = this.clientstore.getClientsSignal();
 
-  constructor() {
-    effect(() => {
-      console.log('Clientes cargados:', this.clients());
-    });
-  }
+
 
   show() {
         this.ref = this.dialogService.open(CreateClientComponent, { 
