@@ -30,7 +30,7 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { DocumentsStore } from '../../../stores/scrumboardStore';
+import { DocumentsStore, ScrumboardStore } from '../../../stores/scrumboardStore';
 
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -63,6 +63,7 @@ import { KanbanHistoryComponent } from '../kanban-history/kanban-history.compone
 export class KanbanTable {
   readonly confirmationService = inject(ConfirmationService);
   readonly scrumboardStore = inject(DocumentsStore);
+  readonly scrumboardStoreFeature = inject(ScrumboardStore)
   readonly messageService = inject(MessageService);
   dialogService = inject(DialogService);
   store = inject(DocumentsStore);
@@ -77,12 +78,7 @@ export class KanbanTable {
     },
   });
 
-  constructor() {
-    console.log('ConfirmationService instance', this.confirmationService);
-    effect(() => {
-      console.log('Datos de Firestore:', this.testResource.value());
-    });
-  }
+
 
   getItemsByColumn(columnId: number) {
     return (this.testResource.value()?.tickets ?? []).filter(
@@ -209,7 +205,7 @@ async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
       },
 
       accept: () => {
-        this.scrumboardStore.firestoreService.deleteScrumboardItem(payload.id);
+        this.scrumboardStoreFeature.deleteScrumboardItem(payload.id)
         this.messageService.add({
           severity: 'success',
           summary: 'Confirmado',

@@ -3,8 +3,8 @@ import {
   Component,
   computed,
   EventEmitter,
-  input,
   output,
+  input,
   Output,
 } from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
@@ -36,14 +36,13 @@ const statusMapperText = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemComponent {
-  item = input.required<KanbanItem>();
 
   color = computed(() => {
-    return statusMapperColors[this.item().priority];
+    return statusMapperColors[this.ticket().priority];
   });
 
   statusText = computed(() => {
-    return statusMapperText[this.item().priority];
+    return statusMapperText[this.ticket().priority];
   });
 
   priorityColor(priority: 'Low' | 'Medium' | 'High') {
@@ -54,7 +53,7 @@ export class KanbanItemComponent {
     }[priority];
   }
 
-  ticket = input<KanbanItem>;
+  ticket = input.required<KanbanItem>();
   delete = output<{event: Event;id: number | undefined}>();
   edit = output<{event: Event;id: KanbanItem}>();
   history = output<{event: Event;id: number | undefined}>();

@@ -1,15 +1,14 @@
 import { inject } from '@angular/core';
-import {
-  signalStore,
-  withState,
-  withMethods,
-  withProps,
-} from '@ngrx/signals';
+import { signalStore, withState, withMethods, withProps } from '@ngrx/signals';
 
 import { FirestoreService } from '../services/firestore.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap } from 'rxjs';
-import { KanbanItem } from '../types/kanban.interface';
+import { deleteScrumboardItem } from './srumboardFeatures/deleteScrumboardItem';
+import { updateScrumboardItem } from './srumboardFeatures/updateScrumItem';
+import { newScrumboardItem } from './srumboardFeatures/newScrumboardItem';
+import { getHistoryKanbanItem } from './srumboardFeatures/getHistoryKanbanItem';
+import { Firestore } from '@angular/fire/firestore';
 
 export const DocumentsStore = signalStore(
   { providedIn: 'root' },
@@ -27,18 +26,28 @@ export const DocumentsStore = signalStore(
     //   return store.firestoreService.updateDoc(ref, data);
     // },
 
-    updateDoc: rxMethod<{ref: any, data: any}>(
+    updateDoc: rxMethod<{ ref: any; data: any }>(
       pipe(
-        switchMap( ({ref,data}) => store.firestoreService.updateDoc(ref,data))
+        switchMap(({ ref, data }) =>
+          store.firestoreService.updateDoc(ref, data)
+        )
       )
     ),
 
-    deleteScrumItem: (id: number | undefined) => store.firestoreService.deleteScrumboardItem(id),
 
-    updateScrumItem: (scrumItem: KanbanItem) => store.firestoreService.updateScrumboardTicket(scrumItem),
-
-    newScrumItem: (scrumItem: KanbanItem) => store.firestoreService.createScrumboardItem(scrumItem),
-
-    getHistoryTickets: (ticketId: string, columnMap: Map<number,string>) => store.firestoreService.getHistoryTickets(ticketId, columnMap)
   }))
+);
+
+
+
+export const ScrumboardStore = signalStore(
+  { providedIn: 'root' },
+
+  
+
+  newScrumboardItem(),
+  deleteScrumboardItem(),
+  updateScrumboardItem(),
+  getHistoryKanbanItem()
+
 );

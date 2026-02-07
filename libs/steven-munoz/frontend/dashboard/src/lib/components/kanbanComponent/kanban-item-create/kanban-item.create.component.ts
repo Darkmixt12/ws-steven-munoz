@@ -14,7 +14,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
-import { DocumentsStore } from '../../../stores/scrumboardStore';
+import { DocumentsStore, ScrumboardStore } from '../../../stores/scrumboardStore';
 import { KanbanForm, KanbanItem } from '../../../types/kanban.interface';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import {
@@ -49,6 +49,8 @@ interface AutoCompleteCompleteEvent {
 export class KanbanItemCreateComponent {
   clientstore = inject(ClientsStore);
   Scrumstore = inject(DocumentsStore);
+  scrumboardStore = inject(ScrumboardStore);
+
   readonly firestore = inject(Firestore);
 
   clientsStore = this.clientstore.getClientsSignal();
@@ -124,8 +126,8 @@ export class KanbanItemCreateComponent {
 
     setTimeout(() => {
       this.isEditMode
-        ? this.Scrumstore.updateScrumItem(payload)
-        : this.Scrumstore.newScrumItem({
+        ? this.scrumboardStore.updateScrumboardItem(payload)
+        : this.scrumboardStore.createScrumboardItem({
             ...payload,
             id: 1,
           });

@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-
-import { DocumentsStore } from '../../../stores/scrumboardStore';
+import { ScrumboardStore } from '../../../stores/scrumboardStore';
 
 @Component({
   selector: 'steven-munoz-kanban-history.component',
@@ -17,10 +17,26 @@ import { DocumentsStore } from '../../../stores/scrumboardStore';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanHistoryComponent {
-  readonly scrumboardStore = inject(DocumentsStore);
+  readonly scrumboardStore = inject(ScrumboardStore);
   readonly config = inject(DynamicDialogConfig);
 
-  columnMap: Map<number, string> = new Map(this.config.data.columns.map((c: any) => [c.id, c.title]));
-  history$ = this.scrumboardStore.getHistoryTickets(this.config.data.item, this.columnMap);
 
+
+
+    $history = effect(() => {
+      const ticketId = this.config.data.item;
+      const columns = this.config.data.columns;
+
+      if (!ticketId || !columns?.length) return;
+
+      const columnMap = new Map<number, string>(
+        columns.map((c: { id: number; title: string }) => [c.id, c.title])
+      );
+
+      this.scrumboardStore.setHistoryParams({
+        ticketId,
+        columnMap,
+      });
+    });
+  
 }
