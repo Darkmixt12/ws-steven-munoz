@@ -21,22 +21,5 @@ export class KanbanHistoryComponent {
   readonly config = inject(DynamicDialogConfig);
 
 
-
-
-    $history = effect(() => {
-      const ticketId = this.config.data.item;
-      const columns = this.config.data.columns;
-
-      if (!ticketId || !columns?.length) return;
-
-      const columnMap = new Map<number, string>(
-        columns.map((c: { id: number; title: string }) => [c.id, c.title])
-      );
-
-      this.scrumboardStore.setHistoryParams({
-        ticketId,
-        columnMap,
-      });
-    });
   
 }

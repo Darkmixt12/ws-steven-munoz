@@ -40,6 +40,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule } from '@angular/common';
 import { KanbanHistoryComponent } from '../kanban-history/kanban-history.component';
+import { getHistoryKanbanItem } from '../../../stores/srumboardFeatures/getHistoryKanbanItem';
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
@@ -224,15 +225,10 @@ async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
   }
 
   openHistoryDialog(payload: { event: Event; id: number | undefined }) {
-    this.ref = this.dialogService.open(KanbanHistoryComponent, {
-      transitionOptions: '300ms ease-in-out',
-      data: { item: payload.id, columns: this.testResource.value().columns ?? []},
-      header: 'History Item',
-      width: '20vw',
-      height: '50vh',
-      closable: true,
-      modal: true,
-    });
+      this.scrumboardStoreFeature.openHistoryDialog({
+        ticketId: String(payload.id),
+        columnMap: this.testResource.value().columns
+      })
   }
 
   //! WIP LIMITE DE ITEMS POR COLUMNA

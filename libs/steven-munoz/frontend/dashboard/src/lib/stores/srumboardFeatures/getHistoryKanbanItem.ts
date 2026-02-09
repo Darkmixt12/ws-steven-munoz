@@ -15,10 +15,13 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
-import { EMPTY, map, of } from 'rxjs';
+import { EMPTY, map, of, switchMap, tap } from 'rxjs';
 import { buildLabel } from '../../components/helpers/historyItems.helper';
 import { TicketHistory } from '../../types/ticketHistory.interface';
 import { inject } from '@angular/core';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { DialogService } from 'primeng/dynamicdialog';
+import { KanbanHistoryComponent } from '../../components/kanbanComponent/kanban-history/kanban-history.component';
 
 type HistoryParams = {
   ticketId: string;
@@ -28,68 +31,61 @@ type HistoryParams = {
 export function getHistoryKanbanItem() {
   return signalStoreFeature(
     withState({
-      historyTicketId: null as string | null,
-      columnMap: null as Map<number, string> | null,
-    }),
+  history: [] as (TicketHistory & { label: string })[],
+  loading: false,
+}),
 
-    withMethods((store) => ({
-      setHistoryParams(params: {
-        ticketId: string;
-        columnMap: Map<number, string>;
-      }) {
-        patchState(store, {
-          historyTicketId: params.ticketId,
-          columnMap: params.columnMap,
-        });
-      },
+withMethods((store) => {
+  const firestore = inject(Firestore);
+  const dialogService = inject(DialogService);
 
-      clearHistoryParams() {
-        patchState(store, {
-          historyTicketId: null,
-          columnMap: null,
-        });
-      },
-    })),
+  return {
+    openHistoryDialog: rxMethod<HistoryParams>(
+      switchMap(({ ticketId, columnMap }) => {
+        patchState(store, { loading: true });
 
-    withProps((store) => {
-      const firestore = inject(Firestore);
+        console.log('hola')
+        const historyRef = collection(firestore, 'ticketHistory');
+        const q = query(
+          historyRef,
+          where('ticketId', '==', ticketId),
+          orderBy('changedAt', 'desc'),
+          limit(50)
+        );
 
-      return {
-        ticketHistory: rxResource({
-          params: () => {
-            const ticketId = store.historyTicketId();
-            const columnMap = store.columnMap();
+        return collectionData(q, { idField: 'id' }).pipe(
+          map((history) =>
+            (history as TicketHistory[]).map((h) => ({
+              ...h,
+              label: buildLabel(h, columnMap),
+            }))
+          ),
+          tap((history) => {
+            patchState(store, {
+              history,
+              loading: false,
+            });
 
-            if (!ticketId || !columnMap) return null;
-            return { ticketId, columnMap };
-          },
+            // 👉 abrir dialog SOLO cuando ya hay data
+            dialogService.open(KanbanHistoryComponent, {
+              header: 'History Item',
+              width: '20vw',
+              height: '50vh',
+              modal: true,
+              closable: true,
+            });
+          })
+        );
+      })
+    ),
 
-          stream: ({ params }) => {
-            console.log('🔥 STREAM EJECUTADO', params);
-            if (!params) {
-              // 👇 EMITE al menos una vez
-              return of([]);
-            }
+    clearHistory() {
+      patchState(store, {
+        history: [],
+        loading: false,
+      });
+    },
+  };
+}))
 
-            const historyRef = collection(firestore, 'ticketHistory');
-            const q = query(
-              historyRef,
-              where('ticketId', '==', params.ticketId),
-              orderBy('changedAt', 'desc'),
-              limit(50)
-            );
-
-            return collectionData(q, { idField: 'id' }).pipe(
-              map((history) =>
-                (history as TicketHistory[]).map((h) => ({
-                  ...h,
-                  label: buildLabel(h, params.columnMap),
-                }))
-              )
-            );
-          },
-        }),
-      };
-    })
-  );
 }
