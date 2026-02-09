@@ -33,8 +33,6 @@ export class FirestoreService {
     return updateDoc(ref, { columns });
   }
 
-
-
   async updateScrumboardTicket(updatedTicket: KanbanItem) {
     const scrumRef = doc(this.firestore, 'board2', 'scrum');
 
@@ -115,10 +113,7 @@ export class FirestoreService {
     return `${fieldName}: ${from} → ${to}`;
   }
 
-  getHistoryTickets(
-    ticketId: string,
-    columnMap: Map<number, string>
-  ): Observable<(TicketHistory & { label: string })[]> {
+  getHistoryTickets(ticketId: string, columnMap: Map<number, string>) {
     const historyRef = collection(this.firestore, 'ticketHistory');
 
     const q = query(

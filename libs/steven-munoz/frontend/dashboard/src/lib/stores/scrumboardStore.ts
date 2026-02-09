@@ -1,5 +1,11 @@
 import { inject } from '@angular/core';
-import { signalStore, withState, withMethods, withProps } from '@ngrx/signals';
+import {
+  signalStore,
+  withState,
+  withMethods,
+  withProps,
+  withFeature,
+} from '@ngrx/signals';
 
 import { FirestoreService } from '../services/firestore.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -9,6 +15,7 @@ import { updateScrumboardItem } from './srumboardFeatures/updateScrumItem';
 import { newScrumboardItem } from './srumboardFeatures/newScrumboardItem';
 import { getHistoryKanbanItem } from './srumboardFeatures/getHistoryKanbanItem';
 import { Firestore } from '@angular/fire/firestore';
+import { DialogService } from 'primeng/dynamicdialog';
 
 export const DocumentsStore = signalStore(
   { providedIn: 'root' },
@@ -33,21 +40,19 @@ export const DocumentsStore = signalStore(
         )
       )
     ),
-
-
   }))
 );
-
-
 
 export const ScrumboardStore = signalStore(
   { providedIn: 'root' },
 
-  
+  withProps(() => ({
+    dialogService: inject(DialogService),
+  })),
 
   newScrumboardItem(),
   deleteScrumboardItem(),
   updateScrumboardItem(),
-  getHistoryKanbanItem()
 
+  withFeature((store) => getHistoryKanbanItem())
 );
