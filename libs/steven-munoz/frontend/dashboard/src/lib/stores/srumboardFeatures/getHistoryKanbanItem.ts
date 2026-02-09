@@ -15,7 +15,7 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
-import { EMPTY, map, of, switchMap, tap } from 'rxjs';
+import { EMPTY, map, of, pipe, switchMap, tap } from 'rxjs';
 import { buildLabel } from '../../components/helpers/historyItems.helper';
 import { TicketHistory } from '../../types/ticketHistory.interface';
 import { inject } from '@angular/core';
@@ -42,54 +42,29 @@ export function getHistoryKanbanItem() {
       const firestoreService = inject(FirestoreService);
       return {
         openHistoryDialog: rxMethod<HistoryParams>(
-          switchMap(({ ticketId, columnMap }) => {
-            patchState(innerStore, { loading: true });
-
-            console.log('hola');
-
-
-            return firestoreService.getHistoryTickets(ticketId, columnMap).pipe(
-              tap((history) => console.log('fetching history...', history)),
-              tap((history) => {
-                patchState(innerStore, {
-                  history,
-                  loading: false,
-                });
-                dialog.open(KanbanHistoryComponent, {
-                  header: 'History Item',
-                  width: '20vw',
-                  height: '50vh',
-                  modal: true,
-                  closable: true,
-                });
-              })
-            );
-
-            // return collectionData(q, { idField: 'id' }).pipe(
-            //   tap((res) => console.log('fetching history...', res)),
-            //   map((history) =>
-            //     (history as TicketHistory[]).map((h) => ({
-            //       ...h,
-            //       label: buildLabel(h, columnMap),
-            //     }))
-            //   ),
-            //   tap((history) => {
-            //     patchState(innerStore, {
-            //       history,
-            //       loading: false,
-            //     });
-
-            //     // 👉 abrir dialog SOLO cuando ya hay data
-            //     dialog.open(KanbanHistoryComponent, {
-            //       header: 'History Item',
-            //       width: '20vw',
-            //       height: '50vh',
-            //       modal: true,
-            //       closable: true,
-            //     });
-            //   })
-            // );
-          })
+          pipe(
+            tap(() => {
+              patchState(innerStore, { loading: true });
+            }),
+            switchMap(({ ticketId, columnMap }) =>
+              firestoreService.getHistoryTickets(ticketId, columnMap).pipe(
+                tap((history) => console.log('fetching history...', history)),
+                tap((history) => {
+                  patchState(innerStore, {
+                    history,
+                    loading: false,
+                  });
+                  dialog.open(KanbanHistoryComponent, {
+                    header: 'History Item',
+                    width: '20vw',
+                    height: '50vh',
+                    modal: true,
+                    closable: true,
+                  });
+                })
+              )
+            )
+          )
         ),
 
         clearHistory() {
