@@ -5,22 +5,29 @@ div.bg-white {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   margin-bottom: 15px;
-  max-width: 260px;
+  max-width: 300px;
+  min-width: 250px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
+
+
 
 .titletest {
   font-weight: 600;
+  color: #44abef;
   margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
 
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+  margin: 2px;
+  
 }
 
-.flex {
-  display: flex;
-}
+
 
 .justify-end {
   justify-content: flex-end;
@@ -29,23 +36,90 @@ div.bg-white {
 div.px-4.py-1 {
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
   border-radius: 9999px;
-  margin-top: 1rem;
 }
 
-.bg-green {
-  background-color: #22c55e; /* verde Tailwind */
-  color: white;
+// Badges de usuario  //
+.chips{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
 }
 
-.bg-yellow {
-  background-color: #eab308; /* amarillo Tailwind */
-  color: white;
+.image-chip {
+  font-size: 11px;
+  --p-chip-image-width: 1rem;
+  --p-chip-image-height: 1rem;
+  --p-chip-padding: 0.15rem 0.4rem;
 }
 
-.bg-red {
-  background-color: #ef4444; /* rojo Tailwind */
+.priority-chip {
+  font-size: 11px;
   color: white;
+  background-color: #22c55e;
+  --p-chip-padding-y: 0.15rem
+  --p-chip-padding-x: 0.15rem
+
 }
+
+
+// priority // 
+
+.priority {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #6b7280; /* gris elegante */
+}
+
+.priority .dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+/* Colores de prioridad */
+.priority-low {
+  background-color: #22c55e; /* verde */
+}
+
+.priority-medium {
+  background-color: #facc15; /* amarillo */
+}
+
+.priority-high {
+  background-color: #ef4444; /* rojo */
+}
+
+.title-btn{
+  display: flex;
+  justify-content: space-between;
+}
+
+:host ::ng-deep .trash-btn {
+  width: 2rem;
+  height: 2rem;
+}
+
+
+// ANGULAR POPOVER PARA EDIT Y ELIMINAR DEL SCRUMBOARD
+
+.menu-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.ticket-popover .menu-option:hover {
+  background-color: var(--p-surface-hover, #f3f4f6);
+}
+
+.ticket-popover .menu-option.danger {
+  color: var(--p-red-500, #ef4444);
+}
+
+

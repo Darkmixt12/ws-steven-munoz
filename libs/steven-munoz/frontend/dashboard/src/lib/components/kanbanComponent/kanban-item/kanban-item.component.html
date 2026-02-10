@@ -1,13 +1,56 @@
-  <div class="bg-white p-4 rounded-lg shadow-md cursor-pointer">
-      @let ticket = item();
+<div class="bg-white p-4 rounded-lg shadow-md cursor-pointer">
+  @let ticketSignal = ticket();
 
-      <p class="titletest font-semibold mb-4">{{ ticket.title }}</p>
+  <div class="title-btn">
+    <h3 class="titletest font-semibold mb-4">{{ ticketSignal.title }}</h3>
+    <div>
+      <div (click)="$event.stopPropagation()">
+        <p-button
+          severity="info"
+          icon="pi pi-ellipsis-v"
+          styleClass="p-button-text p-button-rounded p-button-sm"
+          (click)="popover.toggle($event)"
+        >
+        </p-button>
 
-      <p class="text-sm">{{ ticket.description }}</p>
+        <p-popover #popover panelStyleClass="ticket-popover">
+          <div class="menu-option" (click)="onEdit(popover, $event, ticketSignal)">
+            <i class="pi pi-pencil"></i>
+            Editar
+          </div>
 
-      <div class="flex justify-end">
-        <div [class]="color()" class="px-4 py-1 rounded-full mt-4">
-          <span>{{ statusText() }}</span>
-        </div>
+          <div class="menu-option" (click)="onHistory(popover, $event, ticketSignal.id)">
+            <i class="pi pi-history"></i>
+            Historial
+          </div>
+
+          <div
+            class="menu-option danger"
+            (click)="onDelete(popover, $event, ticketSignal.id)"
+          >
+            <i class="pi pi-trash"></i>
+            Eliminar
+          </div>
+        </p-popover>
       </div>
     </div>
+  </div>
+
+  <p class="text-sm">{{ ticketSignal.description }}</p>
+
+  <p class="text-sm"><b>Amount:</b> {{ ticketSignal.proposal | currency }}</p>
+
+  <div class="chips">
+    <p-chip
+      class="image-chip"
+      label="{{ ticketSignal.assignee }}"
+      image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      alt="Avatar image"
+    />
+
+    <div class="priority">
+      <span class="dot" [ngClass]="priorityColor(ticketSignal.priority)"></span>
+      <span class="label">{{ ticketSignal.priority }}</span>
+    </div>
+  </div>
+</div>

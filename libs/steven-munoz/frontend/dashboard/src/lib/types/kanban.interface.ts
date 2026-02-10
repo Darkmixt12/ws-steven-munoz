@@ -1,6 +1,8 @@
+
 export interface KanbanColumn {
-  id: string;
+  id: number;
   title: string;
+  wipLimit?: number;
 }
 
 export interface Board {
@@ -9,13 +11,21 @@ export interface Board {
 }
 
 export interface KanbanItem {
-  columnId: string;
-  id: string;
+  columnId: number;
+  id?: number;
   title: string;
+  proposal: number;
   description: string;
   assignee: string;
   priority: 'High' | 'Medium' | 'Low';
+
 }
+
+export type KanbanForm = Omit<KanbanItem, 'id'> & {
+  client?: string
+}
+
+
 
 // Interfaces para el FIREBASE BOARD
 export interface FireStoreKanbanColumn {

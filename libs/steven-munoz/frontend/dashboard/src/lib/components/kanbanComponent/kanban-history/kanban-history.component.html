@@ -1,0 +1,32 @@
+@if (scrumboardStore.ticketHistory.isLoading()) {
+  <div class="history-loading">
+    Cargando historial…
+  </div>
+}
+
+@if (scrumboardStore.ticketHistory.error()) {
+  <div class="history-error">
+    Ocurrió un error cargando el historial
+  </div>
+}
+
+@if (scrumboardStore.ticketHistory.value(); as history) {
+  <div class="history-panel">
+    @for (h of history; track h.changedAt) {
+      <div class="history-row">
+        <span
+          class="history-dot"
+          [class.amount]="h.field === 'proposal'"
+          [class.column]="h.field === 'columnId'"
+        ></span>
+
+        <div class="history-text">
+          <strong>{{ h.label }}</strong>
+          <small>{{ h.changedAt.toDate() | date: 'short' }}</small>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <p class="history-empty">No hay historial para este ticket.</p>
+}

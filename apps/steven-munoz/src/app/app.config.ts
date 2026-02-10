@@ -6,20 +6,31 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-import Aura from '@primeng/themes/aura'
 import { providePrimeNG } from 'primeng/config';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from './environment';
+import Aura from '@primeuix/themes/aura';
+import { ConfirmationService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    ConfirmationService,
+    DialogService,
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: false,
+        },
+      },
+    }),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimationsAsync(),
-      providePrimeNG({}),
-      provideFirebaseApp(() => initializeApp(environment)),
-      provideFirestore(() => getFirestore())
+    provideFirebaseApp(() => initializeApp(environment)),
+    provideFirestore(() => getFirestore()),
   ],
 };

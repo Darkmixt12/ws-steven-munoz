@@ -18,10 +18,13 @@
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/steven-munoz/public"
+            "input": "apps/steven-munoz/public",
+            "output": "/"
           }
         ],
-        "styles": ["apps/steven-munoz/src/styles.scss"]
+        "styles": [
+          "apps/steven-munoz/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
