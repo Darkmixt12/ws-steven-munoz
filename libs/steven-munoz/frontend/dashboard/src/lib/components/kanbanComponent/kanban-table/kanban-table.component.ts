@@ -10,7 +10,6 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   inject,
 } from '@angular/core';
 import { KanbanColumnComponent } from '../kanban-column/kanban-column.component';
@@ -30,7 +29,10 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { DocumentsStore, ScrumboardStore } from '../../../stores/scrumboardStore';
+import {
+  DocumentsStore,
+  ScrumboardStore,
+} from '../../../stores/scrumboardStore';
 
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -39,7 +41,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule } from '@angular/common';
-import { KanbanHistoryComponent } from '../kanban-history/kanban-history.component';
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
@@ -63,7 +64,7 @@ import { KanbanHistoryComponent } from '../kanban-history/kanban-history.compone
 export class KanbanTable {
   readonly confirmationService = inject(ConfirmationService);
   readonly scrumboardStore = inject(DocumentsStore);
-  readonly scrumboardStoreFeature = inject(ScrumboardStore)
+  readonly scrumboardStoreFeature = inject(ScrumboardStore);
   readonly messageService = inject(MessageService);
   dialogService = inject(DialogService);
   store = inject(DocumentsStore);
@@ -77,8 +78,6 @@ export class KanbanTable {
       return docData(ref);
     },
   });
-
-
 
   getItemsByColumn(columnId: number) {
     return (this.testResource.value()?.tickets ?? []).filter(
@@ -98,72 +97,72 @@ export class KanbanTable {
     this.store.updateDoc({ ref, data: columns });
   }
 
-async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
-  const { previousIndex, currentIndex, container, previousContainer } = event;
+  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
+    const { previousIndex, currentIndex, container, previousContainer } = event;
 
+    if (container === previousContainer) {
+      moveItemInArray(container.data, previousIndex, currentIndex);
+      return;
+    }
 
-  if (container === previousContainer) {
-    moveItemInArray(container.data, previousIndex, currentIndex);
-    return;
-  }
+    const board = this.testResource.value();
+    if (!board) return;
 
-  const board = this.testResource.value();
-  if (!board) return;
+    const targetColumn = board.columns.find(
+      (c: KanbanItem) => c.id === columnId
+    );
+    const wipLimit = targetColumn?.wipLimit;
 
-  const targetColumn = board.columns.find( (c: KanbanItem) => c.id === columnId);
-  const wipLimit = targetColumn?.wipLimit;
+    if (wipLimit && container.data.length + 1 > wipLimit) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Límite WIP excedido',
+        detail: `Máximo permitido: ${wipLimit}`,
+        life: 3000,
+      });
+    }
 
-
-  if (wipLimit && container.data.length + 1 > wipLimit) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Límite WIP excedido',
-      detail: `Máximo permitido: ${wipLimit}`,
-      life: 3000,
-    });
-  }
-
-  // Movimiento visual inmediato
-  transferArrayItem(
-    previousContainer.data,
-    container.data,
-    previousIndex,
-    currentIndex
-  );
-
-  const movedItem = container.data[currentIndex];
-  const previousColumnId = movedItem.columnId;
-
-  if (previousColumnId === columnId) return;
-
-  movedItem.columnId = columnId;
-
-  const boardRef = doc(this.firestore, 'board2/scrum');
-  const historyRef = collection(this.firestore, 'ticketHistory');
-
-  await runTransaction(this.firestore, async transaction => {
-    const boardSnap = await transaction.get(boardRef);
-    if (!boardSnap.exists()) return;
-
-    const boardData = boardSnap.data() as Board;
-
-    // 🔄 Actualizar ticket
-    const updatedTickets = boardData.tickets.map(t =>
-      t.id === movedItem.id ? { ...t, columnId } : t
+    // Movimiento visual inmediato
+    transferArrayItem(
+      previousContainer.data,
+      container.data,
+      previousIndex,
+      currentIndex
     );
 
-    transaction.update(boardRef, { tickets: updatedTickets });
+    const movedItem = container.data[currentIndex];
+    const previousColumnId = movedItem.columnId;
 
-    transaction.set(doc(historyRef), {
-      ticketId: movedItem.id,
-      boardId: 'scrum',
-      field: 'columnId',
-      oldValue: previousColumnId,
-      newValue: columnId,
-      changedAt: Timestamp.now(),
+    if (previousColumnId === columnId) return;
+
+    movedItem.columnId = columnId;
+
+    const boardRef = doc(this.firestore, 'board2/scrum');
+    const historyRef = collection(this.firestore, 'ticketHistory');
+
+    await runTransaction(this.firestore, async (transaction) => {
+      const boardSnap = await transaction.get(boardRef);
+      if (!boardSnap.exists()) return;
+
+      const boardData = boardSnap.data() as Board;
+
+      // 🔄 Actualizar ticket
+      const updatedTickets = boardData.tickets.map((t) =>
+        t.id === movedItem.id ? { ...t, columnId } : t
+      );
+
+      transaction.update(boardRef, { tickets: updatedTickets });
+
+      transaction.set(doc(historyRef), {
+        ticketId: movedItem.id,
+        boardId: 'scrum',
+        field: 'columnId',
+        oldValue: previousColumnId,
+        newValue: columnId,
+        changedAt: Timestamp.now(),
+      });
     });
-  });
-}
+  }
 
   openCreateDialog() {
     this.ref = this.dialogService.open(KanbanItemCreateComponent, {
@@ -205,7 +204,7 @@ async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
       },
 
       accept: () => {
-        this.scrumboardStoreFeature.deleteScrumboardItem(payload.id)
+        this.scrumboardStoreFeature.deleteScrumboardItem(payload.id);
         this.messageService.add({
           severity: 'success',
           summary: 'Confirmado',
@@ -224,18 +223,17 @@ async drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
   }
 
   openHistoryDialog(payload: { event: Event; id: number | undefined }) {
-    this.ref = this.dialogService.open(KanbanHistoryComponent, {
-      transitionOptions: '300ms ease-in-out',
-      data: { item: payload.id, columns: this.testResource.value().columns ?? []},
-      header: 'History Item',
-      width: '20vw',
-      height: '50vh',
-      closable: true,
-      modal: true,
+    const columnMap = new Map<number, string>(
+      this.testResource
+        .value()
+        .columns.map((c: { id: number; title: string }) => [c.id, c.title])
+    );
+
+    this.scrumboardStoreFeature.setHistoryParams({
+      ticketId: payload.id ?? 0,
+      columnMap: columnMap,
     });
   }
-
-  //! WIP LIMITE DE ITEMS POR COLUMNA
 
   getItemsCount(columnId: number): number {
     return this.testResource

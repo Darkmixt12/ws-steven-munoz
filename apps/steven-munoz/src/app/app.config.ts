@@ -12,10 +12,12 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from './environment';
 import Aura from '@primeuix/themes/aura';
 import { ConfirmationService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     ConfirmationService,
+    DialogService,
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -28,7 +30,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimationsAsync(),
-    providePrimeNG({}),
     provideFirebaseApp(() => initializeApp(environment)),
     provideFirestore(() => getFirestore()),
   ],

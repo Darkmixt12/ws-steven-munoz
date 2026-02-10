@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { EnvironmentInjector, inject, Injectable, runInInjectionContext } from '@angular/core';
 import {
   addDoc,
   arrayUnion,
@@ -27,13 +27,12 @@ import { TicketHistory } from '../types/ticketHistory.interface';
 })
 export class FirestoreService {
   firestore = inject(Firestore);
+  private readonly envInjector = inject(EnvironmentInjector);
 
   updateDoc(ref: DocumentReference<DocumentData, DocumentData>, columns: any) {
     console.log('entramos al service');
     return updateDoc(ref, { columns });
   }
-
-
 
   async updateScrumboardTicket(updatedTicket: KanbanItem) {
     const scrumRef = doc(this.firestore, 'board2', 'scrum');
@@ -116,7 +115,7 @@ export class FirestoreService {
   }
 
   getHistoryTickets(
-    ticketId: string,
+    ticketId: number,
     columnMap: Map<number, string>
   ): Observable<(TicketHistory & { label: string })[]> {
     const historyRef = collection(this.firestore, 'ticketHistory');
@@ -127,7 +126,13 @@ export class FirestoreService {
       orderBy('changedAt', 'desc'),
       limit(50)
     );
-    return collectionData(q, { idField: 'id' }).pipe(
+
+    // ✅ ensure AngularFire runs inside injection context even when called from rxMethod/rxResource
+    const history$ = runInInjectionContext(this.envInjector, () =>
+      collectionData(q, { idField: 'id' })
+    );
+
+    return history$.pipe(
       map((history) =>
         (history as TicketHistory[]).map((h) => ({
           ...h,
