@@ -1,22 +1,10 @@
-import { rxResource } from '@angular/core/rxjs-interop';
-import {
-  collection,
-  collectionData,
-  Firestore,
-  limit,
-  orderBy,
-  query,
-  where,
-} from '@angular/fire/firestore';
 import {
   patchState,
   signalStoreFeature,
   withMethods,
-  withProps,
   withState,
 } from '@ngrx/signals';
-import { EMPTY, map, of, pipe, switchMap, tap } from 'rxjs';
-import { buildLabel } from '../../components/helpers/historyItems.helper';
+import { pipe, switchMap, tap } from 'rxjs';
 import { TicketHistory } from '../../types/ticketHistory.interface';
 import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -25,8 +13,8 @@ import { KanbanHistoryComponent } from '../../components/kanbanComponent/kanban-
 import { FirestoreService } from '../../services/firestore.service';
 
 type HistoryParams = {
-  ticketId: string;
-  columnMap: Map<number, string>;
+  ticketId: number;
+  columns: { id: number; title: string }[];
 };
 
 export function getHistoryKanbanItem() {
@@ -37,7 +25,6 @@ export function getHistoryKanbanItem() {
     }),
 
     withMethods((innerStore) => {
-      const firestore = inject(Firestore);
       const dialog = inject(DialogService);
       const firestoreService = inject(FirestoreService);
       return {
@@ -46,8 +33,8 @@ export function getHistoryKanbanItem() {
             tap(() => {
               patchState(innerStore, { loading: true });
             }),
-            switchMap(({ ticketId, columnMap }) =>
-              firestoreService.getHistoryTickets(ticketId, columnMap).pipe(
+            switchMap(({ ticketId, columns }) =>
+              firestoreService.getHistoryTickets(ticketId, columns).pipe(
                 tap((history) => console.log('fetching history...', history)),
                 tap((history) => {
                   patchState(innerStore, {
@@ -60,6 +47,7 @@ export function getHistoryKanbanItem() {
                     height: '50vh',
                     modal: true,
                     closable: true,
+                    data: { history },
                   });
                 })
               )

@@ -1,13 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { ScrumboardStore } from '../../../stores/scrumboardStore';
-
+import { TicketHistory } from '../../../types/ticketHistory.interface';
 @Component({
   selector: 'steven-munoz-kanban-history.component',
   standalone: true,
@@ -17,9 +15,11 @@ import { ScrumboardStore } from '../../../stores/scrumboardStore';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanHistoryComponent {
-  readonly scrumboardStore = inject(ScrumboardStore);
   readonly config = inject(DynamicDialogConfig);
 
+  readonly history = this.config.data.history as (TicketHistory & {
+  label: string;
+})[];
 
   
 }

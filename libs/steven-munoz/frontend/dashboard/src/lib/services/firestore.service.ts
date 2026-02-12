@@ -86,10 +86,11 @@ export class FirestoreService {
   private formatValue(
     field: string,
     value: any,
-    columnMap: Map<number, string>
+    columns: { id: number; title: string }[]
   ): string {
     if (field === 'columnId') {
-      return columnMap.get(value) ?? `Columna ${value}`;
+      const column = columns.find((c) => c.id === value);
+      return column?.title ?? `Columna ${value}`;
     }
 
     if (field === 'proposal') {
@@ -105,30 +106,37 @@ export class FirestoreService {
     return field;
   }
 
-  buildLabel(h: TicketHistory, columnMap: Map<number, string>): string {
+  buildLabel(
+    h: TicketHistory,
+    columns: { id: number; title: string }[]
+  ): string {
     const fieldName = this.getFieldName(h.field);
-    const from = this.formatValue(h.field, h.oldValue, columnMap);
-    const to = this.formatValue(h.field, h.newValue, columnMap);
+    const from = this.formatValue(h.field, h.oldValue, columns);
+    const to = this.formatValue(h.field, h.newValue, columns);
 
     return `${fieldName}: ${from} → ${to}`;
   }
 
-  getHistoryTickets(ticketId: string, columnMap: Map<number, string>) {
-    const historyRef = collection(this.firestore, 'ticketHistory');
+  getHistoryTickets(
+    ticketId: number,
+    columns: { id: number; title: string }[]
+  ) {
+const historyRef = collection(this.firestore, 'ticketHistory');
 
-    const q = query(
-      historyRef,
-      where('ticketId', '==', ticketId),
-      orderBy('changedAt', 'desc'),
-      limit(50)
-    );
-    return collectionData(q, { idField: 'id' }).pipe(
-      map((history) =>
-        (history as TicketHistory[]).map((h) => ({
-          ...h,
-          label: this.buildLabel(h, columnMap),
-        }))
-      )
-    );
+  const q = query(
+    historyRef,
+    where('ticketId', '==', ticketId),
+    orderBy('changedAt', 'desc'),
+    limit(50)
+  );
+
+  return collectionData(q, { idField: 'id' }).pipe(
+    map((history) =>
+      (history as TicketHistory[]).map((h) => ({
+        ...h,
+        label: this.buildLabel(h, columns),
+      }))
+    )
+  );
   }
 }

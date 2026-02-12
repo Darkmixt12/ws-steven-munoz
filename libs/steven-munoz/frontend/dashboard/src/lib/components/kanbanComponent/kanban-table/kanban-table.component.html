@@ -21,7 +21,7 @@
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="listDrop($event)"
   >
-    @for ( column of testResource.value()?.columns; track column.id) {
+    @for ( column of scrumBoardItems.value()?.columns; track column.id) {
     <div
       class="kanban-column-wrapper"
       [class.wip-exceeded]="isWipExceeded(column.id)"
@@ -43,9 +43,8 @@
           </span>
           }
           <span class="amount-total">
-             $ {{ getColumnTotalProposal(column.id) | number : '1.0-0' }}
+            $ {{ getColumnTotalProposal(column.id) | number : '1.0-0' }}
           </span>
-          
         </h1>
 
         @for (ticket of getItemsByColumn(column.id); track ticket.id) {
@@ -54,7 +53,7 @@
           [ticket]="ticket"
           (delete)="openDeleteDialog($event)"
           (edit)="openEditDialog($event)"
-          (history)="openHistoryDialog($event)"
+          (history)=" scrumboardStoreFeature.openHistoryDialog({ticketId: $event.id!,columns: this.scrumBoardItems.value()?.columns})"
           cdkDrag
           class="kanban-item"
         ></steven-munoz-kanban-item>
