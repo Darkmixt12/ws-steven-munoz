@@ -1,4 +1,6 @@
+import { collection, collectionData, Firestore, query, where } from "@angular/fire/firestore";
 import { TicketHistory } from "../../types/ticketHistory.interface";
+import { Observable, map } from "rxjs";
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -6,13 +8,19 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-export function getFieldName(field: string): string {
+const columnMap = new Map<string, string>([
+    ['todo', 'Por hacer'],
+    ['doing', 'En progreso'],
+    ['done', 'Completado'],
+  ]);
+
+function getFieldName(field: string): string {
   if (field === 'columnId') return 'Columna';
   if (field === 'proposal') return 'Monto';
   return field;
 }
 
-export function formatValue(
+function formatValue(
   field: string,
   value: any,
   columnMap: Map<number, string>
@@ -37,4 +45,29 @@ export function buildLabel(
   const to = formatValue(h.field, h.newValue, columnMap);
 
   return `${fieldName}: ${from} → ${to}`;
+}
+
+
+export function fetchHistoryTickets(
+  firestore: Firestore,
+  ticketId: number,
+  columns: { id: number; title: string }[]
+): Observable<(TicketHistory & { label: string })[]> {
+
+  const historyRef = collection(firestore, 'ticketHistory');
+
+  const q = query(historyRef, where('ticketId', '==', ticketId));
+
+  const columnMap = new Map<number, string>(
+    columns.map(c => [c.id, c.title])
+  );
+
+  return collectionData(q, { idField: 'id' }).pipe(
+    map((history: any[]) =>
+      history.map(h => ({
+        ...h,
+        label: buildLabel(h, columnMap)
+      }))
+    )
+  );
 }

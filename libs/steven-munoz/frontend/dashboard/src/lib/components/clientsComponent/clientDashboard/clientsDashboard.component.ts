@@ -27,7 +27,7 @@ export class ClientsDashboardComponent {
 
   clientstore = inject(ClientsStore);
   displayedColumns: string[] = ['position', 'name', 'email',];
-  clients = this.clientstore.getClientsSignal();
+  clients = this.clientstore.getClientsResource.value
 
 
 

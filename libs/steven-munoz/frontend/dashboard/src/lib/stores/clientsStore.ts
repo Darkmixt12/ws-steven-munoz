@@ -1,30 +1,14 @@
-import { inject } from '@angular/core';
 import {
   signalStore,
-  withState,
-  withMethods,
-  withProps,
 } from '@ngrx/signals';
 
-import { FirestoreService } from '../services/firestore.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { CreateClient } from '../types/client.interface';
+import { createClient } from './clientsStoreFeatures/createClient';
+import { getClients } from './clientsStoreFeatures/getClients';
 
 export const ClientsStore = signalStore(
   { providedIn: 'root' },
 
-  withState({
-  }),
+  createClient(),
+  getClients(),
 
-  withProps(() => ({
-    firestoreService: inject(FirestoreService),
-  })),
-
-  withMethods((store) => ({
-
-      getClientsSignal: () => toSignal(store.firestoreService.getClients()),
-    
-      createClient: (client: CreateClient) =>
-      store.firestoreService.createClient(client),
-  }))
 );

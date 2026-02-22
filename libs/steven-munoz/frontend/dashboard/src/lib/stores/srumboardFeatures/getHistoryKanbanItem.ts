@@ -10,7 +10,8 @@ import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { DialogService } from 'primeng/dynamicdialog';
 import { KanbanHistoryComponent } from '../../components/kanbanComponent/kanban-history/kanban-history.component';
-import { FirestoreService } from '../../services/firestore.service';
+import { Firestore } from '@angular/fire/firestore';
+import { fetchHistoryTickets } from '../../components/helpers/historyItems.helper';
 
 type HistoryParams = {
   ticketId: number;
@@ -26,7 +27,7 @@ export function getHistoryKanbanItem() {
 
     withMethods((innerStore) => {
       const dialog = inject(DialogService);
-      const firestoreService = inject(FirestoreService);
+      const firestore = inject(Firestore)
       return {
         openHistoryDialog: rxMethod<HistoryParams>(
           pipe(
@@ -34,7 +35,7 @@ export function getHistoryKanbanItem() {
               patchState(innerStore, { loading: true });
             }),
             switchMap(({ ticketId, columns }) =>
-              firestoreService.getHistoryTickets(ticketId, columns).pipe(
+              fetchHistoryTickets(firestore,ticketId, columns).pipe(
                 tap((history) => console.log('fetching history...', history)),
                 tap((history) => {
                   patchState(innerStore, {

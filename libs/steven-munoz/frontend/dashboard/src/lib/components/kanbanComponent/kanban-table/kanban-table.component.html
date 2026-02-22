@@ -21,7 +21,7 @@
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="listDrop($event)"
   >
-    @for ( column of scrumBoardItems.value()?.columns; track column.id) {
+    @for ( column of this.columns(); track column.id) {
     <div
       class="kanban-column-wrapper"
       [class.wip-exceeded]="isWipExceeded(column.id)"
@@ -53,7 +53,7 @@
           [ticket]="ticket"
           (delete)="openDeleteDialog($event)"
           (edit)="openEditDialog($event)"
-          (history)=" scrumboardStoreFeature.openHistoryDialog({ticketId: $event.id!,columns: this.scrumBoardItems.value()?.columns})"
+          (history)=" openHistory({ticketId: $event.id!})"
           cdkDrag
           class="kanban-item"
         ></steven-munoz-kanban-item>
