@@ -6232,18 +6232,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ngrx/signals@npm:^21.0.1":
-  version: 21.0.1
-  resolution: "@ngrx/signals@npm:21.0.1"
+"@ngrx/signals@npm:20":
+  version: 20.1.0
+  resolution: "@ngrx/signals@npm:20.1.0"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/core": ^21.0.0
+    "@angular/core": ^20.0.0
     rxjs: ^6.5.3 || ^7.4.0
   peerDependenciesMeta:
     rxjs:
       optional: true
-  checksum: 10c0/32f65f2731b40f2024a07ad61e4f802650c1e76d46f5f4715e9b482a2fab7044463b65d17ded3f07cb3b7900495e20c4c4849be922eec56bd7324fc9aa007f45
+  checksum: 10c0/5ee2df30ac5c85540c035f40312f9f3af87388686b9dee086e834098af6bfd9221641e0304be66ebfb67ac377330565b6fbd8f820078ec3c5d014cdf18549390
   languageName: node
   linkType: hard
 
@@ -9206,7 +9206,7 @@ __metadata:
     "@angular/platform-browser-dynamic": "npm:~20.3.0"
     "@angular/router": "npm:~20.3.0"
     "@eslint/js": "npm:^9.8.0"
-    "@ngrx/signals": "npm:^21.0.1"
+    "@ngrx/signals": "npm:20"
     "@ngrx/store": "npm:^21.0.0"
     "@nx/angular": "npm:22.0.2"
     "@nx/cypress": "npm:22.0.2"
