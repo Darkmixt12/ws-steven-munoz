@@ -7,10 +7,11 @@ describe('KanbanItem', () => {
   let fixture: ComponentFixture<KanbanItemComponent>;
 
     const mockItem: KanbanItem = {
+    proposal: 1500,
     assignee: 'Test Steven',
-    columnId: '1',
+    columnId: 1,
     description: 'Study',
-    id: '1',
+    id: 1,
     priority: 'High',
     title: 'Test Pass'
   }
@@ -19,6 +20,7 @@ describe('KanbanItem', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [KanbanItemComponent],
+      providers: []
     }).compileComponents();
 
     fixture = TestBed.createComponent(KanbanItemComponent);

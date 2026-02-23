@@ -9246,6 +9246,7 @@ __metadata:
     tslib: "npm:^2.3.0"
     typescript: "npm:~5.9.2"
     typescript-eslint: "npm:^8.40.0"
+    whatwg-fetch: "npm:^3.6.20"
     zone.js: "npm:~0.15.0"
   languageName: unknown
   linkType: soft
@@ -23691,7 +23692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-fetch@npm:^3.4.1":
+"whatwg-fetch@npm:^3.4.1, whatwg-fetch@npm:^3.6.20":
   version: 3.6.20
   resolution: "whatwg-fetch@npm:3.6.20"
   checksum: 10c0/fa972dd14091321d38f36a4d062298df58c2248393ef9e8b154493c347c62e2756e25be29c16277396046d6eaa4b11bd174f34e6403fff6aaca9fb30fa1ff46d
