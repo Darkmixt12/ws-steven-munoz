@@ -4,6 +4,7 @@ import { provideRouter, RouterModule } from '@angular/router';
 import { Firestore } from '@angular/fire/firestore';
 import { of } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 jest.mock('@angular/fire/firestore', () => ({
   Firestore: jest.fn(),
@@ -12,6 +13,11 @@ jest.mock('@angular/fire/firestore', () => ({
   runTransaction: jest.fn(() => Promise.resolve()),
   updateDoc: jest.fn(() => Promise.resolve()),
 }));
+
+const dialogServiceMock = {
+  open: jest.fn(),
+  close: jest.fn(),
+};
 
 describe('KanbanTable', () => {
   let component: KanbanTable;
@@ -29,6 +35,10 @@ describe('KanbanTable', () => {
       providers: [
         provideRouter([]),
         { provide: Firestore, useValue: {} },
+        {
+          provide: DialogService,
+          useValue: dialogServiceMock,
+        },
         {
           provide: ConfirmationService,
           useValue: {
