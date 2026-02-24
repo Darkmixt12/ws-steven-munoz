@@ -4,7 +4,6 @@ import { Firestore } from '@angular/fire/firestore';
 import { ConfirmationService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { provideRouter, RouterModule } from '@angular/router';
-import { Firestore } from '@angular/fire/firestore';
 import { of } from 'rxjs';
 
 jest.mock('@angular/fire/firestore', () => ({
