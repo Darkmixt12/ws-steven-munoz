@@ -4,37 +4,32 @@ import {
   CdkDropList,
   CdkDropListGroup,
   DragDropModule,
-  moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
+  computed,
   inject,
-  signal,
 } from '@angular/core';
 import { KanbanColumnComponent } from '../kanban-column/kanban-column.component';
 import { KanbanItemComponent } from '../kanban-item/kanban-item.component';
 import { RouterModule } from '@angular/router';
-import {
-  Board,
-  FireStoreKanbanColumn,
-  KanbanColumn,
-  KanbanItem,
-} from '../../../types/kanban.interface';
-import {
-  doc,
-  docData,
-  Firestore,
-  runTransaction,
-  updateDoc,
-} from '@angular/fire/firestore';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { KanbanItem } from '../../../types/kanban.interface';
+
+import { ButtonModule } from 'primeng/button';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { KanbanItemCreateComponent } from '../kanban-item-create/kanban-item.create.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CommonModule } from '@angular/common';
+import { Firestore } from '@angular/fire/firestore';
+import { ScrumboardStore } from '../../../stores/scrumboardStore';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
   imports: [
+    CommonModule,
     RouterModule,
     CdkDrag,
     CdkDropList,
@@ -42,119 +37,135 @@ import { rxResource } from '@angular/core/rxjs-interop';
     DragDropModule,
     KanbanColumnComponent,
     KanbanItemComponent,
+    ButtonModule,
+    ToastModule,
+    ConfirmDialogModule,
   ],
+  providers: [DialogService, MessageService],
   templateUrl: './kanban-table.component.html',
   styleUrl: './kanban-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanTable {
+  readonly confirmationService = inject(ConfirmationService);
+  private readonly scrumboardStoreFeature = inject(ScrumboardStore);
+  readonly messageService = inject(MessageService);
+  dialogService = inject(DialogService);
   firestore = inject(Firestore);
 
-  testResource = rxResource<any, FireStoreKanbanColumn[] | null>({
-    stream: () => {
-      const ref = doc(this.firestore, 'board2/scrum');
-      return docData(ref);
-    },
-  });
+  ref: DynamicDialogRef | null = null;
+  readonly columns = computed(
+    () => this.scrumboardStoreFeature.boardResource.value()?.columns ?? []
+  );
 
-  constructor() {
-    effect(() => {
-      console.log('Datos de Firestore:', this.testResource.value());
+  readonly tickets = computed(
+    () => this.scrumboardStoreFeature.boardResource.value()?.tickets ?? []
+  );
+
+  openHistory(event: { ticketId: number }) {
+    this.scrumboardStoreFeature.openHistoryDialog({
+      ticketId: event.ticketId,
+      columns: this.columns(),
     });
   }
 
-  columns = signal<KanbanColumn[]>([
-    {
-      id: '1',
-      title: 'To Do',
-    },
-    {
-      id: '2',
-      title: 'To Progress',
-    },
-    {
-      id: '3',
-      title: 'To End',
-    },
-  ]);
-
-  items = signal<KanbanItem[]>([
-    {
-      columnId: '1',
-      assignee: 'Laura Gómez',
-      description: 'Actualizar el diseño del panel principal.',
-      id: '1',
-      priority: 'High',
-      title: 'Revisión de interfaz',
-    },
-    {
-      columnId: '2',
-      assignee: 'Carlos Rivera',
-      description: 'Corregir errores en el formulario de registro.',
-      id: '2',
-      priority: 'Medium',
-      title: 'Bug en registro de usuarios',
-    },
-    {
-      columnId: '3',
-      assignee: 'Andrea López',
-      description: 'Agregar validación al campo de correo electrónico.',
-      id: '3',
-      priority: 'Low',
-      title: 'Validación pendiente',
-    },
-  ]);
-
-  async drop(event: CdkDragDrop<KanbanItem[]>, columnId: string) {
-    const { previousIndex, currentIndex, container, previousContainer } = event;
-
-    if (container === previousContainer)
-      return moveItemInArray(container.data, previousIndex, currentIndex);
-
-    transferArrayItem(
-      previousContainer.data,
-      container.data,
-      previousIndex,
-      currentIndex
-    );
-
-    const movedItem = container.data[currentIndex];
-    movedItem.columnId = columnId;
-
-    const boardRef = doc(this.firestore, 'board2/scrum');
-
-    await runTransaction(this.firestore, async (transaction) => {
-      const boardSnap = await transaction.get(boardRef);
-
-      if (!boardSnap.exists()) return;
-
-      const board = boardSnap.data() as Board;
-
-      const updatedTickets = board.tickets.map((t: KanbanItem) =>
-        t.id === movedItem.id ? { ...t, columnId } : t
-      );
-
-      // ACTUALIZA DENTRO DE LA TRANSACCIÓN
-      transaction.update(boardRef, { tickets: updatedTickets });
-    });
-  }
-
-  getItemsByColumn(columnId: string) {
-    return (this.testResource.value()?.tickets ?? []).filter(
+  getItemsByColumn(columnId: number) {
+    return (this.tickets() ?? []).filter(
       (item: KanbanItem) => item.columnId === columnId
     );
   }
 
-  async listDrop(event: CdkDragDrop<undefined>) {
-    const { previousIndex, currentIndex } = event;
-    moveItemInArray(
-      this.testResource.value()?.columns,
-      previousIndex,
-      currentIndex
+  listDrop(event: CdkDragDrop<any>) {
+    this.scrumboardStoreFeature.reorderColumns(
+      event.previousIndex,
+      event.currentIndex
     );
+  }
 
-    const ref = doc(this.firestore, 'board2', 'scrum');
-    const columns = this.testResource.value()?.columns;
-    await updateDoc(ref, { columns });
+  drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
+    this.scrumboardStoreFeature.drop(event, columnId);
+  }
+
+  openCreateDialog() {
+    this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      transitionOptions: '300ms ease-in-out',
+      data: { item: null },
+      header: 'Crear Nuevo Item',
+      width: '20vw',
+      height: '50vh',
+      closable: true,
+      modal: true,
+    });
+  }
+
+  openEditDialog(payload: { event: Event; id: KanbanItem }) {
+    this.ref = this.dialogService.open(KanbanItemCreateComponent, {
+      transitionOptions: '300ms ease-in-out',
+      data: { item: payload.id },
+      header: 'Editar Item',
+      width: '20vw',
+      height: '50vh',
+      closable: true,
+      modal: true,
+    });
+  }
+
+  openDeleteDialog(payload: { event: Event; id: number | undefined }) {
+    this.confirmationService.confirm({
+      message: 'Realmente quiere eliminar este registro?',
+      header: 'Cuidado',
+      icon: 'pi pi-info-circle',
+
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.scrumboardStoreFeature.deleteScrumboardItem(payload.id);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Confirmado',
+          detail: 'Has eliminado el ticket con exito',
+        });
+      },
+
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelado',
+          detail: 'Has cancelado la eliminación',
+        });
+      },
+    });
+  }
+
+  //! WIP LIMITE DE ITEMS POR COLUMNA
+
+  getItemsCount(columnId: number): number {
+    return this.scrumboardStoreFeature
+      .tickets()
+      .filter((item) => item.columnId === columnId).length;
+  }
+
+  isWipExceeded(columnId: number): boolean {
+    const column = this.scrumboardStoreFeature
+      .columns()
+      .find((c) => c.id === columnId);
+
+    if (!column?.wipLimit) return false;
+
+    return this.getItemsCount(columnId) > column.wipLimit;
+  }
+
+  getColumnTotalProposal(columnId: number): number {
+    return this.getItemsByColumn(columnId).reduce(
+      (total: number, item: KanbanItem) => total + (item.proposal ?? 0),
+      0
+    );
   }
 }

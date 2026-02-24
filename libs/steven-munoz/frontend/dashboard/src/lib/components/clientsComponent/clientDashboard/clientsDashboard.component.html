@@ -1,0 +1,73 @@
+
+<div>
+
+    <div class="header-card">
+      <h2>Contactos</h2>
+      <div class="header-btns">
+      <p-button label="Importar" variant="outlined" severity="warn" />
+      <p-button label="Crear Contacto" severity="warn" (click)="show()" />
+      </div>
+
+    </div>
+
+</div>
+
+<div class="card-wrapper">
+  <p-card>
+    <p-table
+      #dt2
+      [value]="clients() || []"
+      stripedRows
+      [globalFilterFields]="[
+        'name',
+        'email',
+        'representative.name',
+        'status'
+      ]"
+    >
+      <ng-template #caption>
+        <div class="table-search">
+          <p-iconfield iconPosition="left" class="ml-auto">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input
+              pInputText
+              type="text"
+              (input)="dt2.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search keyword"
+            />
+          </p-iconfield>
+          <p-button label="Exportar Clientes" severity="info" />
+        </div>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Telefono</th>
+          <th>Fecha de Creacion</th>
+          <th>Usuario</th>
+            <th style="width: 5rem"></th>
+
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-product>
+        <tr>
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.email }}</td>
+          <td>{{ product.tel }}</td>
+          <td>{{ product.create_date}}</td>
+          <td>{{ product.user_owner }}</td>
+            <td>
+                <p-button icon="pi pi-search"  severity="secondary" rounded />
+            </td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

@@ -5,9 +5,12 @@ button {
 }
 .testing {
   display: flex;
+  min-width: 250px;
+  
 }
 
 .columnasItem {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }

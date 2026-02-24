@@ -3,6 +3,8 @@ import { KanbanTable } from './kanban-table.component';
 import { provideRouter, RouterModule } from '@angular/router';
 import { Firestore } from '@angular/fire/firestore';
 import { of } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 jest.mock('@angular/fire/firestore', () => ({
   Firestore: jest.fn(),
@@ -12,6 +14,10 @@ jest.mock('@angular/fire/firestore', () => ({
   updateDoc: jest.fn(() => Promise.resolve()),
 }));
 
+const dialogServiceMock = {
+  open: jest.fn(),
+  close: jest.fn(),
+};
 
 describe('KanbanTable', () => {
   let component: KanbanTable;
@@ -23,13 +29,28 @@ describe('KanbanTable', () => {
     })
   );
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [KanbanTable, RouterModule],
       providers: [
         provideRouter([]),
         { provide: Firestore, useValue: {} },
+        {
+          provide: DialogService,
+          useValue: dialogServiceMock,
+        },
+        {
+          provide: ConfirmationService,
+          useValue: {
+            confirm: jest.fn(),
+          },
+        },
+        {
+          provide: MessageService,
+          useValue: {
+            add: jest.fn(),
+          },
+        },
       ],
     }).compileComponents();
 

@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { SideNavComponent } from '../sideNavComponent/side-nav.component';
 
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'steven-munoz-layout',
   imports: [
@@ -24,6 +25,7 @@ import { SideNavComponent } from '../sideNavComponent/side-nav.component';
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
+    ConfirmDialogModule
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',

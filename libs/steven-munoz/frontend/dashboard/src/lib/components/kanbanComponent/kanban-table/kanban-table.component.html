@@ -1,4 +1,19 @@
-<div class="testingDiv max-w-[1000px] mx-auto my-24">
+<div>
+  <p-toast position="bottom-center" />
+
+  <div class="header-card">
+    <h2>Scrumboard</h2>
+    <div class="header-btns">
+      <p-button
+        label="Crear Tarjeta"
+        severity="warn"
+        (onClick)="openCreateDialog()"
+      />
+    </div>
+  </div>
+</div>
+
+<div class="kanban-space">
   <div
     class="columnsDisplay"
     cdkDropListGroup
@@ -6,24 +21,46 @@
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="listDrop($event)"
   >
-    @for ( column of testResource.value()?.columns; track column.id) {
-    <steven-munoz-kanban-column
+    @for ( column of this.columns(); track column.id) {
+    <div
+      class="kanban-column-wrapper"
+      [class.wip-exceeded]="isWipExceeded(column.id)"
       cdkDrag
-      class="flex-1 p-8 border-r"
       cdkDropList
       [cdkDropListData]="getItemsByColumn(column.id)"
       (cdkDropListDropped)="drop($event, column.id)"
     >
-      <h1 class="text-5xl font-bold">{{ column.title }}</h1>
+      <steven-munoz-kanban-column>
+        <h1 class="kanban-column-title">
+          {{ column.title }}
 
-      @for (ticket of getItemsByColumn(column.id); track ticket.id) {
-      <steven-munoz-kanban-item
-        cdkDrag
-        [item]="ticket"
-        class="mb-8 last:mb-0"
-      ></steven-munoz-kanban-item>
-      }
-    </steven-munoz-kanban-column>
+          @if(column.wipLimit){
+          <span
+            class="wip-badge"
+            [class.wip-badge--exceeded]="isWipExceeded(column.id)"
+          >
+            {{ getItemsByColumn(column.id).length }}/ {{ column.wipLimit }}
+          </span>
+          }
+          <span class="amount-total">
+            $ {{ getColumnTotalProposal(column.id) | number : '1.0-0' }}
+          </span>
+        </h1>
+
+        @for (ticket of getItemsByColumn(column.id); track ticket.id) {
+
+        <steven-munoz-kanban-item
+          [ticket]="ticket"
+          (delete)="openDeleteDialog($event)"
+          (edit)="openEditDialog($event)"
+          (history)=" openHistory({ticketId: $event.id!})"
+          cdkDrag
+          class="kanban-item"
+        ></steven-munoz-kanban-item>
+        }
+      </steven-munoz-kanban-column>
+    </div>
+
     }
   </div>
 </div>
