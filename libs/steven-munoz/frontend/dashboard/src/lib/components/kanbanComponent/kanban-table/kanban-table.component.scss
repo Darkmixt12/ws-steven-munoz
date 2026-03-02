@@ -48,6 +48,12 @@
   gap: 1rem;
 }
 
+.page-resumeInfo {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 0.1rem;
+}
+
 /* ==============================
    COLUMNS
 ================================ */
@@ -107,7 +113,6 @@
   transition: color 0.2s ease;
 }
 
-
 /* ==============================
    DRAG & DROP (CDK)
 ================================ */
@@ -138,6 +143,3 @@
     background-color: #fff1f2;
   }
 }
-
-
-

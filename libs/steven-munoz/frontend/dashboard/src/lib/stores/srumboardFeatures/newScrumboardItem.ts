@@ -1,3 +1,4 @@
+import { Timestamp } from '@angular/fire/firestore';
 import { inject } from '@angular/core';
 import {
   arrayUnion,
@@ -8,7 +9,7 @@ import {
 } from '@angular/fire/firestore';
 import { signalStoreFeature, withMethods, withProps } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { KanbanItem } from '../../types/kanban.interface';
+import { KanbanForm, KanbanItem } from '../../types/kanban.interface';
 import { from, map, pipe } from 'rxjs';
 
 export function newScrumboardItem() {
@@ -19,7 +20,7 @@ export function newScrumboardItem() {
     })),
 
     withMethods((store) => ({
-      createScrumboardItem: rxMethod<KanbanItem>(
+      createScrumboardItem: rxMethod<KanbanForm>(
         pipe(
           map((item) =>
             from(
@@ -38,6 +39,7 @@ export function newScrumboardItem() {
                 const newItem: KanbanItem = {
                   ...item,
                   id: newId,
+                  createdAt:  Timestamp.now()
                 };
 
                 await updateDoc(scrumRef, { tickets: arrayUnion(newItem) });

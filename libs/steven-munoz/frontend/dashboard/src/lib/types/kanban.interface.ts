@@ -1,3 +1,4 @@
+import { Timestamp } from "@angular/fire/firestore";
 
 export interface KanbanColumn {
   id: number;
@@ -12,20 +13,27 @@ export interface Board {
 
 export interface KanbanItem {
   columnId: number;
-  id?: number;
+  id: number;
   title: string;
   proposal: number;
   description: string;
   assignee: string;
   priority: 'High' | 'Medium' | 'Low';
-
+  createdAt: Timestamp;
+  closedAt?: Timestamp | null;
 }
 
-export type KanbanForm = Omit<KanbanItem, 'id'> & {
-  client?: string
-}
+export type KanbanForm = Omit<
+  KanbanItem,
+  'id' | 'createdAt' | 'closedAt' | 'updatedAt'
+> & {
+  client?: string;
+};
 
-
+export type KanbanUpdate = {
+  id: number;
+  changes: KanbanForm;
+};
 
 // Interfaces para el FIREBASE BOARD
 export interface FireStoreKanbanColumn {

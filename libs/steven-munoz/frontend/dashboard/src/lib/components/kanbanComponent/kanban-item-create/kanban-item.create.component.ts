@@ -23,7 +23,6 @@ import {
   Firestore,
   serverTimestamp,
 } from '@angular/fire/firestore';
-import { Client } from '../../../types/client.interface';
 
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
@@ -113,27 +112,18 @@ export class KanbanItemCreateComponent {
     this.formSubmitted = true;
     if (this.exampleForm.invalid) return;
 
-    this.saving = true;
-
-    const payload: KanbanItem = {
-      ...this.editingItem,
-      ...this.exampleForm.getRawValue(),
-    };
+    const formValue: KanbanForm = this.exampleForm.getRawValue();
 
     if (this.isEditMode && this.editingItem) {
-      await this.trackChanges(this.editingItem, payload);
+      this.scrumboardStore.updateScrumboardItem({
+        id: this.editingItem.id,
+        changes: formValue,
+      });
+    } else {
+      this.scrumboardStore.createScrumboardItem(formValue);
     }
 
-    setTimeout(() => {
-      this.isEditMode
-        ? this.scrumboardStore.updateScrumboardItem(payload)
-        : this.scrumboardStore.createScrumboardItem({
-            ...payload,
-            id: 1,
-          });
-
-      this.dialogRef.close(true);
-    }, 400);
+    this.dialogRef.close(true);
   }
 
   private async trackChanges(oldItem: KanbanItem, newItem: KanbanItem) {

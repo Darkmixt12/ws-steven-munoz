@@ -25,6 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule } from '@angular/common';
 import { Firestore } from '@angular/fire/firestore';
 import { ScrumboardStore } from '../../../stores/scrumboardStore';
+import { KanbanResumeInfoComponent } from '../kanban-resume-info/kanbanResumeInfo.component';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -36,6 +37,7 @@ import { ScrumboardStore } from '../../../stores/scrumboardStore';
     CdkDropListGroup,
     DragDropModule,
     KanbanColumnComponent,
+    KanbanResumeInfoComponent,
     KanbanItemComponent,
     ButtonModule,
     ToastModule,

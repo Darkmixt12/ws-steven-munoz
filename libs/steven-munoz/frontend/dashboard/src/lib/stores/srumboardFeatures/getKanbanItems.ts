@@ -95,9 +95,35 @@ export function boardFeature() {
 
         if (previousColumnId === columnId) return;
 
-        const updatedTickets = tickets.map((t) =>
-          t.id === movedItem.id ? { ...t, columnId } : t
-        );
+        const WON = 4;
+
+        const updatedTickets = tickets.map((t) => {
+          if (t.id !== movedItem.id) return t;
+
+          const updatedTicket = {
+            ...t,
+            columnId,
+            updatedAt: Timestamp.now(), 
+          };
+
+ 
+          if (columnId === WON) {
+            return {
+              ...updatedTicket,
+              closedAt: Timestamp.now(),
+            };
+          }
+
+
+          if (previousColumnId === WON && columnId !== WON) {
+            return {
+              ...updatedTicket,
+              closedAt: null,
+            };
+          }
+
+          return updatedTicket;
+        });
 
         patchState(store, { tickets: updatedTickets });
 
@@ -117,7 +143,6 @@ export function boardFeature() {
           });
         } catch (error) {
           console.error('Error moving ticket:', error);
-
           patchState(store, { tickets });
         }
       },
