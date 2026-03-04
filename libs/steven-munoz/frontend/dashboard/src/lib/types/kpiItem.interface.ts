@@ -6,6 +6,7 @@ export interface KpiItem {
   progress?: number; // 0 - 100
   format: 'currency' | 'number' | 'percent' | 'days'
   customColor: string
+  displayMessage?: string
 }
 
 export interface Deal {

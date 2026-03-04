@@ -1,14 +1,13 @@
-import { Timestamp } from "@angular/fire/firestore";
-
-export interface KanbanColumn {
-  id: number;
-  title: string;
-  wipLimit?: number;
-}
+import { Timestamp } from '@angular/fire/firestore';
 
 export interface Board {
   columns: KanbanColumn[];
   tickets: KanbanItem[];
+}
+export interface KanbanColumn {
+  id: number;
+  title: string;
+  wipLimit?: number;
 }
 
 export interface KanbanItem {
@@ -21,6 +20,8 @@ export interface KanbanItem {
   priority: 'High' | 'Medium' | 'Low';
   createdAt: Timestamp;
   closedAt?: Timestamp | null;
+  deletedAt?: Timestamp | null;
+  isDeleted: boolean;
 }
 
 export type KanbanForm = Omit<

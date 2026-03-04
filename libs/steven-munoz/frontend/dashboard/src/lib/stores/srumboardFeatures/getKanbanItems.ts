@@ -16,6 +16,7 @@ import {
   withProps,
   patchState,
   withMethods,
+  withComputed,
 } from '@ngrx/signals';
 import {
   FireStoreKanbanColumn,
@@ -23,8 +24,10 @@ import {
   KanbanItem,
 } from '../../types/kanban.interface';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { map } from 'rxjs';
 
 export function boardFeature() {
+
   return signalStoreFeature(
     withState({
       columns: [] as KanbanColumn[],
@@ -40,7 +43,19 @@ export function boardFeature() {
       const boardResource = rxResource<any, FireStoreKanbanColumn[]>({
         stream: () => {
           const ref = doc(store.firestore, 'board2/scrum');
-          return docData(ref);
+          return docData(ref).pipe(
+            map((data: any) => {
+              const tickets: KanbanItem[] = data?.tickets ?? [];
+
+              const activeTickets = tickets.filter((t) => !t.isDeleted);
+
+              return {
+                ...data,
+                tickets: activeTickets,
+                allTicketsforAnalytics: tickets,
+              };
+            })
+          );
         },
       });
 
@@ -48,10 +63,15 @@ export function boardFeature() {
 
       const tickets = computed(() => boardResource.value()?.tickets ?? []);
 
+      const allTickets = computed(
+        () => boardResource.value()?.allTicketsforAnalytics ?? []
+      );
+
       return {
         boardResource,
         columns,
         tickets,
+        allTickets,
       };
     }),
 
@@ -70,7 +90,7 @@ export function boardFeature() {
         const { previousIndex, currentIndex, container, previousContainer } =
           event;
 
-        const tickets = [...store.tickets()];
+        const tickets = [...store.allTickets()];
 
         if (container === previousContainer) {
           const columnTickets = tickets.filter((t) => t.columnId === columnId);
@@ -103,17 +123,15 @@ export function boardFeature() {
           const updatedTicket = {
             ...t,
             columnId,
-            updatedAt: Timestamp.now(), 
+            updatedAt: Timestamp.now(),
           };
 
- 
           if (columnId === WON) {
             return {
               ...updatedTicket,
               closedAt: Timestamp.now(),
             };
           }
-
 
           if (previousColumnId === WON && columnId !== WON) {
             return {

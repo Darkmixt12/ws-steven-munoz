@@ -1,0 +1,66 @@
+<div class="kpi-container">
+  @for (kpi of kpis(); track kpi.label; let i = $index) {
+
+  <div class="kpi-card">
+    <div class="kpi-top">
+      <div class="kpi-title">
+        <!-- Icono con color personalizado -->
+        <div class="kpi-icon" [style.background]="kpi.customColor">
+          <i [class]="kpi.icon"></i>
+        </div>
+
+        <span>{{ kpi.label }}</span>
+      </div>
+      @if (kpi.trend !== null && kpi.trend !== undefined) {
+      <div
+        class="kpi-badge"
+        [ngClass]="{
+          positive: kpi.trend > 0,
+          negative: kpi.trend < 0,
+          neutral: kpi.trend === 0
+        }"
+      >
+        <span>
+          <ng-container *ngIf="kpi.trend > 0">↑</ng-container>
+          <ng-container *ngIf="kpi.trend < 0">↓</ng-container>
+          <ng-container *ngIf="kpi.trend === 0">→</ng-container>
+        </span>
+
+        {{ kpi.trend | number : '1.0-2' }}%
+      </div>
+      }
+    </div>
+
+    <div class="value-container">
+      <div class="kpi-value">
+        @if (kpi.format === 'currency') {
+        {{ kpi.value | currency : 'USD' : 'symbol' : '1.0-0' }}
+        } @else if (kpi.format === 'percent') {
+        {{ kpi.value }}% } @else {
+        {{ kpi.value }}
+        }
+      </div>
+
+      <div>
+        @if (kpi.displayMessage) {
+        <div class="kpi-extra">
+          <span>
+            <span class="muted"> {{ kpi.displayMessage }} </span>
+          </span>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="kpi-bar">
+      <!-- Barra de progreso con color personalizado -->
+      <div
+        class="kpi-progress"
+        [style.width.%]="kpi.progress"
+        [style.background]="kpi.customColor"
+      ></div>
+    </div>
+  </div>
+
+  }
+</div>

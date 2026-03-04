@@ -88,6 +88,7 @@ export class KanbanItemCreateComponent {
     description: '',
     columnId: 1,
     assignee: 'Andres Peralta',
+    isDeleted: false
   });
 
   searchClients(event: any) {

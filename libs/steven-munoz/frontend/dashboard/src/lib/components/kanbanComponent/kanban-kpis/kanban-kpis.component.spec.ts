@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { KanbanResumeInfoComponent } from './kanbanResumeInfo.component';
+import { KanbanKpisComponent } from './kanban-kpis.component';
 
 describe('KanbanResumeInfoComponent', () => {
-  let component: KanbanResumeInfoComponent;
-  let fixture: ComponentFixture<KanbanResumeInfoComponent>;
+  let component: KanbanKpisComponent;
+  let fixture: ComponentFixture<KanbanKpisComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KanbanResumeInfoComponent],
+      imports: [KanbanKpisComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(KanbanResumeInfoComponent);
+    fixture = TestBed.createComponent(KanbanKpisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

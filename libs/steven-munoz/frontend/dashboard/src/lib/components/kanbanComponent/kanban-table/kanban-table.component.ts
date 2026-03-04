@@ -25,7 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule } from '@angular/common';
 import { Firestore } from '@angular/fire/firestore';
 import { ScrumboardStore } from '../../../stores/scrumboardStore';
-import { KanbanResumeInfoComponent } from '../kanban-resume-info/kanbanResumeInfo.component';
+import { KanbanKpisComponent } from '../kanban-kpis/kanban-kpis.component';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -37,7 +37,7 @@ import { KanbanResumeInfoComponent } from '../kanban-resume-info/kanbanResumeInf
     CdkDropListGroup,
     DragDropModule,
     KanbanColumnComponent,
-    KanbanResumeInfoComponent,
+    KanbanKpisComponent,
     KanbanItemComponent,
     ButtonModule,
     ToastModule,
@@ -151,13 +151,13 @@ export class KanbanTable {
   getItemsCount(columnId: number): number {
     return this.scrumboardStoreFeature
       .tickets()
-      .filter((item) => item.columnId === columnId).length;
+      .filter((item: any) => item.columnId === columnId).length;
   }
 
   isWipExceeded(columnId: number): boolean {
     const column = this.scrumboardStoreFeature
       .columns()
-      .find((c) => c.id === columnId);
+      .find((c: any) => c.id === columnId);
 
     if (!column?.wipLimit) return false;
 
