@@ -14,6 +14,7 @@ export interface KanbanItem {
   columnId: number;
   id: number;
   title: string;
+  client: string;
   proposal: number;
   description: string;
   assignee: string;
@@ -22,6 +23,7 @@ export interface KanbanItem {
   closedAt?: Timestamp | null;
   deletedAt?: Timestamp | null;
   isDeleted: boolean;
+  updatedAt?: Timestamp | null
 }
 
 export type KanbanForm = Omit<

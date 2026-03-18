@@ -1,0 +1,73 @@
+.filters-wrapper {
+  background: #fff;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+/* filas */
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primary-row {
+  margin-bottom: 8px;
+}
+
+/* inputs */
+.filter-input {
+  height: 34px;
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+.search-input {
+  width: 180px;
+}
+
+/* selects */
+.filter-select {
+  min-width: 140px;
+}
+
+.filter-form {
+  display: flex;
+  gap: 10px;
+}
+
+/* aging */
+.aging-group {
+  display: flex;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 1px solid #ddd;
+}
+
+/* botones más compactos */
+.aging-btn .p-button {
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+/* contenedor de filtros activos */
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto; /* 🔥 empuja a la derecha */
+}
+
+/* chips */
+.filter-chip {
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+/* botón limpiar */
+.clear-btn {
+  margin-left: 8px;
+}

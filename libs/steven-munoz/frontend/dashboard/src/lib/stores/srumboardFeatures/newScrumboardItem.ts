@@ -10,42 +10,43 @@ import {
 import { signalStoreFeature, withMethods, withProps } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { KanbanForm, KanbanItem } from '../../types/kanban.interface';
-import { from, map, pipe } from 'rxjs';
+import { from, map, pipe, switchMap } from 'rxjs';
 
 export function newScrumboardItem() {
   return signalStoreFeature(
-
     withProps(() => ({
-      firestore :inject(Firestore)
+      firestore: inject(Firestore),
     })),
 
     withMethods((store) => ({
       createScrumboardItem: rxMethod<KanbanForm>(
         pipe(
-          map((item) =>
-            from(
-              (async () => {
-                const scrumRef = doc(store.firestore, 'board2', 'scrum');
-                const snap = await getDoc(scrumRef);
-                const getTickets: KanbanItem[] = snap.data()?.['tickets'] ?? 0;
+          switchMap((item) => {
+            const scrumRef = doc(store.firestore, 'board2', 'scrum');
 
-                const lasTicketsid =
-                  getTickets.length > 0
-                    ? Math.max(...getTickets.map((t) => Number(t.id)))
+            return from(getDoc(scrumRef)).pipe(
+              switchMap((snap) => {
+                const tickets: KanbanItem[] = snap.data()?.['tickets'] ?? [];
+
+                const lastTicketId =
+                  tickets.length > 0
+                    ? Math.max(...tickets.map((t) => Number(t.id)))
                     : 0;
 
-                const newId = lasTicketsid + 1;
+                const newId = lastTicketId + 1;
 
                 const newItem: KanbanItem = {
                   ...item,
                   id: newId,
-                  createdAt:  Timestamp.now()
+                  createdAt: Timestamp.now(),
                 };
 
-                await updateDoc(scrumRef, { tickets: arrayUnion(newItem) });
-              })()
-            )
-          )
+                return from(
+                  updateDoc(scrumRef, { tickets: arrayUnion(newItem) })
+                );
+              })
+            );
+          })
         )
       ),
     }))

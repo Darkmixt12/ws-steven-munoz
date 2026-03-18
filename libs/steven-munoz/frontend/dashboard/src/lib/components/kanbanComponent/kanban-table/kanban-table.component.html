@@ -16,13 +16,12 @@
 
   <div class="page-resumeInfo">
   <steven-munoz-kanban-kpis-info></steven-munoz-kanban-kpis-info>
+  <steven-munoz-kanban-filter/>
     
   </div>
 
 
 </div>
-
-
 
 <div class="kanban-space">
 
@@ -59,7 +58,7 @@
           </span>
         </h1>
 
-        @for (ticket of getItemsByColumn(column.id); track ticket.id) {
+        @for (ticket of scrumboardStoreFeature.ticketsByColumn().get(column.id) ?? []; track ticket.id) {
 
         <steven-munoz-kanban-item
           [ticket]="ticket"

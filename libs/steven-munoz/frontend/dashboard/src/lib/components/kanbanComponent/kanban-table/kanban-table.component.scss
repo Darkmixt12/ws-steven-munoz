@@ -18,19 +18,17 @@
   transform-origin: top center;
 }
 
-.kanban-space {
-  margin-top: 2rem;
-}
+
 
 @media (min-width: 1920px) {
   .kanban-space {
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 }
 
 @media (min-width: 2560px) {
   .kanban-space {
-    margin-top: 6rem;
+    margin-top: 2rem;
   }
 }
 
@@ -43,10 +41,7 @@
   justify-content: space-around;
 }
 
-.header-btns {
-  display: flex;
-  gap: 1rem;
-}
+
 
 .page-resumeInfo {
   max-width: 1400px;

@@ -1,0 +1,139 @@
+<div class="filters-wrapper">
+
+  <!-- 🔹 FILA 1 -->
+  <div class="filters-row primary-row">
+
+    <input
+      class="filter-input search-input"
+      type="text"
+      pInputText
+      placeholder="Buscar..."
+      (input)="onSearch($event.target.value)"
+    />
+
+    <form class="filter-form" [formGroup]="form">
+
+      <p-select
+        appendTo="body"
+        class="filter-select"
+        formControlName="priority"
+        [options]="categories()"
+        optionLabel="name"
+        [showClear]="false"
+        (onChange)="onPriorityChange($event.value)"
+      >
+      </p-select>
+
+      <p-select
+        appendTo="body"
+        class="filter-select"
+        formControlName="assigne"
+        [options]="assigne()"
+        optionLabel="name"
+        [showClear]="false"
+        (onChange)="onSellerChange($event.value)"
+      >
+      </p-select>
+
+    </form>
+
+    <input
+      class="filter-input"
+      pInputText
+      placeholder="Min Proposal"
+      #min
+      [value]="store.filters().minValue ?? ''"
+      (input)="onMinChange(min.value)"
+    />
+
+    <input
+      class="filter-input"
+      pInputText
+      placeholder="Max Proposal"
+      #max
+      [value]="store.filters().maxValue ?? ''"
+      (input)="onMaxChange(max.value)"
+    />
+
+  </div>
+
+  <!-- 🔹 FILA 2 -->
+  <div class="filters-row secondary-row">
+
+    <input
+      class="filter-input"
+      pInputText
+      placeholder="Min días"
+      #minAging
+      (input)="onMinAgingChange(minAging.value)"
+    />
+
+    <input
+      class="filter-input"
+      pInputText
+      placeholder="Max días"
+      #maxAging
+      (input)="onMaxAgingChange(maxAging.value)"
+    />
+
+    <!-- Aging -->
+    <div class="aging-group">
+
+      <button
+        pButton
+        class="aging-btn"
+        severity="success"
+        icon="pi pi-star"
+        (click)="setAging(0, 2)"
+      >
+        Nuevos
+      </button>
+
+      <button
+        pButton
+        class="aging-btn"
+        severity="info"
+        icon="pi pi-sync"
+        (click)="setAging(3, 7)"
+      >
+        En progreso
+      </button>
+
+      <button
+        pButton
+        class="aging-btn"
+        severity="danger"
+        icon="pi pi-exclamation-triangle"
+        (click)="setAging(7, null)"
+      >
+        En riesgo
+      </button>
+
+    </div>
+
+    @if (store.activeFiltersList()) {
+
+    <div class="filters-container">
+
+      @for (filter of store.activeFiltersList(); track filter) {
+        <span class="filter-chip">
+          {{ filter }}
+        </span>
+      }
+
+      <button
+        pButton
+        class="clear-btn"
+        icon="pi pi-refresh"
+        (click)="onResetFilters()"
+      >
+        Eliminar Filtros
+      </button>
+
+    </div>
+
+    }
+
+  </div>
+
+</div>

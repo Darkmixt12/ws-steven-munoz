@@ -53,7 +53,7 @@ export class KanbanKpisComponent {
       },
       {
         label: 'Win Rate',
-        value: this.winrateSummary().currentRate,
+        value: Math.floor(this.winrateSummary().currentRate),
         icon: 'pi pi-chart-bar',
         progress: this.winrateSummary().currentRate,
         trend: this.winrateSummary().trend,

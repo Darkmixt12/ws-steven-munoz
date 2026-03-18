@@ -26,6 +26,7 @@ import { CommonModule } from '@angular/common';
 import { Firestore } from '@angular/fire/firestore';
 import { ScrumboardStore } from '../../../stores/scrumboardStore';
 import { KanbanKpisComponent } from '../kanban-kpis/kanban-kpis.component';
+import { KanbanFilterComponent } from '../kanban-filter/kanban-filter.component';
 
 @Component({
   selector: 'steven-munoz-kanban-table.',
@@ -42,6 +43,7 @@ import { KanbanKpisComponent } from '../kanban-kpis/kanban-kpis.component';
     ButtonModule,
     ToastModule,
     ConfirmDialogModule,
+    KanbanFilterComponent
   ],
   providers: [DialogService, MessageService],
   templateUrl: './kanban-table.component.html',
@@ -50,7 +52,7 @@ import { KanbanKpisComponent } from '../kanban-kpis/kanban-kpis.component';
 })
 export class KanbanTable {
   readonly confirmationService = inject(ConfirmationService);
-  private readonly scrumboardStoreFeature = inject(ScrumboardStore);
+  readonly scrumboardStoreFeature = inject(ScrumboardStore);
   readonly messageService = inject(MessageService);
   dialogService = inject(DialogService);
   firestore = inject(Firestore);
@@ -85,7 +87,7 @@ export class KanbanTable {
   }
 
   drop(event: CdkDragDrop<KanbanItem[]>, columnId: number) {
-    this.scrumboardStoreFeature.drop(event, columnId);
+    this.scrumboardStoreFeature.drop({event, columnId});
   }
 
   openCreateDialog() {

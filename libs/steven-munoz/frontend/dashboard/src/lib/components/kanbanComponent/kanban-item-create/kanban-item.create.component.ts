@@ -47,27 +47,25 @@ interface AutoCompleteCompleteEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemCreateComponent {
-  clientstore = inject(ClientsStore);
-  scrumboardStore = inject(ScrumboardStore);
-
+  readonly dialogConfig = inject(DynamicDialogConfig);
+  readonly scrumboardStore = inject(ScrumboardStore);
+  readonly dialogRef = inject(DynamicDialogRef);
+  readonly clientstore = inject(ClientsStore);
   readonly firestore = inject(Firestore);
-
-  clientsStore = this.clientstore.getClientsResource.value;
   readonly fb = inject(FormBuilder);
 
-  selectedClient = signal<any>(null);
+  clientsStore = this.clientstore.getClientsResource.value;
+
   filteredClients = signal<any[]>([]);
+  selectedClient = signal<any>(null);
   clients = signal<any[]>([]);
 
-  ingredient!: string;
   formSubmitted: boolean = false;
+  editingItem?: KanbanItem;
+  isEditMode = false;
+  saving = false;
 
   // FORMULARIO PARA CREAR Y EDITAR EN UNO SOLO
-  isEditMode = false;
-  editingItem?: KanbanItem;
-  saving = false;
-  readonly dialogConfig = inject(DynamicDialogConfig);
-  readonly dialogRef = inject(DynamicDialogRef);
 
   constructor() {
     effect(() => {
@@ -88,7 +86,7 @@ export class KanbanItemCreateComponent {
     description: '',
     columnId: 1,
     assignee: 'Andres Peralta',
-    isDeleted: false
+    isDeleted: false,
   });
 
   searchClients(event: any) {
@@ -131,7 +129,7 @@ export class KanbanItemCreateComponent {
     const historyRef = collection(this.firestore, 'ticketHistory');
 
     if (oldItem.columnId !== newItem.columnId) {
-      await addDoc(historyRef, {
+      addDoc(historyRef, {
         boardId: 'scrum',
         ticketId: oldItem.id,
         field: 'columnId',
@@ -143,7 +141,7 @@ export class KanbanItemCreateComponent {
     }
 
     if (oldItem.proposal !== newItem.proposal) {
-      await addDoc(historyRef, {
+      addDoc(historyRef, {
         boardId: 'scrum',
         ticketId: oldItem.id,
         field: 'proposal',

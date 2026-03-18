@@ -4,9 +4,9 @@ div.bg-white {
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  margin-bottom: 15px;
-  max-width: 300px;
-  min-width: 250px;
+  margin-bottom: 1rem;
+  max-width: 15rem;
+  min-width: 15rem;
   word-break: break-word;
   overflow-wrap: break-word;
 }
@@ -14,17 +14,27 @@ div.bg-white {
 
 
 .titletest {
-  font-weight: 600;
-  color: #44abef;
-  margin-bottom: 1rem;
+  font-weight: 500;
+  color: black;
   margin-top: 0.5rem;
+  word-break: break-word;
 }
 
+.text-sm-proposal {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin: 2px;
+  text-align: right;
+  color: #16A34A;
+  
+}
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
   margin: 2px;
-  
+
+
 }
 
 
@@ -122,4 +132,7 @@ div.px-4.py-1 {
   color: var(--p-red-500, #ef4444);
 }
 
+.item-timer{
+  display: flex;
+}
 

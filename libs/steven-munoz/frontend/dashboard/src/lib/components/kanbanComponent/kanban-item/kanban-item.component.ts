@@ -6,6 +6,7 @@ import {
   output,
   input,
   Output,
+  inject,
 } from '@angular/core';
 import { KanbanItem } from '../../../types/kanban.interface';
 import { CommonModule } from '@angular/common';
@@ -14,6 +15,7 @@ import { ChipModule } from 'primeng/chip';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
+import { ScrumboardStore } from '../../../stores/scrumboardStore';
 
 const statusMapperColors = {
   Medium: 'bg-yellow-200',
@@ -36,6 +38,7 @@ const statusMapperText = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KanbanItemComponent {
+  store = inject(ScrumboardStore)
 
   color = computed(() => {
     return statusMapperColors[this.ticket().priority];

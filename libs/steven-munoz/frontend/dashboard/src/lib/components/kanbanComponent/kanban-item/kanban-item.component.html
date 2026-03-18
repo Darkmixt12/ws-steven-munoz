@@ -14,12 +14,18 @@
         </p-button>
 
         <p-popover #popover panelStyleClass="ticket-popover">
-          <div class="menu-option" (click)="onEdit(popover, $event, ticketSignal)">
+          <div
+            class="menu-option"
+            (click)="onEdit(popover, $event, ticketSignal)"
+          >
             <i class="pi pi-pencil"></i>
             Editar
           </div>
 
-          <div class="menu-option" (click)="onHistory(popover, $event, ticketSignal.id)">
+          <div
+            class="menu-option"
+            (click)="onHistory(popover, $event, ticketSignal.id)"
+          >
             <i class="pi pi-history"></i>
             Historial
           </div>
@@ -36,9 +42,9 @@
     </div>
   </div>
 
-  <p class="text-sm">{{ ticketSignal.description }}</p>
+  <p class="text-sm">{{ ticketSignal.client }}</p>
 
-  <p class="text-sm"><b>Amount:</b> {{ ticketSignal.proposal | currency }}</p>
+  <p class="text-sm-proposal">{{ ticketSignal.proposal | currency : 'USD' : 'symbol' : '1.0-0'  }}</p>
 
   <div class="chips">
     <p-chip
@@ -49,6 +55,13 @@
     />
 
     <div class="priority">
+      <div class="item-timer" style="opacity: 0.8">
+        <div class="kpi-icon">
+          <i class="pi pi-stopwatch"></i>
+        </div>
+
+        <span>{{ store.ticketAgingMap().get(ticketSignal.id) }}d</span>
+      </div>
       <span class="dot" [ngClass]="priorityColor(ticketSignal.priority)"></span>
       <span class="label">{{ ticketSignal.priority }}</span>
     </div>
