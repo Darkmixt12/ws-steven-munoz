@@ -126,3 +126,11 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Tiquete** | `ticket` | Comprobante para consumidor final, sin receptor identificado. | boleta, recibo |
 | **Factura** | `invoice` | Comprobante a nombre de un Perfil de facturación. | factura electrónica (como genérico) |
 | **Nota de crédito** | `creditNote` | Comprobante que revierte total o parcialmente otro Comprobante ya aceptado. | anulación de factura |
+
+### Reportes
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Venta** | `sale` | Unidades y monto de las Líneas de un Pedido que entran a los reportes al confirmarse su Pago. | pedido, compra |
+| **Venta neta** | `netSales` | Ventas de un período menos lo anulado y devuelto en ese período. | ventas reales, ganancia |
+| **Más y menos vendidos** | `salesRanking` | Reporte que ordena Variantes o Productos por unidades netas en un rango de fechas. | top ventas, ranking |
