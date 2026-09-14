@@ -83,6 +83,14 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Reingreso por devolución** | `orderReturned` | Movimiento que suma las unidades devueltas que el Empleado decidió reingresar. | devolución (como movimiento) |
 | **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
 
+### Carrito
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Carrito** | `cart` | Variantes que un Cliente, o un visitante sin sesión, piensa comprar, con su cantidad; no aparta Stock ni fija precio. | canasta, bolsa |
+| **Línea del carrito** | `cartLine` | Una Variante con su cantidad dentro del Carrito; cada Variante aparece a lo sumo en una línea. | ítem |
+| **Finalizar compra** | `checkout` | Paso en que el Cliente elige Método de entrega, Comprobante y método de pago y confirma, lo que crea el Pedido. | pago, caja |
+
 ### Pedido
 
 | Término | Identificador en código | Definición | Evitar |
