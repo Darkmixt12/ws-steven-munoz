@@ -8,7 +8,16 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 
 | Término | Identificador en código | Definición | Evitar |
 |---|---|---|---|
-| **Cliente** | `customer` | Persona que compra en la tienda, con registro completo; hay uno por cuenta. | Client (término del CRM), comprador, usuario, cuenta |
+| **Cuenta** | `account` | Identidad con la que una persona inicia sesión; puede tener a lo sumo un Cliente y un Empleado. | usuario, login |
+| **Cliente** | `customer` | Persona que compra en la tienda, con registro completo; hay uno por Cuenta. | Client (término del CRM), comprador, usuario, cuenta |
+| **Empleado** | `employee` | Persona que trabaja en la tienda con acceso al Panel; hay uno por Cuenta, independiente del Cliente de esa misma Cuenta. | staff, colaborador, usuario, administrador |
+
+### Acceso al Panel
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Panel** | `admin` | Aplicación interna desde la que los Empleados gestionan la tienda. | backoffice, dashboard |
+| **Invitación** | `invitation` | Alta pendiente de un Empleado, hecha con un correo y un rol, que vence si no se completa. | solicitud, pre-registro |
 
 ### Datos del Cliente
 
@@ -18,19 +27,20 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Dirección predeterminada** | `defaultAddress` | La Dirección que se propone primero al Cliente al comprar; hay a lo sumo una. | dirección principal |
 | **Perfil de facturación** | `billingProfile` | Identificación y nombre (o razón social) a los que se emite una factura en vez de un tiquete; un Cliente puede tener varios. | receptor, datos fiscales |
 
-### Estados del Cliente
+### Estados del Cliente y del Empleado
 
 | Término | Identificador en código | Definición | Evitar |
 |---|---|---|---|
-| **Activo** | `active` | Estado del Cliente que puede iniciar sesión y comprar. | habilitado |
-| **Deshabilitado** | `disabled` | Estado reversible del Cliente al que un Empleado impidió iniciar sesión y comprar; conserva su historial. | bloqueado, eliminado, baneado |
+| **Invitado** | `invited` | Estado del Empleado que todavía no completó su primer ingreso al Panel. | pendiente |
+| **Activo** | `active` | Estado del Cliente que puede comprar, o del Empleado que puede entrar al Panel. | habilitado |
+| **Deshabilitado** | `disabled` | Estado reversible del Cliente o del Empleado al que un Empleado impidió usar lo que su papel le permite; conserva su historial. | bloqueado, eliminado, baneado, dado de baja |
 
 ### Privacidad
 
 | Término | Identificador en código | Definición | Evitar |
 |---|---|---|---|
 | **Aviso de privacidad** | `privacyNotice` | Texto versionado que informa a una persona qué datos se recolectan, para qué Finalidades y cuáles son sus derechos. | política, términos |
-| **Finalidad** | `purpose` | Uso concreto de los datos personales para el que se pide Consentimiento (p. ej. cuenta y Pedidos, comunicaciones comerciales). | propósito, permiso |
+| **Finalidad** | `purpose` | Uso concreto de los datos personales para el que se pide Consentimiento (p. ej. cuenta y Pedidos, comunicaciones comerciales, acceso al Panel). | propósito, permiso |
 | **Consentimiento** | `consent` | Aceptación o revocación expresa de una Finalidad por una persona, ligada a una versión del Aviso de privacidad. | opt-in, aceptación de términos |
 | **Solicitud de derechos** | `dataRequest` | Petición de una persona para acceder, rectificar o suprimir sus datos personales. | reclamo, ticket |
 
