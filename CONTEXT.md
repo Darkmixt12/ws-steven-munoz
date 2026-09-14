@@ -8,7 +8,31 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 
 | Término | Identificador en código | Definición | Evitar |
 |---|---|---|---|
-| **Cliente** | `customer` | Persona que compra en la tienda. | Client (término del CRM), comprador, usuario |
+| **Cliente** | `customer` | Persona que compra en la tienda, con registro completo; hay uno por cuenta. | Client (término del CRM), comprador, usuario, cuenta |
+
+### Datos del Cliente
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Dirección** | `address` | Lugar de entrega en Costa Rica guardado por un Cliente, con destinatario, teléfono, distrito y señas. | domicilio, ubicación |
+| **Dirección predeterminada** | `defaultAddress` | La Dirección que se propone primero al Cliente al comprar; hay a lo sumo una. | dirección principal |
+| **Perfil de facturación** | `billingProfile` | Identificación y nombre (o razón social) a los que se emite una factura en vez de un tiquete; un Cliente puede tener varios. | receptor, datos fiscales |
+
+### Estados del Cliente
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Activo** | `active` | Estado del Cliente que puede iniciar sesión y comprar. | habilitado |
+| **Deshabilitado** | `disabled` | Estado reversible del Cliente al que un Empleado impidió iniciar sesión y comprar; conserva su historial. | bloqueado, eliminado, baneado |
+
+### Privacidad
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Aviso de privacidad** | `privacyNotice` | Texto versionado que informa a una persona qué datos se recolectan, para qué Finalidades y cuáles son sus derechos. | política, términos |
+| **Finalidad** | `purpose` | Uso concreto de los datos personales para el que se pide Consentimiento (p. ej. cuenta y Pedidos, comunicaciones comerciales). | propósito, permiso |
+| **Consentimiento** | `consent` | Aceptación o revocación expresa de una Finalidad por una persona, ligada a una versión del Aviso de privacidad. | opt-in, aceptación de términos |
+| **Solicitud de derechos** | `dataRequest` | Petición de una persona para acceder, rectificar o suprimir sus datos personales. | reclamo, ticket |
 
 ### Catálogo
 
