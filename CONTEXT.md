@@ -10,7 +10,7 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 |---|---|---|---|
 | **Cuenta** | `account` | Identidad con la que una persona inicia sesión; puede tener a lo sumo un Cliente y un Empleado. | usuario, login |
 | **Cliente** | `customer` | Persona que compra en la tienda, con registro completo; hay uno por Cuenta. | Client (término del CRM), comprador, usuario, cuenta |
-| **Empleado** | `employee` | Persona que trabaja en la tienda con acceso al Panel; hay uno por Cuenta, independiente del Cliente de esa misma Cuenta. | staff, colaborador, usuario, administrador |
+| **Empleado** | `employee` | Persona que trabaja en la tienda con acceso al Panel; hay uno por Cuenta, independiente del Cliente de esa misma Cuenta. | staff, colaborador, usuario |
 
 ### Acceso al Panel
 
@@ -18,6 +18,16 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 |---|---|---|---|
 | **Panel** | `admin` | Aplicación interna desde la que los Empleados gestionan la tienda. | backoffice, dashboard |
 | **Invitación** | `invitation` | Alta pendiente de un Empleado, hecha con un correo y un rol, que vence si no se completa. | solicitud, pre-registro |
+
+### Roles del Panel
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Rol** | `role` | Conjunto fijo de Permisos asignado a un Empleado; cada Empleado tiene exactamente uno. | perfil, cargo, puesto |
+| **Permiso** | `permission` | Acción del Panel que un Rol habilita (p. ej. anular un Pedido, gestionar Empleados). | privilegio, acceso |
+| **Administrador** | `administrator` | Rol con todos los Permisos, incluido gestionar Empleados; siempre queda al menos uno Activo. | dueño, superusuario, admin |
+| **Operador** | `operator` | Rol que atiende Pedidos, stock y Clientes. | operaciones, vendedor |
+| **Editor de catálogo** | `catalogEditor` | Rol que mantiene Productos, Categorías, Etiquetas y stock. | catálogo (como nombre de rol) |
 
 ### Datos del Cliente
 
