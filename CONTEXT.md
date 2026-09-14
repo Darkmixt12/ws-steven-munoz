@@ -82,3 +82,39 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Reposición por anulación** | `orderCancelled` | Movimiento automático que devuelve lo que un Pedido anulado había restado. | reversa |
 | **Reingreso por devolución** | `orderReturned` | Movimiento que suma las unidades devueltas que el Empleado decidió reingresar. | devolución (como movimiento) |
 | **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
+
+### Pedido
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Pedido** | `order` | Compra confirmada por un Cliente: sus Líneas, la entrega, el Pago y los Comprobantes, con copia congelada de lo que se vendió. | orden, compra, venta |
+| **Número de Pedido** | `orderNumber` | Consecutivo visible con que el Cliente y la tienda identifican un Pedido; no es el consecutivo de Hacienda. | folio, consecutivo |
+| **Línea de Pedido** | `orderLine` | Variante comprada dentro de un Pedido, con cantidad, precio, descuento y la copia de sus datos al momento de la compra. | ítem, detalle |
+| **Estado del Pedido** | `orderStatus` | Punto del ciclo de vida en que está un Pedido, de Pendiente de pago a Entregado, Anulado o Devuelto. | estatus, fase |
+| **Pendiente de pago** | `pendingPayment` | Estado del Pedido recién creado, con el Stock ya apartado, que espera su Pago. | nuevo, abierto |
+| **Por preparar** | `toFulfill` | Estado del Pedido pagado que falta alistar. | pagado, confirmado |
+| **Enviado** | `shipped` | Estado del Pedido con Envío a domicilio que salió de la bodega. | despachado, en camino |
+| **Listo para retirar** | `readyForPickup` | Estado del Pedido con Retiro en bodega ya alistado, que espera al Cliente. | por retirar |
+| **Entregado** | `delivered` | Estado del Pedido que el Cliente recibió o retiró. | completado, finalizado |
+| **Anulado** | `cancelled` | Estado final del Pedido que se deshizo antes de la entrega; todo su Stock vuelve. | cancelado, eliminado |
+| **Devuelto** | `returned` | Estado final del Pedido entregado cuyas unidades se devolvieron todas. | reembolsado |
+| **Devolución** | `return` | Registro de unidades entregadas que el Cliente regresa, con cuáles reingresan al Stock y cuánto se reembolsa; un Pedido puede tener varias. | cambio, reclamo |
+| **Pendiente de despacho** | — | Unidades de Pedidos Pendientes de pago, Por preparar o Listos para retirar, que siguen físicamente en la bodega. | comprometido, reservado |
+| **Historial del Pedido** | `statusHistory` | Sucesión de cambios de Estado del Pedido con su fecha y autor. | bitácora |
+
+### Entrega y pago
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Método de entrega** | `deliveryMethod` | Forma en que el Cliente recibe su Pedido: Envío a domicilio o Retiro en bodega. | forma de envío |
+| **Envío a domicilio** | `homeDelivery` | Entrega en una Dirección de Costa Rica, con costo según la Tarifa de envío. | delivery |
+| **Retiro en bodega** | `pickup` | Entrega en la que el Cliente recoge el Pedido en la bodega, sin costo. | pick-up, recoger en tienda |
+| **Tarifa de envío** | `shippingRate` | Costo del Envío a domicilio para una provincia, con IVA incluido. | flete |
+| **Guía** | `tracking` | Empresa de transporte, número y enlace con que el Cliente rastrea un Pedido Enviado. | tracking, número de rastreo |
+| **Pago** | `payment` | Cobro de un Pedido por SINPE Móvil o tarjeta; hay uno por Pedido. | transacción, cobro |
+| **Estado de pago** | `paymentStatus` | Situación del Pago: Pendiente, Confirmado, Rechazado, Reembolsado parcialmente o Reembolsado. | — |
+| **Reembolso** | `refund` | Devolución de dinero sobre un Pago, por una anulación o una Devolución. | reintegro |
+| **Comprobante** | `taxDocument` | Documento electrónico que se emite a Hacienda por un Pedido: Tiquete, Factura o Nota de crédito; un Pedido puede tener varios. | factura (como genérico) |
+| **Tiquete** | `ticket` | Comprobante para consumidor final, sin receptor identificado. | boleta, recibo |
+| **Factura** | `invoice` | Comprobante a nombre de un Perfil de facturación. | factura electrónica (como genérico) |
+| **Nota de crédito** | `creditNote` | Comprobante que revierte total o parcialmente otro Comprobante ya aceptado. | anulación de factura |
