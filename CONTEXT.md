@@ -67,4 +67,18 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Borrador** | `draft` | Estado del Producto en preparación, invisible para el Cliente. | inactivo |
 | **Publicado** | `published` | Estado del Producto visible en el catálogo y comprable. | activo |
 | **Archivado** | `archived` | Estado del Producto retirado del catálogo pero conservado por su historial. | eliminado, borrado |
-| **Agotado** | — | Condición de una Variante publicada sin stock disponible: se ve pero no se compra. No es un estado del Producto. | sin existencias, inactivo |
+| **Agotado** | — | Condición de una Variante publicada con Stock en cero: se ve pero no se compra. No es un estado del Producto. | sin existencias, inactivo |
+
+### Stock
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Stock** | `stock` | Cantidad de una Variante disponible para vender; baja al crear un Pedido y nunca es negativa. | existencias, inventario, saldo |
+| **Movimiento de stock** | `stockMovement` | Cambio inmutable del Stock de una Variante, con tipo, cantidad, autor y origen; un error se corrige con otro Movimiento. | transacción, kardex |
+| **Entrada** | `receipt` | Movimiento manual que suma mercadería recibida en la bodega. | compra, ingreso |
+| **Ajuste** | `adjustment` | Movimiento manual que corrige el Stock hacia arriba o abajo, siempre con un motivo de lista fija. | corrección, merma |
+| **Carga de stock** | `stockImport` | Grupo de Entradas registradas juntas desde un archivo. | lote, importación |
+| **Salida por Pedido** | `orderPlaced` | Movimiento automático que resta las unidades de un Pedido al crearse. | venta, reserva |
+| **Reposición por anulación** | `orderCancelled` | Movimiento automático que devuelve lo que un Pedido anulado había restado. | reversa |
+| **Reingreso por devolución** | `orderReturned` | Movimiento que suma las unidades devueltas que el Empleado decidió reingresar. | devolución (como movimiento) |
+| **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
