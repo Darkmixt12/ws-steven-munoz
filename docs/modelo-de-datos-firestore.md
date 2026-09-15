@@ -53,6 +53,7 @@ En las colecciones del Panel directo, **el backend nunca toca `updatedAt` ni `up
 | `privacyNotices/{version}` | versión | Panel directo (solo crear) | público | [7.3](#73-privacynoticesversion) |
 | `salesDaily/{yyyy-mm-dd}` | día | backend | los tres Roles | [8.1](#81-salesdailyyyyy-mm-dd) |
 | `auditEvents/{eventId}` | id del evento del trigger o autoId | backend | Administrador | [8.2](#82-auditeventseventid) |
+| `notifications/{notificationId}` | determinista desde el origen; autoId en reenvíos | backend | Administrador; Operador (las de Pedidos) | [9](#9-notificaciones) |
 
 Todo lo que no aparece aquí queda denegado por la regla final `/{document=**}`. Las subcolecciones necesitan su propio `match` anidado.
 
@@ -374,7 +375,8 @@ Lectura pública, porque el checkout la muestra.
 - `shippingVatRateCode`
 - `paymentTimeouts`: `{cardMinutes, sinpeMovilMinutes}`
 - `sinpeMovilNumber`
-- `storeInfo`: `{name, contactEmail, contactPhone}`
+- `storeInfo`: `{name, contactEmail, contactPhone}`; `contactEmail` es el *reply-to* de las Notificaciones
+- `pickupInfo`: `{address, hours}` de la bodega, para el checkout y la Notificación "Listo para retirar"
 - `currentPrivacyNoticeVersion`
 - `updatedAt`, `updatedBy`
 
@@ -419,7 +421,72 @@ La Bitácora ([ADR 0005](adr/0005-la-bitacora-solo-la-escribe-el-backend.md)).
 
 ## 9. Notificaciones
 
-*Pendiente.* Lo decide [¿Qué notificaciones recibe el Cliente y dejan huella en Firestore?](https://github.com/Darkmixt12/ws-steven-munoz/issues/51), que completará esta sección: si una notificación deja registro (p. ej. una cola de correos), será otra colección escrita solo por el backend.
+Correos al Cliente, a la persona invitada y a quien presentó una Solicitud de derechos ([¿Qué notificaciones recibe el Cliente y dejan huella en Firestore?](https://github.com/Darkmixt12/ws-steven-munoz/issues/51), [ADR 0007](adr/0007-las-notificaciones-salen-de-una-bandeja-de-salida.md)).
+
+- **Canal:** solo correo. "Mis pedidos" es la vista siempre disponible del estado del Pedido.
+- **Finalidad:** son transaccionales, bajo "cuenta y Pedidos" (`accountAndOrders`). No admiten baja y **nunca** llevan contenido comercial. La Finalidad `marketing` no se usa aquí.
+- Los correos de Firebase Auth (verificar el correo, restablecer la contraseña) los envía Auth y no pasan por aquí.
+
+### 9.1 `notifications/{notificationId}`
+
+Bandeja de salida: el backend la escribe **en la misma transacción** que la operación que la origina, y un trigger la envía.
+
+| Campo | Tipo | Dato | Notas |
+|---|---|---|---|
+| `type` | string | | ver [9.2](#92-tipos) |
+| `ref` | `{collection: 'orders' \| 'invitations' \| 'dataRequests', id}` | | origen; el correo se arma al enviarlo, leyéndolo |
+| `params` | map \| null | | solo lo que el origen no identifica: `refundId`, `returnId`, `taxDocumentId` |
+| `to` | string[] | C | uno o dos correos; ver [9.3](#93-destinatario) |
+| `channel` | `email` | | |
+| `status` | `pending` \| `sent` \| `failed` \| `bounced` \| `cancelled` | | |
+| `attempts` | int | | hasta 3, con espera creciente; luego `failed` |
+| `lastError` | string \| null | | |
+| `providerMessageId` | string \| null | | |
+| `sentAt` | Timestamp \| null | | |
+| `actor` | Autor | | el de la operación que la originó; en un reenvío, el Empleado |
+| `resendOf` | string \| null | | id de la Notificación reenviada |
+| `createdAt`, `updatedAt` | Timestamp | | |
+| `expiresAt` | Timestamp | | `createdAt` + 90 días, política TTL |
+
+- **Id:** determinista desde el origen, `{ref.id}_{type}`, más `_{subId}` cuando el tipo se repite en el mismo origen (id del Reembolso, de la Devolución o del Comprobante; número de envío de la Invitación). AutoId en los reenvíos.
+- **No guarda el correo armado** ni copias del Pedido: el único dato personal es `to`.
+- **Escribe:** solo el backend, desde las operaciones de [9.2](#92-tipos). El trigger `sendNotification` actualiza `status`, `attempts`, `lastError`, `providerMessageId` y `sentAt`. Es idempotente (no reenvía una `sent`) y, si el origen ya no existe (p. ej. una Invitación revocada), la marca `cancelled` sin enviar. Si el proveedor tiene webhook de rebotes, pasa a `bounced`.
+- **Reenviar:** `resendNotification` (Permiso "Avanzar estado del Pedido", solo Notificaciones de Pedidos) crea una Notificación **nueva** con `resendOf` y `actor`, al mismo `to`. No hay reenvío a otro correo: sería una forma de sacar datos del Pedido a cualquier dirección. Las Invitaciones se reenvían con `resendInvitation`.
+- **Lee:** el Administrador, todas. El Operador, solo `ref.collection == 'orders'` (la consulta debe filtrarlo), en la ficha del Pedido. El Cliente no las lee (ve su Pedido) y el Editor de catálogo tampoco.
+- **Bitácora:** ni el envío ni el reenvío generan Evento; la Notificación es su propia historia, con Autor.
+- **Retención:** 90 días por TTL. "Eliminar mi cuenta" y la anonimización del Pedido no la tocan.
+
+### 9.2 Tipos
+
+**Una Notificación por operación:** si una operación produce dos hechos (anular y reembolsar), el correo cuenta los dos.
+
+| `type` | Cuándo | Lo escribe | Contenido |
+|---|---|---|---|
+| `order.awaitingSinpePayment` | Pedido creado con SINPE Móvil | `createOrder` | número SINPE, monto, Número de Pedido como referencia y plazo |
+| `order.paymentConfirmed` | Pendiente de pago → Por preparar | `confirmSinpePayment`, `cardPaymentWebhook` | |
+| `order.shipped` | → Enviado | `advanceOrderStatus` | la Guía, si ya está registrada |
+| `order.readyForPickup` | → Listo para retirar | `advanceOrderStatus` | `settings/storefront.pickupInfo` |
+| `order.cancelled` | → Anulado | `cancelMyOrder`, `cancelOrder`, `cancelUnpaidOrders` | motivo y, si va en la misma operación, el Reembolso |
+| `order.refunded` | Reembolso registrado aparte (p. ej. el SINPE de vuelta) | `registerRefund` | monto y referencia |
+| `order.returnRegistered` | Devolución registrada | `registerReturn` | unidades, monto y su Reembolso si va junto |
+| `order.addressCorrected` | un Empleado corrige la dirección de entrega | `updateOrderAddress` | |
+| `taxDocument.accepted` | Hacienda acepta un Comprobante | integración de factura | PDF, XML y respuesta de Hacienda |
+| `invitation.sent` | Invitación creada o reenviada | `inviteEmployee`, `resendInvitation` | enlace al Panel y vencimiento |
+| `dataRequest.answered` | Solicitud de derechos resuelta o rechazada | `resolveDataRequest`, `deleteMyAccount` | la respuesta escrita |
+
+**No notifican:** el Pedido creado con tarjeta (el resultado se ve en pantalla), el rechazo de tarjeta, Entregado, la Guía registrada o corregida después de Enviado (se ve en "Mis pedidos"), el cambio de Rol de una Invitación y el Carrito. Un Comprobante rechazado por Hacienda no se envía: se corrige y se envía el reemitido.
+
+### 9.3 Destinatario
+
+| Origen | `to` |
+|---|---|
+| Pedido (todos los `order.*`) | `contact.email` congelado, siempre: aunque el Cliente cambie su correo, esté Deshabilitado o haya eliminado su cuenta |
+| Factura | `billing.profile.email` y, si es distinto, `contact.email` |
+| Tiquete y Nota de crédito | `contact.email` |
+| Invitación | `email` de la Invitación |
+| Solicitud de derechos | `contactEmail` |
+
+`settings/storefront.storeInfo.contactEmail` es el *reply-to* de todas. Un Pedido anonimizado ya no genera Notificaciones.
 
 ## 10. Storage (referencia)
 
@@ -445,32 +512,35 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 |---|---|---|---|
 | `completeRegistration` | callable | Cuenta sin Cliente | `customers`, `consents` |
 | `setMarketingConsent` | callable | Cliente | `consents` |
-| `deleteMyAccount` | callable | Cliente | borra `customers/**` y `carts`; `orders.customerId`; `dataRequests`; Auth condicional |
+| `deleteMyAccount` | callable | Cliente | borra `customers/**` y `carts`; `orders.customerId`; `dataRequests`; `notifications`; Auth condicional |
 | `mergeCart` | callable | Cliente | `carts` |
-| `createOrder` | callable | Cliente Activo, correo verificado | `orders`, `counters`, `variants.stock`, `stockMovements`, `products.summary`, `carts` |
-| `cancelMyOrder` | callable | Cliente (Pendiente de pago) | `orders`, `variants.stock`, `stockMovements` |
-| `cardPaymentWebhook` | HTTP | pasarela | `orders`, `salesDaily` |
-| `confirmSinpePayment` | callable | Avanzar estado del Pedido | `orders`, `salesDaily` |
-| `advanceOrderStatus` | callable | Avanzar estado del Pedido | `orders` |
-| `updateOrderAddress`, `setOrderTracking` | callable | Avanzar estado del Pedido | `orders`, `auditEvents` |
-| `cancelOrder`, `registerReturn`, `registerRefund` | callable | Anular o devolver Pedido (no los propios) | `orders`, `variants.stock`, `stockMovements`, `salesDaily` |
+| `createOrder` | callable | Cliente Activo, correo verificado | `orders`, `counters`, `variants.stock`, `stockMovements`, `products.summary`, `carts`, `notifications` (SINPE Móvil) |
+| `cancelMyOrder` | callable | Cliente (Pendiente de pago) | `orders`, `variants.stock`, `stockMovements`, `notifications` |
+| `cardPaymentWebhook` | HTTP | pasarela | `orders`, `salesDaily`, `notifications` |
+| `confirmSinpePayment` | callable | Avanzar estado del Pedido | `orders`, `salesDaily`, `notifications` |
+| `advanceOrderStatus` | callable | Avanzar estado del Pedido | `orders`, `notifications` (salvo Entregado) |
+| `updateOrderAddress`, `setOrderTracking` | callable | Avanzar estado del Pedido | `orders`, `auditEvents`; `notifications` (solo `updateOrderAddress`) |
+| `cancelOrder`, `registerReturn`, `registerRefund` | callable | Anular o devolver Pedido (no los propios) | `orders`, `variants.stock`, `stockMovements`, `salesDaily`, `notifications` |
+| `resendNotification` | callable | Avanzar estado del Pedido | `notifications` |
 | `recordStockMovements` | callable | Registrar movimientos de stock | `variants.stock`, `stockMovements`, `stockImports`, `products.summary` |
 | `getPendingDispatch` | callable (lectura) | Registrar movimientos de stock | — |
 | `deleteProduct`, `deleteVariant`, `deleteCategory`, `deleteTag` | callable | Crear y editar Productos / Administrar Categorías y Etiquetas | catálogo, `skus`, `slugs`, `auditEvents` |
 | `setCustomerStatus` | callable | Deshabilitar y rehabilitar Clientes | `customers`, `auditEvents` |
 | `enterPanel`, `completeEmployeeProfile`, `updateMyEmployeeProfile` | callable | la propia Cuenta | `employees`, `invitations`, `staffDirectory`, `consents`, `auditEvents` |
-| `inviteEmployee`, `resendInvitation`, `changeInvitationRole`, `revokeInvitation` | callable | Gestionar Empleados | `invitations`, `auditEvents` |
+| `inviteEmployee`, `resendInvitation`, `changeInvitationRole`, `revokeInvitation` | callable | Gestionar Empleados | `invitations`, `auditEvents`; `notifications` (solo `inviteEmployee` y `resendInvitation`) |
 | `setEmployeeRole`, `setEmployeeStatus` | callable | Gestionar Empleados | `employees`, `staffDirectory`, `auditEvents` |
-| `registerDataRequest`, `resolveDataRequest` | callable | Atender Solicitudes de derechos | `dataRequests`, datos del sujeto, `consents.expiresAt`, `auditEvents` |
+| `registerDataRequest`, `resolveDataRequest` | callable | Atender Solicitudes de derechos | `dataRequests`, datos del sujeto, `consents.expiresAt`, `auditEvents`; `notifications` (solo `resolveDataRequest`) |
 | `rebuildSalesDaily` | callable | Administrador | `salesDaily`, `auditEvents` |
-| integración de factura | backend | tras confirmar el Pago o emitir una Nota de crédito | `orders.taxDocuments` |
+| integración de factura | backend | tras confirmar el Pago o emitir una Nota de crédito | `orders.taxDocuments`; `notifications` cuando Hacienda acepta |
+| `sendNotification` | trigger | creación en `notifications` | envía el correo; `notifications` (estado, intentos) |
+| webhook de rebotes | HTTP (opcional) | proveedor de correo | `notifications.status = bounced` |
 | `auditPanelWrites` | trigger | escrituras del Panel directo en `products`, `variants`, `categories`, `tags`, `settings`, `privacyNotices` | `auditEvents` |
 | `syncProductSummary` | trigger | escrituras en `variants` | `products.summary` |
 | `cleanupProductImages` | trigger | escrituras en `products` | Storage |
 | Resize Images | extensión | subidas a `products/**` | Storage |
-| `cancelUnpaidOrders` | programada (cada pocos minutos) | Sistema | `orders`, `variants.stock`, `stockMovements` |
+| `cancelUnpaidOrders` | programada (cada pocos minutos) | Sistema | `orders`, `variants.stock`, `stockMovements`, `notifications` |
 | `anonymizeExpiredOrders` | programada (diaria) | Sistema | `orders`, `auditEvents` |
-| Políticas TTL | Firestore | — | borran `auditEvents`, `invitations`, `consents`, `dataRequests` vencidos |
+| Políticas TTL | Firestore | — | borran `auditEvents`, `invitations`, `consents`, `dataRequests`, `notifications` vencidos |
 
 ## 12. Índices compuestos previstos
 
@@ -491,8 +561,9 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 | `auditEvents` | `target.collection` ↑, `target.id` ↑, `occurredAt` ↓ | por objetivo |
 | `auditEvents` | `actor.id` ↑, `occurredAt` ↓ | por Autor |
 | `auditEvents` | `actionKey` ↑, `occurredAt` ↓ | por acción |
+| `notifications` | `ref.collection` ↑, `ref.id` ↑, `createdAt` ↓ | Notificaciones de un Pedido, una Invitación o una Solicitud |
 
-Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDays`, `orderNumber`, `auditEvents.occurredAt`) usan los índices automáticos. Políticas TTL: `auditEvents.expiresAt`, `invitations.expiresAt`, `consents.expiresAt`, `dataRequests.expiresAt`.
+Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDays`, `orderNumber`, `auditEvents.occurredAt`) usan los índices automáticos. Políticas TTL: `auditEvents.expiresAt`, `invitations.expiresAt`, `consents.expiresAt`, `dataRequests.expiresAt`, `notifications.expiresAt`.
 
 ## 13. Matriz rol × colección × operación
 
@@ -522,6 +593,7 @@ Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDay
 | `privacyNotices` | R | R | R C | R | R | — |
 | `salesDaily` | — | — | R | R | R | C U |
 | `auditEvents` | — | — | R | — | — | C (TTL borra) |
+| `notifications` | — | — | R | R¹⁰ | — | C U (TTL borra) |
 
 1. Solo `status == 'published'`; la consulta debe filtrarlo.
 2. Solo `summary` y `hasHistory`; borrar, por `deleteProduct`.
@@ -532,6 +604,7 @@ Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDay
 7. Solo su propio documento. El Administrador lee todos, incluido el suyo.
 8. Solo `expiresAt`.
 9. Solo los suyos (`customerId == uid`).
+10. Solo las de Pedidos (`ref.collection == 'orders'`); la consulta debe filtrarlo. El reenvío es por `resendNotification`.
 
 ## 14. Presupuesto de reglas
 
@@ -553,7 +626,7 @@ Ninguna petición prevista pasa de 4. La tabla Rol → Permisos tiene tres espej
 - **Librería de stores:** un `withWatchDocument` hermano de `withWatchCollection`, para seguir documentos sueltos: `carts/{uid}`, `customers/{uid}`, el propio `employees/{uid}` y `settings/storefront`. `moofyvip` no lo tiene.
 - **`withFirestoreCrud`:** siempre **sin** la opción `audit` ([ADR 0005](adr/0005-la-bitacora-solo-la-escribe-el-backend.md)). Las subcolecciones se pasan como ruta string (`products/{id}/variants`).
 - **`firestore.rules`:** `match` anidado para cada subcolección, porque la regla final lo deniega todo.
-- **Proyecto Firebase de la tienda:** políticas TTL; extensión Resize Images; secretos en Secret Manager; sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
+- **Proyecto Firebase de la tienda:** políticas TTL; extensión Resize Images; secretos en Secret Manager (incluida la credencial del proveedor de correo, que elige la feature); sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
 - **Catálogo territorial:** JSON `DTA-2026` en una librería compartida del monorepo, usado por el front y por las Functions.
 
 ## 16. Decisiones menores tomadas en este documento
@@ -569,3 +642,6 @@ Estos detalles no los fijó ningún ticket; se eligieron al redactar este docume
 - `customerId` como base de la regla de "Mis pedidos", y la anonimización pone `buyerUid` en `null`.
 - `consents.expiresAt` como única mutación de un Consentimiento.
 - El acceso a los archivos de Comprobantes se deja a la feature de factura electrónica.
+- Nombres de los tipos de Notificación (`order.shipped`, …) y el formato del id determinista de `notifications`.
+- `changeInvitationRole` no notifica; `deleteMyAccount` sí escribe `dataRequest.answered` como confirmación de la supresión; la Solicitud rechazada también se notifica.
+- El `actor` de una Notificación es el Autor de la operación que la originó.

@@ -144,3 +144,9 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Evento de bitácora** | `auditEvent` | Entrada de la Bitácora: la acción, sobre qué se hizo, qué campos cambiaron, su Autor, la fecha y el motivo cuando la acción lo exige. | registro, entrada de log |
 | **Autor** | `actor` | Quien hizo una acción registrada: un Empleado, un Cliente o el Sistema, según desde dónde actuó. | usuario, responsable |
 | **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
+
+### Notificaciones
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Notificación** | `notification` | Correo que la tienda envía a una persona por un hecho de su Pedido, su Invitación o su Solicitud de derechos; nunca lleva contenido comercial. | aviso (choca con Aviso de privacidad), mensaje, email |
