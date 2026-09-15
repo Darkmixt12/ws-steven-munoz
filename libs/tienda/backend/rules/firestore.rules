@@ -77,12 +77,135 @@ service cloud.firestore {
       return isActiveEmployee() && permission in rolePermissions()[employee().role];
     }
 
+    // ─── Escrituras del Panel directo (ADR 0005) ─────────────────────────
+
+    // Toda escritura del Panel lleva su Autor y la hora del servidor: de ahí saca el Autor
+    // el trigger de Bitácora. El backend nunca toca estos dos campos.
+    function stamped() {
+      return request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // Exactamente las claves del Modelo de datos: ni de más ni de menos.
+    function keysAre(fields) {
+      return request.resource.data.keys().hasOnly(fields)
+        && request.resource.data.keys().hasAll(fields);
+    }
+
+    // Claves que cambian, sin los sellos que van en toda escritura.
+    // `affectedKeys()` da un Set, así que se restan con `difference`, no con `removeAll`.
+    function changed() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .difference(['updatedAt', 'updatedBy'].toSet());
+    }
+
     // ─── Catálogo ────────────────────────────────────────────────────────
+
+    // Presupuesto (§14). Peor caso previsto, el batch de renombrado que además mueve la
+    // Categoría: la escritura del Producto lee `employees/{uid}`, `categories/{categoryId}`
+    // y `slugs/{nuevo}`; cada escritura del índice lee `employees/{uid}` y `products/{id}`.
+    // Ninguna evaluación pasa de 4 documentos distintos.
+
+    function productFields() {
+      return ['name', 'description', 'slug', 'categoryId', 'tagIds', 'status', 'publishedAt',
+        'images', 'options', 'cabysCode', 'vatRateCode', 'unitOfMeasure', 'summary',
+        'hasHistory', 'createdAt', 'updatedAt', 'updatedBy'];
+    }
+
+    // Forma del Producto: las claves del modelo, un estado conocido, los topes de §3.1 y el
+    // invariante de la Imagen principal (`catalogIndex.mainImageId` sale de `images[0]`).
+    function productShape() {
+      let product = request.resource.data;
+      return keysAre(productFields())
+        && product.status in ['draft', 'published', 'archived']
+        && product.images.size() <= 10
+        && product.options.size() <= 3
+        && (product.status != 'published' || product.images.size() >= 1);
+    }
+
+    // El resumen nace en ceros: de ahí en adelante lo mueve solo el backend (ADR 0006).
+    function emptySummary() {
+      let summary = request.resource.data.summary;
+      return summary.size() == 4
+        && summary.priceMin == 0 && summary.priceMax == 0
+        && summary.inStock == false && summary.activeVariantCount == 0;
+    }
+
+    // Fecha de publicación: se fija al publicar por primera vez y no cambia después.
+    function keepsPublishedAt() {
+      return request.resource.data.publishedAt == (
+        resource.data.status != 'published'
+          && request.resource.data.status == 'published'
+          && resource.data.publishedAt == null
+        ? request.time
+        : resource.data.publishedAt);
+    }
+
+    // El índice apunta al Producto al terminar el batch, y el Producto reclama ese slug.
+    function slugPointsTo(slug, productId) {
+      return getAfter(/databases/$(database)/documents/slugs/$(slug)).data.productId == productId;
+    }
+
+    function productAfter(productId) {
+      return getAfter(/databases/$(database)/documents/products/$(productId)).data;
+    }
+
+    function productClaims(productId, slug) {
+      return productAfter(productId).slug == slug;
+    }
+
+    function categoryExists(categoryId) {
+      return exists(/databases/$(database)/documents/categories/$(categoryId));
+    }
+
+    function categoryFields() {
+      return ['name', 'parentId', 'sortOrder', 'createdAt', 'updatedAt', 'updatedBy'];
+    }
+
+    // Árbol de dos niveles: si cuelga de alguien, el padre existe, es raíz y no es ella misma.
+    function categoryShape(categoryId) {
+      let parentId = request.resource.data.parentId;
+      return keysAre(categoryFields())
+        && (parentId == null
+          || (parentId != categoryId
+            && get(/databases/$(database)/documents/categories/$(parentId)).data.parentId == null));
+    }
+
+    function tagFields() {
+      return ['name', 'createdAt', 'updatedAt', 'updatedBy'];
+    }
 
     // Público: solo Productos Publicados, y la consulta debe filtrar `status == 'published'`.
     // Panel: todo estado, con "Ver Borradores y Archivados".
     match /products/{productId} {
       allow read: if resource.data.status == 'published' || can('viewDraftsAndArchived');
+
+      // Nace Borrador: publicar es siempre una actualización posterior.
+      allow create: if can('editProducts')
+        && stamped()
+        && productShape()
+        && request.resource.data.status == 'draft'
+        && request.resource.data.publishedAt == null
+        && emptySummary()
+        && request.resource.data.hasHistory == false
+        && request.resource.data.createdAt == request.time
+        && categoryExists(request.resource.data.categoryId)
+        && slugPointsTo(request.resource.data.slug, productId);
+
+      // Mover `status` pide "Publicar y archivar"; cualquier otro campo, "Crear y editar
+      // Productos". Publicar toca además `publishedAt`, así que pide los dos Permisos: los
+      // dos Roles que publican también editan.
+      allow update: if (can('editProducts') || can('publishProducts'))
+        && (!changed().hasAny(['status']) || can('publishProducts'))
+        && (changed().difference(['status'].toSet()).size() == 0 || can('editProducts'))
+        && stamped()
+        && productShape()
+        && !changed().hasAny(['summary', 'hasHistory', 'createdAt'])
+        && keepsPublishedAt()
+        && (!changed().hasAny(['slug']) || slugPointsTo(request.resource.data.slug, productId))
+        && (!changed().hasAny(['categoryId']) || categoryExists(request.resource.data.categoryId));
+
+      // Sin borrado: el Producto se archiva, y borrarlo es cosa de `deleteProduct`.
 
       // Público: solo si el Producto padre está Publicado (1 `get`).
       match /variants/{variantId} {
@@ -93,10 +216,32 @@ service cloud.firestore {
 
     match /categories/{categoryId} {
       allow read: if true;
+
+      allow create: if can('manageCategoriesAndTags')
+        && stamped()
+        && categoryShape(categoryId)
+        && request.resource.data.createdAt == request.time;
+
+      // Una raíz nunca baja a Subcategoría; una Subcategoría sí se mueve de raíz o sube.
+      allow update: if can('manageCategoriesAndTags')
+        && stamped()
+        && categoryShape(categoryId)
+        && !changed().hasAny(['createdAt'])
+        && (request.resource.data.parentId == null || resource.data.parentId != null);
     }
 
     match /tags/{tagId} {
       allow read: if true;
+
+      allow create: if can('manageCategoriesAndTags')
+        && stamped()
+        && keysAre(tagFields())
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if can('manageCategoriesAndTags')
+        && stamped()
+        && keysAre(tagFields())
+        && !changed().hasAny(['createdAt']);
     }
 
     // El Panel verifica la disponibilidad del SKU.
@@ -106,6 +251,18 @@ service cloud.firestore {
 
     match /slugs/{slug} {
       allow read: if true;
+
+      // Se crea en el mismo batch que el Producto, solo si está libre (un `set` sobre uno
+      // existente es `update`, y no hay `allow update`) y solo si el Producto lo reclama.
+      allow create: if can('editProducts')
+        && keysAre(['productId'])
+        && productClaims(request.resource.data.productId, slug);
+
+      // Única excepción a "sin borrados": el índice viejo de un renombrado, y solo si el
+      // Producto ya no lo reclama y no tiene historial (§3.4, nota 5 de §13).
+      allow delete: if can('editProducts')
+        && !productClaims(resource.data.productId, slug)
+        && productAfter(resource.data.productId).hasHistory == false;
     }
 
     match /catalogIndex/storefront {
