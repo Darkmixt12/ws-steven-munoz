@@ -17,7 +17,8 @@
     "paths": {
       "steven-munoz/dashboard": [
         "libs/steven-munoz/frontend/dashboard/src/index.ts"
-      ]
+      ],
+      "tienda/stores": ["libs/tienda/frontend/stores/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

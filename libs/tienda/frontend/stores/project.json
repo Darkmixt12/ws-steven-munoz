@@ -1,0 +1,21 @@
+{
+  "name": "tienda-stores",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tienda/frontend/stores/src",
+  "prefix": "tienda",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/tienda/frontend/stores/jest.config.ts",
+        "tsConfig": "libs/tienda/frontend/stores/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
