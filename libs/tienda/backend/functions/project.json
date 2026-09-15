@@ -1,0 +1,8 @@
+{
+  "name": "tienda-functions",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tienda/backend/functions/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {}
+}

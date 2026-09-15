@@ -47,6 +47,10 @@ Thumbs.db
 .firebase
 .yarn
 
+# Firebase emulators
+*-debug.log
+firebase-debug.*.log
+
 # MATT POCOCK SKILL
 
 .agents

@@ -1,0 +1,15 @@
+{
+  "name": "tienda-rules",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tienda/backend/rules/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "test-rules": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx firebase emulators:exec --config firebase.tienda.json --project demo-tienda-cr --only firestore,storage,auth \"npx jest --config libs/tienda/backend/rules/jest.config.ts\""
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Bundle generado por esbuild
+lib/
+
+# Node.js dependency directory
+node_modules/
+*.local

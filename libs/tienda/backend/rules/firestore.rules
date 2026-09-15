@@ -1,0 +1,54 @@
+rules_version = '2';
+
+// Reglas de Firestore de la Tienda CR. Fuente: docs/modelo-de-datos-firestore.md
+// (§2 mapa de colecciones, §13 matriz rol × colección × operación).
+// Cada subcolección lleva su `match` anidado, porque la regla final lo deniega todo.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Catálogo público ────────────────────────────────────────────────
+
+    // Solo Productos Publicados; una consulta debe filtrar `status == 'published'`.
+    match /products/{productId} {
+      allow read: if resource.data.status == 'published';
+
+      // Solo si el Producto padre está Publicado (1 `get`).
+      match /variants/{variantId} {
+        allow read: if get(/databases/$(database)/documents/products/$(productId)).data.status == 'published';
+      }
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+    }
+
+    match /tags/{tagId} {
+      allow read: if true;
+    }
+
+    match /slugs/{slug} {
+      allow read: if true;
+    }
+
+    match /catalogIndex/storefront {
+      allow read: if true;
+    }
+
+    // ─── Configuración pública ───────────────────────────────────────────
+
+    match /settings/storefront {
+      allow read: if true;
+    }
+
+    match /privacyNotices/{version} {
+      allow read: if true;
+    }
+
+    // ─── Regla final ─────────────────────────────────────────────────────
+
+    // Todo lo que no aparece arriba queda denegado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

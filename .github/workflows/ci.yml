@@ -26,6 +26,11 @@ jobs:
         with:
           node-version: 22
           cache: 'yarn'
+      # Los emuladores de Firestore y Storage de la tienda piden Java 21
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
       # This enables task distribution via Nx Cloud
       # Run this command as early as possible, before dependencies are installed
       # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
@@ -38,6 +43,8 @@ jobs:
       # - run: npx nx-cloud record -- echo Hello World
       # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: npx nx run-many -t lint test build e2e
+      # Reglas de la tienda contra los emuladores (target aparte: `yarn build` del CRM corre `-t test`)
+      - run: npx nx run tienda-rules:test-rules
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()
