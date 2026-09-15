@@ -35,6 +35,7 @@ En las colecciones del Panel directo, **el backend nunca toca `updatedAt` ni `up
 | `tags/{tagId}` | autoId | Panel directo | público | [3.3](#33-categoriescategoryid-y-tagstagid) |
 | `skus/{sku}` | SKU normalizado | Panel directo (índice) | Empleados | [3.4](#34-skussku-y-slugsslug) |
 | `slugs/{slug}` | slug | Panel directo (índice) | público | [3.4](#34-skussku-y-slugsslug) |
+| `catalogIndex/storefront` | fijo | backend | público | [3.5](#35-catalogindexstorefront) |
 | `stockMovements/{movementId}` | autoId | backend | los tres Roles | [4.1](#41-stockmovementsmovementid) |
 | `stockImports/{importId}` | autoId | backend | los tres Roles | [4.2](#42-stockimportsimportid) |
 | `customers/{uid}` | `uid` | backend + Cliente directo | dueño; Administrador, Operador | [5.1](#51-customersuid) |
@@ -71,6 +72,7 @@ La ficha del Producto ([¿Qué es un Producto en la tienda?](https://github.com/
 | `categoryId` | string | exactamente una Categoría; la regla exige que exista |
 | `tagIds` | string[] | Etiquetas |
 | `status` | `draft` \| `published` \| `archived` | |
+| `publishedAt` | Timestamp \| null | Fecha de publicación: se fija al pasar a `published` por primera vez y no cambia después; ordena lo más nuevo |
 | `images` | `{id, alt?}[]` | ≤ 10, en orden; la primera es la Imagen principal |
 | `options` | `{name, values: string[]}[]` | ≤ 3 ejes de Opción |
 | `cabysCode` | string (13) | |
@@ -80,10 +82,10 @@ La ficha del Producto ([¿Qué es un Producto en la tienda?](https://github.com/
 | `hasHistory` | boolean | **solo backend**; pasa a `true` con el primer Movimiento o la primera Venta de alguna Variante |
 | `createdAt`, `updatedAt`, `updatedBy` | | |
 
-- **Escribe:** Panel directo con "Crear y editar Productos" o "Publicar y archivar" (Administrador, Editor de catálogo). El cliente no puede tocar `summary` ni `hasHistory`. Para pasar a `published`, la regla exige `images.size() >= 1`.
+- **Escribe:** Panel directo con "Crear y editar Productos" o "Publicar y archivar" (Administrador, Editor de catálogo). El cliente no puede tocar `summary` ni `hasHistory`. Para pasar a `published`, la regla exige `images.size() >= 1`; la primera vez, además, `publishedAt == request.time`, y después `publishedAt` no cambia.
 - **Borrar:** solo la callable `deleteProduct`, y solo si `hasHistory == false`. Borra también las Variantes, los índices `skus`/`slugs` y, vía trigger, la carpeta de Storage.
-- **Lee:** el anónimo y el Cliente, solo si `status == 'published'` (las consultas deben filtrar `where('status', '==', 'published')`); todo Empleado Activo, todos los estados.
-- **Triggers:** Bitácora; limpieza de Storage al quitar imágenes si `hasHistory == false` ([imágenes](https://github.com/Darkmixt12/ws-steven-munoz/issues/50)).
+- **Lee:** el anónimo y el Cliente, solo si `status == 'published'` (las consultas deben filtrar `where('status', '==', 'published')`); todo Empleado Activo, todos los estados. La tienda no lista desde aquí: la portada, las grillas y la Búsqueda salen de `catalogIndex/storefront` ([3.5](#35-catalogindexstorefront)), y el Producto completo se lee solo en su página (`/p/{slug}`).
+- **Triggers:** Bitácora; limpieza de Storage al quitar imágenes si `hasHistory == false` ([imágenes](https://github.com/Darkmixt12/ws-steven-munoz/issues/50)); `syncCatalogIndex` ([3.5](#35-catalogindexstorefront)).
 
 ### 3.2 `products/{productId}/variants/{variantId}`
 
@@ -129,6 +131,41 @@ La unidad vendible ([ADR 0001](adr/0001-producto-siempre-con-variante.md), [ADR 
 - **Escribe:** Panel directo, en el **mismo batch** que la Variante o el Producto. La regla solo permite crear si no existe, y exige con `getAfter()` que la Variante o el Producto que lo reclama tenga ese valor.
 - **Renombrar:** el batch crea el índice nuevo y borra el viejo. Es la única excepción a "sin borrados desde el Panel": el índice no se audita porque el cambio queda en el Evento de la Variante o del Producto. Borrar un `skus` exige que la Variante no tenga historial.
 - **Lee:** `skus` solo Empleados Activos (el Panel verifica disponibilidad). `slugs` es público: la tienda resuelve `/p/{slug}` con una lectura.
+
+### 3.5 `catalogIndex/storefront`
+
+El índice del catálogo publicado, del que la tienda lista y busca ([¿Cómo busca el Cliente en el catálogo?](https://github.com/Darkmixt12/ws-steven-munoz/issues/52), [ADR 0008](adr/0008-el-catalogo-se-lista-y-se-busca-desde-un-indice-derivado.md)).
+
+| Campo | Tipo | Notas |
+|---|---|---|
+| `entries` | map `productId` → entrada | una por Producto Publicado |
+| `updatedAt` | Timestamp | última escritura del trigger |
+
+Cada entrada sale solo del documento del Producto:
+
+| Campo | Sale de |
+|---|---|
+| `slug`, `name`, `categoryId`, `tagIds`, `publishedAt` | los mismos campos del Producto |
+| `optionValues` | string[]: todos los valores de `options` |
+| `priceMin`, `priceMax`, `inStock` | `summary` |
+| `mainImageId` | `images[0].id` |
+
+- **Escribe:** solo el trigger `syncCatalogIndex` sobre `products`. Si el Producto queda `published`, escribe su entrada (`entries.{productId}`); si pasa a otro estado o se borra, la quita. Recalcula la entrada desde el Producto actual, así que es idempotente. Como `summary` vive en el Producto, los cambios de Variantes y de Stock llegan por el mismo trigger.
+- **Lee:** público. La tienda lo sigue con `withWatchDocument`.
+- **Nombres:** las entradas llevan ids; el navegador toma los nombres de `categories` y `tags`, públicas y ya cargadas para el menú. Renombrar una Categoría o una Etiqueta no toca el índice.
+- **Consistencia:** eventual, en segundos. Un Producto recién Agotado puede verse disponible un instante; la página del Producto lee la Variante y `createOrder` rechaza lo que no hay.
+- **Tamaño:** ~250 bytes por entrada (~75 KB con 300 Productos) frente al límite de 1 MiB. Si se acerca, se parte en varios documentos.
+- **Índices:** exento de los índices automáticos (exención de campo único sobre `entries`).
+
+**Búsqueda en la tienda.** Es detalle de la feature y no pide nada más al modelo:
+
+- Coincide contra el nombre, los nombres de la Categoría (y de su padre), de las Etiquetas y los valores de Opción; no contra la descripción ni el SKU.
+- Sin tildes ni mayúsculas, por prefijo, con varias palabras que deben coincidir todas, y con el nombre pesando más. La tolerancia a errores de tipeo y los plurales entran si la librería los da.
+- Se combina con los filtros de Categoría, Etiqueta, "solo disponibles" y rango de precio (`priceMin`), y con el orden por relevancia, precio o más nuevos (`publishedAt`). No hay filtro por valor de Opción.
+- Los Agotados aparecen marcados y "solo disponibles" los oculta. Los Borradores y Archivados nunca están en el índice.
+- Busca cualquier visitante, con o sin sesión. Las búsquedas no se guardan.
+
+**Búsqueda del Panel.** El Panel ya lee todos los Productos, en todos los estados, y filtra en el navegador; un SKU exacto se resuelve leyendo `skus/{SKU normalizado}`. Tampoco pide nada al modelo.
 
 ## 4. Stock
 
@@ -498,6 +535,8 @@ products/{productId}/thumbs/{imageId}_400x400.webp  ← extensión Resize Images
 products/{productId}/thumbs/{imageId}_800x800.webp
 ```
 
+Firebase Extensions se apaga el 31 de marzo de 2027: el reemplazo de Resize Images por una Function propia lo decide [¿Cómo se generan las miniaturas de las imágenes sin la extensión Resize Images?](https://github.com/Darkmixt12/ws-steven-munoz/issues/53).
+
 `storage.rules`:
 
 - **Lectura:** pública.
@@ -536,8 +575,9 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 | webhook de rebotes | HTTP (opcional) | proveedor de correo | `notifications.status = bounced` |
 | `auditPanelWrites` | trigger | escrituras del Panel directo en `products`, `variants`, `categories`, `tags`, `settings`, `privacyNotices` | `auditEvents` |
 | `syncProductSummary` | trigger | escrituras en `variants` | `products.summary` |
+| `syncCatalogIndex` | trigger | escrituras en `products` | `catalogIndex` |
 | `cleanupProductImages` | trigger | escrituras en `products` | Storage |
-| Resize Images | extensión | subidas a `products/**` | Storage |
+| Resize Images | extensión, pendiente de reemplazo ([miniaturas](https://github.com/Darkmixt12/ws-steven-munoz/issues/53)) | subidas a `products/**` | Storage |
 | `cancelUnpaidOrders` | programada (cada pocos minutos) | Sistema | `orders`, `variants.stock`, `stockMovements`, `notifications` |
 | `anonymizeExpiredOrders` | programada (diaria) | Sistema | `orders`, `auditEvents` |
 | Políticas TTL | Firestore | — | borran `auditEvents`, `invitations`, `consents`, `dataRequests`, `notifications` vencidos |
@@ -546,8 +586,6 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 
 | Colección | Campos | Consulta |
 |---|---|---|
-| `products` | `status` ↑, `categoryId` ↑, `createdAt` ↓ | catálogo publicado por Categoría |
-| `products` | `status` ↑, `tagIds` (array-contains), `createdAt` ↓ | catálogo publicado por Etiqueta |
 | `products` | `status` ↑, `updatedAt` ↓ | Panel: Productos por estado |
 | `stockMovements` | `variantId` ↑, `createdAt` ↓ | historia de una Variante |
 | `stockMovements` | `origin.id` ↑, `createdAt` ↑ | Movimientos de un Pedido o de una Carga |
@@ -563,7 +601,7 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 | `auditEvents` | `actionKey` ↑, `occurredAt` ↓ | por acción |
 | `notifications` | `ref.collection` ↑, `ref.id` ↑, `createdAt` ↓ | Notificaciones de un Pedido, una Invitación o una Solicitud |
 
-Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDays`, `orderNumber`, `auditEvents.occurredAt`) usan los índices automáticos. Políticas TTL: `auditEvents.expiresAt`, `invitations.expiresAt`, `consents.expiresAt`, `dataRequests.expiresAt`, `notifications.expiresAt`.
+Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDays`, `orderNumber`, `auditEvents.occurredAt`) usan los índices automáticos. La tienda no consulta `products` para listar ([ADR 0008](adr/0008-el-catalogo-se-lista-y-se-busca-desde-un-indice-derivado.md)), así que no hay índices compuestos del catálogo publicado; `catalogIndex.entries` va exento de los índices de campo único. Políticas TTL: `auditEvents.expiresAt`, `invitations.expiresAt`, `consents.expiresAt`, `dataRequests.expiresAt`, `notifications.expiresAt`.
 
 ## 13. Matriz rol × colección × operación
 
@@ -576,6 +614,7 @@ Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDay
 | `categories`, `tags` | R | R | R C U | R | R C U | D |
 | `skus` | — | — | R C D⁵ | R | R C D⁵ | D |
 | `slugs` | R | R | R C D⁵ | R | R C D⁵ | D |
+| `catalogIndex` | R | R | R | R | R | C U |
 | `stockMovements` | — | — | R | R | R | C |
 | `stockImports` | — | — | R | R | R | C |
 | `customers` | — | R U⁶ | R | R | — | C U D |
@@ -623,10 +662,10 @@ Ninguna petición prevista pasa de 4. La tabla Rol → Permisos tiene tres espej
 
 ## 15. Requisitos para la ejecución
 
-- **Librería de stores:** un `withWatchDocument` hermano de `withWatchCollection`, para seguir documentos sueltos: `carts/{uid}`, `customers/{uid}`, el propio `employees/{uid}` y `settings/storefront`. `moofyvip` no lo tiene.
+- **Librería de stores:** un `withWatchDocument` hermano de `withWatchCollection`, para seguir documentos sueltos: `carts/{uid}`, `customers/{uid}`, el propio `employees/{uid}`, `settings/storefront` y `catalogIndex/storefront`. `moofyvip` no lo tiene.
 - **`withFirestoreCrud`:** siempre **sin** la opción `audit` ([ADR 0005](adr/0005-la-bitacora-solo-la-escribe-el-backend.md)). Las subcolecciones se pasan como ruta string (`products/{id}/variants`).
 - **`firestore.rules`:** `match` anidado para cada subcolección, porque la regla final lo deniega todo.
-- **Proyecto Firebase de la tienda:** políticas TTL; extensión Resize Images; secretos en Secret Manager (incluida la credencial del proveedor de correo, que elige la feature); sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
+- **Proyecto Firebase de la tienda:** políticas TTL; extensión Resize Images (Firebase Extensions se apaga el 31 de marzo de 2027; su reemplazo lo decide [miniaturas](https://github.com/Darkmixt12/ws-steven-munoz/issues/53)); exención de índice de `catalogIndex.entries`; secretos en Secret Manager (incluida la credencial del proveedor de correo, que elige la feature); sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
 - **Catálogo territorial:** JSON `DTA-2026` en una librería compartida del monorepo, usado por el front y por las Functions.
 
 ## 16. Decisiones menores tomadas en este documento
@@ -645,3 +684,6 @@ Estos detalles no los fijó ningún ticket; se eligieron al redactar este docume
 - Nombres de los tipos de Notificación (`order.shipped`, …) y el formato del id determinista de `notifications`.
 - `changeInvitationRole` no notifica; `deleteMyAccount` sí escribe `dataRequest.answered` como confirmación de la supresión; la Solicitud rechazada también se notifica.
 - El `actor` de una Notificación es el Autor de la operación que la originó.
+- El nombre `catalogIndex/storefront`, un solo documento con `entries` como mapa por `productId`, y `mainImageId` en vez de la galería.
+- `publishedAt` en `null` mientras el Producto nunca se publicó.
+- El umbral para partir el índice (cerca de 1 MiB) y la forma de partirlo.
