@@ -81,7 +81,6 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Salida por Pedido** | `orderPlaced` | Movimiento automático que resta las unidades de un Pedido al crearse. | venta, reserva |
 | **Reposición por anulación** | `orderCancelled` | Movimiento automático que devuelve lo que un Pedido anulado había restado. | reversa |
 | **Reingreso por devolución** | `orderReturned` | Movimiento que suma las unidades devueltas que el Empleado decidió reingresar. | devolución (como movimiento) |
-| **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
 
 ### Carrito
 
@@ -134,3 +133,12 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Venta** | `sale` | Unidades y monto de las Líneas de un Pedido que entran a los reportes al confirmarse su Pago. | pedido, compra |
 | **Venta neta** | `netSales` | Ventas de un período menos lo anulado y devuelto en ese período. | ventas reales, ganancia |
 | **Más y menos vendidos** | `salesRanking` | Reporte que ordena Variantes o Productos por unidades netas en un rango de fechas. | top ventas, ranking |
+
+### Bitácora
+
+| Término | Identificador en código | Definición | Evitar |
+|---|---|---|---|
+| **Bitácora** | `auditLog` | Registro inmutable de lo que los Empleados y el Sistema hicieron en la tienda, fuera de lo que ya tiene historia propia; solo la ve el Administrador. | auditoría, log, historial |
+| **Evento de bitácora** | `auditEvent` | Entrada de la Bitácora: la acción, sobre qué se hizo, qué campos cambiaron, su Autor, la fecha y el motivo cuando la acción lo exige. | registro, entrada de log |
+| **Autor** | `actor` | Quien hizo una acción registrada: un Empleado, un Cliente o el Sistema, según desde dónde actuó. | usuario, responsable |
+| **Sistema** | `system` | Autor de las acciones que no dispara ninguna persona (p. ej. la anulación automática de un Pedido sin pago). | automático, bot |
