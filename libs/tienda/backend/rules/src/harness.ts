@@ -7,7 +7,8 @@ import { doc, setDoc, type DocumentData, type Firestore } from 'firebase/firesto
 import type { FirebaseStorage } from 'firebase/storage';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { customer } from './fixtures';
+import { ROLES, type EmployeeStatus, type Role } from 'tienda/domain';
+import { customer, employee } from './fixtures';
 
 /** Proyecto solo de emuladores: con el prefijo `demo-`, nunca toca un proyecto real. */
 export const PROJECT_ID = 'demo-tienda-cr';
@@ -81,3 +82,76 @@ export const publicPersonas = [
   ['anonymous', asAnonymous],
   ['customer', asCustomer],
 ] as const;
+
+/** `uid` de cada persona Empleado. */
+export const EMPLOYEE_UIDS = {
+  administrator: 'administrator-1',
+  operator: 'operator-1',
+  catalogEditor: 'catalog-editor-1',
+  invited: 'invited-1',
+  disabled: 'disabled-1',
+  unverified: 'unverified-1',
+  customerEmployee: 'customer-employee-1',
+} as const;
+
+/**
+ * Cuenta con sesión cuyo `employees/{uid}` se siembra con `data`: acepta cualquier forma,
+ * para probar documentos inesperados.
+ */
+export async function asEmployee(
+  env: RulesTestEnvironment,
+  uid: string,
+  data: DocumentData,
+  { emailVerified = true } = {},
+): Promise<RulesTestContext> {
+  await seed(env, { [`employees/${uid}`]: data });
+  return env.authenticatedContext(uid, {
+    email: `${uid}@example.com`,
+    email_verified: emailVerified,
+  });
+}
+
+/** Empleado Activo con correo verificado y el Rol dado. */
+export function asActiveEmployee(role: Role) {
+  return (env: RulesTestEnvironment) =>
+    asEmployee(env, EMPLOYEE_UIDS[role], employee(role, 'active'));
+}
+
+/** Cada Rol Activo, para `describe.each`. */
+export const activeEmployeePersonas = ROLES.map(
+  (role) => [role, asActiveEmployee(role)] as const,
+);
+
+/** Empleado Invitado. Con Rol Administrador: el estado corta aunque el Rol tenga todos los Permisos. */
+export function asInvitedEmployee(env: RulesTestEnvironment) {
+  return asEmployee(env, EMPLOYEE_UIDS.invited, employee('administrator', 'invited'));
+}
+
+/** Empleado Deshabilitado, con Rol Administrador. */
+export function asDisabledEmployee(env: RulesTestEnvironment) {
+  return asEmployee(env, EMPLOYEE_UIDS.disabled, employee('administrator', 'disabled'));
+}
+
+/** Empleado Activo con el correo sin verificar, con Rol Administrador. */
+export function asUnverifiedEmployee(env: RulesTestEnvironment) {
+  return asEmployee(env, EMPLOYEE_UIDS.unverified, employee('administrator', 'active'), {
+    emailVerified: false,
+  });
+}
+
+/** Empleados a los que se les niega el Panel, para `describe.each`. */
+export const blockedEmployeePersonas = [
+  ['invited', asInvitedEmployee],
+  ['disabled', asDisabledEmployee],
+  ['unverified', asUnverifiedEmployee],
+] as const;
+
+/** Cuenta que es Cliente y Empleado Operador a la vez; siembra `customers/{uid}` y `employees/{uid}`. */
+export async function asCustomerEmployee(
+  env: RulesTestEnvironment,
+  status: EmployeeStatus = 'active',
+): Promise<RulesTestContext> {
+  const uid = EMPLOYEE_UIDS.customerEmployee;
+  await seed(env, { [`customers/${uid}`]: customer() });
+  return asEmployee(env, uid, employee('operator', status));
+}

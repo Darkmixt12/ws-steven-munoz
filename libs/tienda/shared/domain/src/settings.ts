@@ -26,6 +26,36 @@ export interface StorefrontSettings {
   updatedBy: string;
 }
 
+/** Tipo de identificación de Hacienda: cédula física, cédula jurídica, DIMEX o NITE. */
+export type IdType = '01' | '02' | '03' | '04';
+
+/** Ubicación con los códigos del catálogo territorial. */
+export interface CodedLocation {
+  districtCode: string;
+  provinceName: string;
+  cantonName: string;
+  districtName: string;
+  /** 5–160 caracteres en el Comprobante. */
+  otherSigns: string;
+}
+
+/** `settings/issuer`: datos del emisor de los Comprobantes. Lo leen el Administrador y el backend. */
+export interface IssuerSettings {
+  idType: IdType;
+  /** Texto, nunca número: la jurídica admite caracteres alfanuméricos. */
+  idNumber: string;
+  name: string;
+  economicActivityCode: string;
+  /** 3 dígitos; `001` = casa matriz. */
+  branch: string;
+  /** 5 dígitos. */
+  terminal: string;
+  location: CodedLocation;
+  email: string;
+  updatedAt: Timestamp;
+  updatedBy: string;
+}
+
 /** Finalidad: uso de los datos personales para el que se pide Consentimiento. */
 export type Purpose = 'accountAndOrders' | 'marketing' | 'panelAccess';
 

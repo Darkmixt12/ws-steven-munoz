@@ -21,6 +21,12 @@ export interface Actor {
   id: string;
 }
 
+/** Motivo de lista fija más una nota libre. */
+export interface Reason {
+  code: string;
+  note: string | null;
+}
+
 /** Referencia a una Variante: siempre con su Producto, porque la Variante vive bajo él. */
 export interface VariantRef {
   productId: string;

@@ -89,6 +89,12 @@ export interface Tag {
   updatedBy: string;
 }
 
+/** `skus/{sku}`: índice de unicidad del SKU normalizado; solo lo leen Empleados Activos. */
+export interface SkuIndex {
+  productId: string;
+  variantId: string;
+}
+
 /** `slugs/{slug}`: índice de unicidad del slug; la tienda resuelve `/p/{slug}` con él. */
 export interface SlugIndex {
   productId: string;

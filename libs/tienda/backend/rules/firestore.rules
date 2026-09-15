@@ -1,20 +1,93 @@
 rules_version = '2';
 
 // Reglas de Firestore de la Tienda CR. Fuente: docs/modelo-de-datos-firestore.md
-// (§2 mapa de colecciones, §13 matriz rol × colección × operación).
+// (§2 mapa de colecciones, §13 matriz rol × colección × operación, §14 presupuesto).
 // Cada subcolección lleva su `match` anidado, porque la regla final lo deniega todo.
+// Lo que escribe el backend (Admin SDK) no pasa por estas reglas: aquí no tiene `allow write`.
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ─── Catálogo público ────────────────────────────────────────────────
+    // ─── Empleado y Permisos (ADR 0002) ──────────────────────────────────
 
-    // Solo Productos Publicados; una consulta debe filtrar `status == 'published'`.
+    // Espejo de ROLE_PERMISSIONS en libs/tienda/shared/domain/src/permissions.ts;
+    // role-permissions-mirror.spec.ts falla si dejan de ser iguales.
+    // BEGIN ROLE_PERMISSIONS
+    function rolePermissions() {
+      return {
+        'administrator': [
+          'viewDraftsAndArchived',
+          'editProducts',
+          'publishProducts',
+          'manageCategoriesAndTags',
+          'recordStockMovements',
+          'viewOrders',
+          'advanceOrderStatus',
+          'cancelOrReturnOrders',
+          'viewCustomers',
+          'disableCustomers',
+          'handleDataRequests',
+          'viewEmployees',
+          'manageEmployees',
+          'viewReports',
+          'exportReports',
+          'viewAuditLog',
+          'manageSettings'
+        ],
+        'operator': [
+          'viewDraftsAndArchived',
+          'recordStockMovements',
+          'viewOrders',
+          'advanceOrderStatus',
+          'cancelOrReturnOrders',
+          'viewCustomers',
+          'disableCustomers',
+          'viewReports',
+          'exportReports'
+        ],
+        'catalogEditor': [
+          'viewDraftsAndArchived',
+          'editProducts',
+          'publishProducts',
+          'manageCategoriesAndTags',
+          'recordStockMovements',
+          'viewReports',
+          'exportReports'
+        ]
+      };
+    }
+    // END ROLE_PERMISSIONS
+
+    // Documento de Empleado de la Cuenta (1 `get` por petición). Si no existe, el `get`
+    // falla y la regla niega.
+    function employee() {
+      return get(/databases/$(database)/documents/employees/$(request.auth.uid)).data;
+    }
+
+    // Empleado Activo con correo verificado y un Rol de la tabla. Sin custom claims: se lee
+    // su documento, así que deshabilitarlo corta la siguiente petición aunque el token siga vigente.
+    function isActiveEmployee() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && employee().status == 'active'
+        && employee().role in rolePermissions();
+    }
+
+    // ¿El Empleado Activo tiene el Permiso? Se pregunta por el Permiso, nunca por el Rol.
+    function can(permission) {
+      return isActiveEmployee() && permission in rolePermissions()[employee().role];
+    }
+
+    // ─── Catálogo ────────────────────────────────────────────────────────
+
+    // Público: solo Productos Publicados, y la consulta debe filtrar `status == 'published'`.
+    // Panel: todo estado, con "Ver Borradores y Archivados".
     match /products/{productId} {
-      allow read: if resource.data.status == 'published';
+      allow read: if resource.data.status == 'published' || can('viewDraftsAndArchived');
 
-      // Solo si el Producto padre está Publicado (1 `get`).
+      // Público: solo si el Producto padre está Publicado (1 `get`).
       match /variants/{variantId} {
-        allow read: if get(/databases/$(database)/documents/products/$(productId)).data.status == 'published';
+        allow read: if get(/databases/$(database)/documents/products/$(productId)).data.status == 'published'
+          || can('viewDraftsAndArchived');
       }
     }
 
@@ -26,6 +99,11 @@ service cloud.firestore {
       allow read: if true;
     }
 
+    // El Panel verifica la disponibilidad del SKU.
+    match /skus/{sku} {
+      allow read: if isActiveEmployee();
+    }
+
     match /slugs/{slug} {
       allow read: if true;
     }
@@ -34,19 +112,80 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    // ─── Configuración pública ───────────────────────────────────────────
+    // ─── Stock ───────────────────────────────────────────────────────────
+
+    match /stockMovements/{movementId} {
+      allow read: if can('recordStockMovements');
+    }
+
+    match /stockImports/{importId} {
+      allow read: if can('recordStockMovements');
+    }
+
+    // ─── Personas ────────────────────────────────────────────────────────
+
+    // El propio documento se lee siempre, en cualquier estado: el Panel lo observa para
+    // salir en cuanto deja de estar Activo. Todos, con "Ver Empleados".
+    match /employees/{uid} {
+      allow read: if (request.auth != null && request.auth.uid == uid) || can('viewEmployees');
+    }
+
+    match /invitations/{email} {
+      allow read: if can('viewEmployees');
+    }
+
+    // Nombre del Autor de una acción, para cualquier Rol.
+    match /staffDirectory/{uid} {
+      allow read: if isActiveEmployee();
+    }
+
+    // Lectura del Panel; la del dueño llega con el ticket del Cliente.
+    match /consents/{consentId} {
+      allow read: if can('handleDataRequests');
+    }
+
+    match /dataRequests/{requestId} {
+      allow read: if can('handleDataRequests');
+    }
+
+    // ─── Configuración ───────────────────────────────────────────────────
 
     match /settings/storefront {
       allow read: if true;
+    }
+
+    match /settings/issuer {
+      allow read: if can('manageSettings');
     }
 
     match /privacyNotices/{version} {
       allow read: if true;
     }
 
+    // ─── Reportes y Bitácora ─────────────────────────────────────────────
+
+    match /salesDaily/{day} {
+      allow read: if can('viewReports');
+    }
+
+    match /auditEvents/{eventId} {
+      allow read: if can('viewAuditLog');
+    }
+
+    // ─── Notificaciones ──────────────────────────────────────────────────
+
+    // Cada una la lee quien tiene el Permiso de su origen, y la consulta debe filtrar
+    // `ref.collection`; quien tiene los tres Permisos (hoy, el Administrador) no filtra.
+    match /notifications/{notificationId} {
+      allow read: if (can('viewOrders') && can('viewEmployees') && can('handleDataRequests'))
+        || (resource.data.ref.collection == 'orders' && can('viewOrders'))
+        || (resource.data.ref.collection == 'invitations' && can('viewEmployees'))
+        || (resource.data.ref.collection == 'dataRequests' && can('handleDataRequests'));
+    }
+
     // ─── Regla final ─────────────────────────────────────────────────────
 
-    // Todo lo que no aparece arriba queda denegado.
+    // Todo lo que no aparece arriba queda denegado; `counters` no lo lee nadie.
     match /{document=**} {
       allow read, write: if false;
     }
