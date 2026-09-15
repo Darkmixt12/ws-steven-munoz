@@ -85,7 +85,7 @@ La ficha del Producto ([¿Qué es un Producto en la tienda?](https://github.com/
 - **Escribe:** Panel directo con "Crear y editar Productos" o "Publicar y archivar" (Administrador, Editor de catálogo). El cliente no puede tocar `summary` ni `hasHistory`. Para pasar a `published`, la regla exige `images.size() >= 1`; la primera vez, además, `publishedAt == request.time`, y después `publishedAt` no cambia.
 - **Borrar:** solo la callable `deleteProduct`, y solo si `hasHistory == false`. Borra también las Variantes, los índices `skus`/`slugs` y, vía trigger, la carpeta de Storage.
 - **Lee:** el anónimo y el Cliente, solo si `status == 'published'` (las consultas deben filtrar `where('status', '==', 'published')`); todo Empleado Activo, todos los estados. La tienda no lista desde aquí: la portada, las grillas y la Búsqueda salen de `catalogIndex/storefront` ([3.5](#35-catalogindexstorefront)), y el Producto completo se lee solo en su página (`/p/{slug}`).
-- **Triggers:** Bitácora; limpieza de Storage al quitar imágenes si `hasHistory == false` ([imágenes](https://github.com/Darkmixt12/ws-steven-munoz/issues/50)); `syncCatalogIndex` ([3.5](#35-catalogindexstorefront)).
+- **Triggers:** Bitácora; limpieza de Storage (original y miniaturas) al quitar imágenes si `hasHistory == false` ([imágenes](https://github.com/Darkmixt12/ws-steven-munoz/issues/50)); `syncCatalogIndex` ([3.5](#35-catalogindexstorefront)).
 
 ### 3.2 `products/{productId}/variants/{variantId}`
 
@@ -527,20 +527,25 @@ Bandeja de salida: el backend la escribe **en la misma transacción** que la ope
 
 ## 10. Storage (referencia)
 
-Decidido en [¿Cómo se guardan y referencian las imágenes de un Producto?](https://github.com/Darkmixt12/ws-steven-munoz/issues/50):
+Decidido en [¿Cómo se guardan y referencian las imágenes de un Producto?](https://github.com/Darkmixt12/ws-steven-munoz/issues/50) y [¿Cómo se generan las miniaturas de las imágenes sin la extensión Resize Images?](https://github.com/Darkmixt12/ws-steven-munoz/issues/53):
 
 ```
 products/{productId}/{imageId}.webp                 ← original ≤ 1600 px
-products/{productId}/thumbs/{imageId}_400x400.webp  ← extensión Resize Images
-products/{productId}/thumbs/{imageId}_800x800.webp
+products/{productId}/thumbs/{imageId}_400x400.webp  ← generada en el Panel
+products/{productId}/thumbs/{imageId}_800x800.webp  ← generada en el Panel
 ```
 
-Firebase Extensions se apaga el 31 de marzo de 2027: el reemplazo de Resize Images por una Function propia lo decide [¿Cómo se generan las miniaturas de las imágenes sin la extensión Resize Images?](https://github.com/Darkmixt12/ws-steven-munoz/issues/53).
+**Miniaturas.** Sin extensión ni Function (Firebase Extensions se apaga el 31 de marzo de 2027):
+
+- **Las genera el Panel al subir**, desde el mismo bitmap del que saca el original: 400 y 800 px, ajustadas dentro del cuadro sin recortar, en WebP. Sube tres archivos con el mismo `imageId`.
+- **Una imagen entra a la galería solo cuando sus tres archivos existen.** Si una subida falla, el Panel reintenta solo los que faltan (la regla lo permite porque no existen); si sigue fallando, muestra el error y la imagen no se agrega. Los archivos que sí subieron quedan huérfanos.
+- **Red de seguridad:** si una miniatura no carga, el front usa el original. Las reglas no pueden comprobar que el archivo exista.
+- **Cambiar de tamaño:** los tamaños nuevos se agregan junto a los viejos; ninguna miniatura se borra ni se sobrescribe, así los `thumbPath` congelados en los Pedidos siguen sirviendo. Regenerar es un script de la ejecución que parte de los originales.
 
 `storage.rules`:
 
 - **Lectura:** pública.
-- **Crear:** solo un Empleado Activo con "Crear y editar Productos". La regla lee `employees/{uid}` con `firestore.get()` y exige `resource == null`, tipo JPEG/PNG/WebP y ≤ 5 MB.
+- **Crear:** solo un Empleado Activo con "Crear y editar Productos". La regla lee `employees/{uid}` con `firestore.get()` y exige `resource == null`, tipo JPEG/PNG/WebP y ≤ 5 MB. Aplica igual al original y a cada miniatura.
 - **Actualizar o borrar:** nunca desde el cliente.
 
 ## 11. Procesos del backend
@@ -576,8 +581,7 @@ Nombres indicativos. Toda callable del Panel relee `employees/{uid}` y verifica 
 | `auditPanelWrites` | trigger | escrituras del Panel directo en `products`, `variants`, `categories`, `tags`, `settings`, `privacyNotices` | `auditEvents` |
 | `syncProductSummary` | trigger | escrituras en `variants` | `products.summary` |
 | `syncCatalogIndex` | trigger | escrituras en `products` | `catalogIndex` |
-| `cleanupProductImages` | trigger | escrituras en `products` | Storage |
-| Resize Images | extensión, pendiente de reemplazo ([miniaturas](https://github.com/Darkmixt12/ws-steven-munoz/issues/53)) | subidas a `products/**` | Storage |
+| `cleanupProductImages` | trigger | escrituras en `products` | Storage (original y miniaturas) |
 | `cancelUnpaidOrders` | programada (cada pocos minutos) | Sistema | `orders`, `variants.stock`, `stockMovements`, `notifications` |
 | `anonymizeExpiredOrders` | programada (diaria) | Sistema | `orders`, `auditEvents` |
 | Políticas TTL | Firestore | — | borran `auditEvents`, `invitations`, `consents`, `dataRequests`, `notifications` vencidos |
@@ -665,8 +669,9 @@ Ninguna petición prevista pasa de 4. La tabla Rol → Permisos tiene tres espej
 - **Librería de stores:** un `withWatchDocument` hermano de `withWatchCollection`, para seguir documentos sueltos: `carts/{uid}`, `customers/{uid}`, el propio `employees/{uid}`, `settings/storefront` y `catalogIndex/storefront`. `moofyvip` no lo tiene.
 - **`withFirestoreCrud`:** siempre **sin** la opción `audit` ([ADR 0005](adr/0005-la-bitacora-solo-la-escribe-el-backend.md)). Las subcolecciones se pasan como ruta string (`products/{id}/variants`).
 - **`firestore.rules`:** `match` anidado para cada subcolección, porque la regla final lo deniega todo.
-- **Proyecto Firebase de la tienda:** políticas TTL; extensión Resize Images (Firebase Extensions se apaga el 31 de marzo de 2027; su reemplazo lo decide [miniaturas](https://github.com/Darkmixt12/ws-steven-munoz/issues/53)); exención de índice de `catalogIndex.entries`; secretos en Secret Manager (incluida la credencial del proveedor de correo, que elige la feature); sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
+- **Proyecto Firebase de la tienda:** políticas TTL; sin Firebase Extensions (las miniaturas las genera el Panel, [miniaturas](https://github.com/Darkmixt12/ws-steven-munoz/issues/53)); exención de índice de `catalogIndex.entries`; secretos en Secret Manager (incluida la credencial del proveedor de correo, que elige la feature); sin Identity Platform (no hay blocking functions: la Invitación se liga en `enterPanel`).
 - **Catálogo territorial:** JSON `DTA-2026` en una librería compartida del monorepo, usado por el front y por las Functions.
+- **Tamaños de miniatura:** una constante en la librería compartida del monorepo, usada por el Panel (generar), el helper de rutas del front (leer, incluido `thumbPath`) y el script de regeneración.
 
 ## 16. Decisiones menores tomadas en este documento
 
