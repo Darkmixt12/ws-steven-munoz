@@ -46,3 +46,10 @@ Thumbs.db
 .angular
 .firebase
 .yarn
+
+# MATT POCOCK SKILL
+
+.agents
+.claude/skills
+.claude/worktrees
+skills-lock.json
