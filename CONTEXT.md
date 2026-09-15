@@ -68,6 +68,8 @@ Tienda online de productos físicos que vende solo en Costa Rica. Es un dominio 
 | **Publicado** | `published` | Estado del Producto visible en el catálogo y comprable. | activo |
 | **Archivado** | `archived` | Estado del Producto retirado del catálogo pero conservado por su historial. | eliminado, borrado |
 | **Agotado** | — | Condición de una Variante publicada con Stock en cero: se ve pero no se compra. No es un estado del Producto. | sin existencias, inactivo |
+| **Imagen de Producto** | `productImage` | Foto de la galería ordenada de un Producto; una Variante puede señalar una. | foto, media, archivo |
+| **Imagen principal** | `mainImage` | La primera Imagen de Producto de la galería; se muestra cuando la Variante no señala ninguna. | portada, destacada |
 
 ### Stock
 
