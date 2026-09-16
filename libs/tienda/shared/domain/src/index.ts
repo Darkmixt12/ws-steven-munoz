@@ -4,6 +4,7 @@ export * from './catalog';
 export * from './images';
 export * from './stock';
 export * from './customers';
+export * from './territory';
 export * from './staff';
 export * from './privacy';
 export * from './purchase';

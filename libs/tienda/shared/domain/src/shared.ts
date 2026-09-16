@@ -41,3 +41,22 @@ export interface VariantRef {
 export function normalizeSku(value: string): string {
   return value.replace(/\s+/gu, '').toUpperCase();
 }
+
+/**
+ * Correo normalizado: minúsculas y sin espacios. Es el id de `invitations/{email}`, así que el
+ * Panel normaliza antes de escribir y quien acepta la invitación busca con el mismo valor; las
+ * reglas no normalizan. Espejo de `normalizeSku`.
+ */
+export function normalizeEmail(value: string): string {
+  return value.replace(/\s+/gu, '').toLowerCase();
+}
+
+/**
+ * Día `yyyy-mm-dd` en hora de Costa Rica (UTC−6). Es la clave de los documentos por día, como los
+ * agregados de ventas. El desfase es fijo: Costa Rica no tiene horario de verano, así que no hace
+ * falta una librería de zonas horarias.
+ */
+export function costaRicaDay(instant: Date): string {
+  const offsetMs = 6 * 60 * 60 * 1000;
+  return new Date(instant.getTime() - offsetMs).toISOString().slice(0, 10);
+}

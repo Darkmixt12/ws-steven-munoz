@@ -1,0 +1,2969 @@
+{
+  "version": "DTA-2026",
+  "districts": [
+    {
+      "code": "10101",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Carmen"
+    },
+    {
+      "code": "10102",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Merced"
+    },
+    {
+      "code": "10103",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Hospital"
+    },
+    {
+      "code": "10104",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Catedral"
+    },
+    {
+      "code": "10105",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Zapote"
+    },
+    {
+      "code": "10106",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "San Francisco de Dos Ríos"
+    },
+    {
+      "code": "10107",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Uruca"
+    },
+    {
+      "code": "10108",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Mata Redonda"
+    },
+    {
+      "code": "10109",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Pavas"
+    },
+    {
+      "code": "10110",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "Hatillo"
+    },
+    {
+      "code": "10111",
+      "provinceName": "San José",
+      "cantonName": "San José",
+      "districtName": "San Sebastián"
+    },
+    {
+      "code": "10201",
+      "provinceName": "San José",
+      "cantonName": "Escazú",
+      "districtName": "Escazú"
+    },
+    {
+      "code": "10202",
+      "provinceName": "San José",
+      "cantonName": "Escazú",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "10203",
+      "provinceName": "San José",
+      "cantonName": "Escazú",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "10301",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Desamparados"
+    },
+    {
+      "code": "10302",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Miguel"
+    },
+    {
+      "code": "10303",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Juan de Dios"
+    },
+    {
+      "code": "10304",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Rafael Arriba"
+    },
+    {
+      "code": "10305",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "10306",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Frailes"
+    },
+    {
+      "code": "10307",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Patarrá"
+    },
+    {
+      "code": "10308",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Cristóbal"
+    },
+    {
+      "code": "10309",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Rosario"
+    },
+    {
+      "code": "10310",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Damas"
+    },
+    {
+      "code": "10311",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "San Rafael Abajo"
+    },
+    {
+      "code": "10312",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Gravilias"
+    },
+    {
+      "code": "10313",
+      "provinceName": "San José",
+      "cantonName": "Desamparados",
+      "districtName": "Los Guido"
+    },
+    {
+      "code": "10401",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Santiago"
+    },
+    {
+      "code": "10402",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Mercedes Sur"
+    },
+    {
+      "code": "10403",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Barbacoas"
+    },
+    {
+      "code": "10404",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Grifo Alto"
+    },
+    {
+      "code": "10405",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "10406",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Candelarita"
+    },
+    {
+      "code": "10407",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Desamparaditos"
+    },
+    {
+      "code": "10408",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "10409",
+      "provinceName": "San José",
+      "cantonName": "Puriscal",
+      "districtName": "Chires"
+    },
+    {
+      "code": "10501",
+      "provinceName": "San José",
+      "cantonName": "Tarrazú",
+      "districtName": "San Marcos"
+    },
+    {
+      "code": "10502",
+      "provinceName": "San José",
+      "cantonName": "Tarrazú",
+      "districtName": "San Lorenzo"
+    },
+    {
+      "code": "10503",
+      "provinceName": "San José",
+      "cantonName": "Tarrazú",
+      "districtName": "San Carlos"
+    },
+    {
+      "code": "10601",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Aserrí"
+    },
+    {
+      "code": "10602",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Tarbaca"
+    },
+    {
+      "code": "10603",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Vuelta de Jorco"
+    },
+    {
+      "code": "10604",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "San Gabriel"
+    },
+    {
+      "code": "10605",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Legua"
+    },
+    {
+      "code": "10606",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Monterrey"
+    },
+    {
+      "code": "10607",
+      "provinceName": "San José",
+      "cantonName": "Aserrí",
+      "districtName": "Salitrillos"
+    },
+    {
+      "code": "10701",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Colón"
+    },
+    {
+      "code": "10702",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Guayabo"
+    },
+    {
+      "code": "10703",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Tabarcia"
+    },
+    {
+      "code": "10704",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Piedras Negras"
+    },
+    {
+      "code": "10705",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Picagres"
+    },
+    {
+      "code": "10706",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Jaris"
+    },
+    {
+      "code": "10707",
+      "provinceName": "San José",
+      "cantonName": "Mora",
+      "districtName": "Quitirrisí"
+    },
+    {
+      "code": "10801",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Guadalupe"
+    },
+    {
+      "code": "10802",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "San Francisco"
+    },
+    {
+      "code": "10803",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Calle Blancos"
+    },
+    {
+      "code": "10804",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Mata de Plátano"
+    },
+    {
+      "code": "10805",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Ipís"
+    },
+    {
+      "code": "10806",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Rancho Redondo"
+    },
+    {
+      "code": "10807",
+      "provinceName": "San José",
+      "cantonName": "Goicoechea",
+      "districtName": "Purral"
+    },
+    {
+      "code": "10901",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Santa Ana"
+    },
+    {
+      "code": "10902",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Salitral"
+    },
+    {
+      "code": "10903",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Pozos"
+    },
+    {
+      "code": "10904",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Uruca"
+    },
+    {
+      "code": "10905",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Piedades"
+    },
+    {
+      "code": "10906",
+      "provinceName": "San José",
+      "cantonName": "Santa Ana",
+      "districtName": "Brasil"
+    },
+    {
+      "code": "11001",
+      "provinceName": "San José",
+      "cantonName": "Alajuelita",
+      "districtName": "Alajuelita"
+    },
+    {
+      "code": "11002",
+      "provinceName": "San José",
+      "cantonName": "Alajuelita",
+      "districtName": "San Josecito"
+    },
+    {
+      "code": "11003",
+      "provinceName": "San José",
+      "cantonName": "Alajuelita",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "11004",
+      "provinceName": "San José",
+      "cantonName": "Alajuelita",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "11005",
+      "provinceName": "San José",
+      "cantonName": "Alajuelita",
+      "districtName": "San Felipe"
+    },
+    {
+      "code": "11101",
+      "provinceName": "San José",
+      "cantonName": "Vázquez de Coronado",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "11102",
+      "provinceName": "San José",
+      "cantonName": "Vázquez de Coronado",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "11103",
+      "provinceName": "San José",
+      "cantonName": "Vázquez de Coronado",
+      "districtName": "Dulce Nombre de Jesús"
+    },
+    {
+      "code": "11104",
+      "provinceName": "San José",
+      "cantonName": "Vázquez de Coronado",
+      "districtName": "Patalillo"
+    },
+    {
+      "code": "11105",
+      "provinceName": "San José",
+      "cantonName": "Vázquez de Coronado",
+      "districtName": "Cascajal"
+    },
+    {
+      "code": "11201",
+      "provinceName": "San José",
+      "cantonName": "Acosta",
+      "districtName": "San Ignacio"
+    },
+    {
+      "code": "11202",
+      "provinceName": "San José",
+      "cantonName": "Acosta",
+      "districtName": "Guaitil"
+    },
+    {
+      "code": "11203",
+      "provinceName": "San José",
+      "cantonName": "Acosta",
+      "districtName": "Palmichal"
+    },
+    {
+      "code": "11204",
+      "provinceName": "San José",
+      "cantonName": "Acosta",
+      "districtName": "Cangrejal"
+    },
+    {
+      "code": "11205",
+      "provinceName": "San José",
+      "cantonName": "Acosta",
+      "districtName": "Sabanillas"
+    },
+    {
+      "code": "11301",
+      "provinceName": "San José",
+      "cantonName": "Tibás",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "11302",
+      "provinceName": "San José",
+      "cantonName": "Tibás",
+      "districtName": "Cinco Esquinas"
+    },
+    {
+      "code": "11303",
+      "provinceName": "San José",
+      "cantonName": "Tibás",
+      "districtName": "Anselmo Llorente"
+    },
+    {
+      "code": "11304",
+      "provinceName": "San José",
+      "cantonName": "Tibás",
+      "districtName": "León XIII"
+    },
+    {
+      "code": "11305",
+      "provinceName": "San José",
+      "cantonName": "Tibás",
+      "districtName": "Colima"
+    },
+    {
+      "code": "11401",
+      "provinceName": "San José",
+      "cantonName": "Moravia",
+      "districtName": "San Vicente"
+    },
+    {
+      "code": "11402",
+      "provinceName": "San José",
+      "cantonName": "Moravia",
+      "districtName": "San Jerónimo"
+    },
+    {
+      "code": "11403",
+      "provinceName": "San José",
+      "cantonName": "Moravia",
+      "districtName": "La Trinidad"
+    },
+    {
+      "code": "11501",
+      "provinceName": "San José",
+      "cantonName": "Montes de Oca",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "11502",
+      "provinceName": "San José",
+      "cantonName": "Montes de Oca",
+      "districtName": "Sabanilla"
+    },
+    {
+      "code": "11503",
+      "provinceName": "San José",
+      "cantonName": "Montes de Oca",
+      "districtName": "Mercedes"
+    },
+    {
+      "code": "11504",
+      "provinceName": "San José",
+      "cantonName": "Montes de Oca",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "11601",
+      "provinceName": "San José",
+      "cantonName": "Turrubares",
+      "districtName": "San Pablo"
+    },
+    {
+      "code": "11602",
+      "provinceName": "San José",
+      "cantonName": "Turrubares",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "11603",
+      "provinceName": "San José",
+      "cantonName": "Turrubares",
+      "districtName": "San Juan de Mata"
+    },
+    {
+      "code": "11604",
+      "provinceName": "San José",
+      "cantonName": "Turrubares",
+      "districtName": "San Luis"
+    },
+    {
+      "code": "11605",
+      "provinceName": "San José",
+      "cantonName": "Turrubares",
+      "districtName": "Carara"
+    },
+    {
+      "code": "11701",
+      "provinceName": "San José",
+      "cantonName": "Dota",
+      "districtName": "Santa María"
+    },
+    {
+      "code": "11702",
+      "provinceName": "San José",
+      "cantonName": "Dota",
+      "districtName": "Jardín"
+    },
+    {
+      "code": "11703",
+      "provinceName": "San José",
+      "cantonName": "Dota",
+      "districtName": "Copey"
+    },
+    {
+      "code": "11801",
+      "provinceName": "San José",
+      "cantonName": "Curridabat",
+      "districtName": "Curridabat"
+    },
+    {
+      "code": "11802",
+      "provinceName": "San José",
+      "cantonName": "Curridabat",
+      "districtName": "Granadilla"
+    },
+    {
+      "code": "11803",
+      "provinceName": "San José",
+      "cantonName": "Curridabat",
+      "districtName": "Sánchez"
+    },
+    {
+      "code": "11804",
+      "provinceName": "San José",
+      "cantonName": "Curridabat",
+      "districtName": "Tirrases"
+    },
+    {
+      "code": "11901",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "San Isidro de El General"
+    },
+    {
+      "code": "11902",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "El General"
+    },
+    {
+      "code": "11903",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Daniel Flores"
+    },
+    {
+      "code": "11904",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Rivas"
+    },
+    {
+      "code": "11905",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "11906",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Platanares"
+    },
+    {
+      "code": "11907",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Pejivalle"
+    },
+    {
+      "code": "11908",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Cajón"
+    },
+    {
+      "code": "11909",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Barú"
+    },
+    {
+      "code": "11910",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Río Nuevo"
+    },
+    {
+      "code": "11911",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "Páramo"
+    },
+    {
+      "code": "11912",
+      "provinceName": "San José",
+      "cantonName": "Pérez Zeledón",
+      "districtName": "La Amistad"
+    },
+    {
+      "code": "12001",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "San Pablo"
+    },
+    {
+      "code": "12002",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "San Andrés"
+    },
+    {
+      "code": "12003",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "Llano Bonito"
+    },
+    {
+      "code": "12004",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "12005",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "Santa Cruz"
+    },
+    {
+      "code": "12006",
+      "provinceName": "San José",
+      "cantonName": "León Cortés Castro",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "20101",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Alajuela"
+    },
+    {
+      "code": "20102",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "San José"
+    },
+    {
+      "code": "20103",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Carrizal"
+    },
+    {
+      "code": "20104",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "20105",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Guácima"
+    },
+    {
+      "code": "20106",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "20107",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Sabanilla"
+    },
+    {
+      "code": "20108",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "20109",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Río Segundo"
+    },
+    {
+      "code": "20110",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Desamparados"
+    },
+    {
+      "code": "20111",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Turrúcares"
+    },
+    {
+      "code": "20112",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Tambor"
+    },
+    {
+      "code": "20113",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Garita"
+    },
+    {
+      "code": "20114",
+      "provinceName": "Alajuela",
+      "cantonName": "Alajuela",
+      "districtName": "Sarapiquí"
+    },
+    {
+      "code": "20201",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "San Ramón"
+    },
+    {
+      "code": "20202",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Santiago"
+    },
+    {
+      "code": "20203",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "20204",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Piedades Norte"
+    },
+    {
+      "code": "20205",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Piedades Sur"
+    },
+    {
+      "code": "20206",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "20207",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "20208",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Ángeles"
+    },
+    {
+      "code": "20209",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Alfaro"
+    },
+    {
+      "code": "20210",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Volio"
+    },
+    {
+      "code": "20211",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "20212",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Zapotal"
+    },
+    {
+      "code": "20213",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "Peñas Blancas"
+    },
+    {
+      "code": "20214",
+      "provinceName": "Alajuela",
+      "cantonName": "San Ramón",
+      "districtName": "San Lorenzo"
+    },
+    {
+      "code": "20301",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "Grecia"
+    },
+    {
+      "code": "20302",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "20303",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "San José"
+    },
+    {
+      "code": "20304",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "San Roque"
+    },
+    {
+      "code": "20305",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "Tacares"
+    },
+    {
+      "code": "20307",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "Puente de Piedra"
+    },
+    {
+      "code": "20308",
+      "provinceName": "Alajuela",
+      "cantonName": "Grecia",
+      "districtName": "Bolívar"
+    },
+    {
+      "code": "20401",
+      "provinceName": "Alajuela",
+      "cantonName": "San Mateo",
+      "districtName": "San Mateo"
+    },
+    {
+      "code": "20402",
+      "provinceName": "Alajuela",
+      "cantonName": "San Mateo",
+      "districtName": "Desmonte"
+    },
+    {
+      "code": "20403",
+      "provinceName": "Alajuela",
+      "cantonName": "San Mateo",
+      "districtName": "Jesús María"
+    },
+    {
+      "code": "20404",
+      "provinceName": "Alajuela",
+      "cantonName": "San Mateo",
+      "districtName": "Labrador"
+    },
+    {
+      "code": "20501",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Atenas"
+    },
+    {
+      "code": "20502",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Jesús"
+    },
+    {
+      "code": "20503",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Mercedes"
+    },
+    {
+      "code": "20504",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "20505",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "20506",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "San José"
+    },
+    {
+      "code": "20507",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Santa Eulalia"
+    },
+    {
+      "code": "20508",
+      "provinceName": "Alajuela",
+      "cantonName": "Atenas",
+      "districtName": "Escobal"
+    },
+    {
+      "code": "20601",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "Naranjo"
+    },
+    {
+      "code": "20602",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "San Miguel"
+    },
+    {
+      "code": "20603",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "San José"
+    },
+    {
+      "code": "20604",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "Cirrí Sur"
+    },
+    {
+      "code": "20605",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "San Jerónimo"
+    },
+    {
+      "code": "20606",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "20607",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "El Rosario"
+    },
+    {
+      "code": "20608",
+      "provinceName": "Alajuela",
+      "cantonName": "Naranjo",
+      "districtName": "Palmitos"
+    },
+    {
+      "code": "20701",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Palmares"
+    },
+    {
+      "code": "20702",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Zaragoza"
+    },
+    {
+      "code": "20703",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Buenos Aires"
+    },
+    {
+      "code": "20704",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Santiago"
+    },
+    {
+      "code": "20705",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Candelaria"
+    },
+    {
+      "code": "20706",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "Esquipulas"
+    },
+    {
+      "code": "20707",
+      "provinceName": "Alajuela",
+      "cantonName": "Palmares",
+      "districtName": "La Granja"
+    },
+    {
+      "code": "20801",
+      "provinceName": "Alajuela",
+      "cantonName": "Poás",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "20802",
+      "provinceName": "Alajuela",
+      "cantonName": "Poás",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "20803",
+      "provinceName": "Alajuela",
+      "cantonName": "Poás",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "20804",
+      "provinceName": "Alajuela",
+      "cantonName": "Poás",
+      "districtName": "Carrillos"
+    },
+    {
+      "code": "20805",
+      "provinceName": "Alajuela",
+      "cantonName": "Poás",
+      "districtName": "Sabana Redonda"
+    },
+    {
+      "code": "20901",
+      "provinceName": "Alajuela",
+      "cantonName": "Orotina",
+      "districtName": "Orotina"
+    },
+    {
+      "code": "20902",
+      "provinceName": "Alajuela",
+      "cantonName": "Orotina",
+      "districtName": "El Mastate"
+    },
+    {
+      "code": "20903",
+      "provinceName": "Alajuela",
+      "cantonName": "Orotina",
+      "districtName": "Hacienda Vieja"
+    },
+    {
+      "code": "20904",
+      "provinceName": "Alajuela",
+      "cantonName": "Orotina",
+      "districtName": "Coyolar"
+    },
+    {
+      "code": "20905",
+      "provinceName": "Alajuela",
+      "cantonName": "Orotina",
+      "districtName": "La Ceiba"
+    },
+    {
+      "code": "21001",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Quesada"
+    },
+    {
+      "code": "21002",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Florencia"
+    },
+    {
+      "code": "21003",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Buenavista"
+    },
+    {
+      "code": "21004",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Aguas Zarcas"
+    },
+    {
+      "code": "21005",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Venecia"
+    },
+    {
+      "code": "21006",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Pital"
+    },
+    {
+      "code": "21007",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "La Fortuna"
+    },
+    {
+      "code": "21008",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "La Tigra"
+    },
+    {
+      "code": "21009",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "La Palmera"
+    },
+    {
+      "code": "21010",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Venado"
+    },
+    {
+      "code": "21011",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Cutris"
+    },
+    {
+      "code": "21012",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Monterrey"
+    },
+    {
+      "code": "21013",
+      "provinceName": "Alajuela",
+      "cantonName": "San Carlos",
+      "districtName": "Pocosol"
+    },
+    {
+      "code": "21101",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Zarcero"
+    },
+    {
+      "code": "21102",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Laguna"
+    },
+    {
+      "code": "21103",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Tapesco"
+    },
+    {
+      "code": "21104",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Guadalupe"
+    },
+    {
+      "code": "21105",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Palmira"
+    },
+    {
+      "code": "21106",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Zapote"
+    },
+    {
+      "code": "21107",
+      "provinceName": "Alajuela",
+      "cantonName": "Zarcero",
+      "districtName": "Brisas"
+    },
+    {
+      "code": "21201",
+      "provinceName": "Alajuela",
+      "cantonName": "Sarchí",
+      "districtName": "Sarchí Norte"
+    },
+    {
+      "code": "21202",
+      "provinceName": "Alajuela",
+      "cantonName": "Sarchí",
+      "districtName": "Sarchí Sur"
+    },
+    {
+      "code": "21203",
+      "provinceName": "Alajuela",
+      "cantonName": "Sarchí",
+      "districtName": "Toro Amarillo"
+    },
+    {
+      "code": "21204",
+      "provinceName": "Alajuela",
+      "cantonName": "Sarchí",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "21205",
+      "provinceName": "Alajuela",
+      "cantonName": "Sarchí",
+      "districtName": "Rodríguez"
+    },
+    {
+      "code": "21301",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Upala"
+    },
+    {
+      "code": "21302",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Aguas Claras"
+    },
+    {
+      "code": "21303",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "San José O Pizote"
+    },
+    {
+      "code": "21304",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Bijagua"
+    },
+    {
+      "code": "21305",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Delicias"
+    },
+    {
+      "code": "21306",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Dos Ríos"
+    },
+    {
+      "code": "21307",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Yolillal"
+    },
+    {
+      "code": "21308",
+      "provinceName": "Alajuela",
+      "cantonName": "Upala",
+      "districtName": "Canalete"
+    },
+    {
+      "code": "21401",
+      "provinceName": "Alajuela",
+      "cantonName": "Los Chiles",
+      "districtName": "Los Chiles"
+    },
+    {
+      "code": "21402",
+      "provinceName": "Alajuela",
+      "cantonName": "Los Chiles",
+      "districtName": "Caño Negro"
+    },
+    {
+      "code": "21403",
+      "provinceName": "Alajuela",
+      "cantonName": "Los Chiles",
+      "districtName": "El Amparo"
+    },
+    {
+      "code": "21404",
+      "provinceName": "Alajuela",
+      "cantonName": "Los Chiles",
+      "districtName": "San Jorge"
+    },
+    {
+      "code": "21501",
+      "provinceName": "Alajuela",
+      "cantonName": "Guatuso",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "21502",
+      "provinceName": "Alajuela",
+      "cantonName": "Guatuso",
+      "districtName": "Buenavista"
+    },
+    {
+      "code": "21503",
+      "provinceName": "Alajuela",
+      "cantonName": "Guatuso",
+      "districtName": "Cote"
+    },
+    {
+      "code": "21504",
+      "provinceName": "Alajuela",
+      "cantonName": "Guatuso",
+      "districtName": "Katira"
+    },
+    {
+      "code": "21601",
+      "provinceName": "Alajuela",
+      "cantonName": "Río Cuarto",
+      "districtName": "Río Cuarto"
+    },
+    {
+      "code": "21602",
+      "provinceName": "Alajuela",
+      "cantonName": "Río Cuarto",
+      "districtName": "Santa Rita"
+    },
+    {
+      "code": "21603",
+      "provinceName": "Alajuela",
+      "cantonName": "Río Cuarto",
+      "districtName": "Santa Isabel"
+    },
+    {
+      "code": "30101",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Oriental"
+    },
+    {
+      "code": "30102",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Occidental"
+    },
+    {
+      "code": "30103",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Carmen"
+    },
+    {
+      "code": "30104",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "San Nicolás"
+    },
+    {
+      "code": "30105",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Aguacaliente o San Francisco"
+    },
+    {
+      "code": "30106",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Guadalupe o Arenilla"
+    },
+    {
+      "code": "30107",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Corralillo"
+    },
+    {
+      "code": "30108",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Tierra Blanca"
+    },
+    {
+      "code": "30109",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Dulce Nombre"
+    },
+    {
+      "code": "30110",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Llano Grande"
+    },
+    {
+      "code": "30111",
+      "provinceName": "Cartago",
+      "cantonName": "Cartago",
+      "districtName": "Quebradilla"
+    },
+    {
+      "code": "30201",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Paraíso"
+    },
+    {
+      "code": "30202",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Santiago"
+    },
+    {
+      "code": "30203",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Orosi"
+    },
+    {
+      "code": "30204",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Cachí"
+    },
+    {
+      "code": "30205",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Llanos de Santa Lucía"
+    },
+    {
+      "code": "30206",
+      "provinceName": "Cartago",
+      "cantonName": "Paraíso",
+      "districtName": "Birrisito"
+    },
+    {
+      "code": "30301",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "Tres Ríos"
+    },
+    {
+      "code": "30302",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "San Diego"
+    },
+    {
+      "code": "30303",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "30304",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "30305",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "30306",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "Dulce Nombre"
+    },
+    {
+      "code": "30307",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "San Ramón"
+    },
+    {
+      "code": "30308",
+      "provinceName": "Cartago",
+      "cantonName": "La Unión",
+      "districtName": "Río Azul"
+    },
+    {
+      "code": "30401",
+      "provinceName": "Cartago",
+      "cantonName": "Jiménez",
+      "districtName": "Juan Viñas"
+    },
+    {
+      "code": "30402",
+      "provinceName": "Cartago",
+      "cantonName": "Jiménez",
+      "districtName": "Tucurrique"
+    },
+    {
+      "code": "30403",
+      "provinceName": "Cartago",
+      "cantonName": "Jiménez",
+      "districtName": "Pejibaye"
+    },
+    {
+      "code": "30404",
+      "provinceName": "Cartago",
+      "cantonName": "Jiménez",
+      "districtName": "La Victoria"
+    },
+    {
+      "code": "30501",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Turrialba"
+    },
+    {
+      "code": "30502",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "La Suiza"
+    },
+    {
+      "code": "30503",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Peralta"
+    },
+    {
+      "code": "30504",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Santa Cruz"
+    },
+    {
+      "code": "30505",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Santa Teresita"
+    },
+    {
+      "code": "30506",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Pavones"
+    },
+    {
+      "code": "30507",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Tuis"
+    },
+    {
+      "code": "30508",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Tayutic"
+    },
+    {
+      "code": "30509",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Santa Rosa"
+    },
+    {
+      "code": "30510",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Tres Equis"
+    },
+    {
+      "code": "30511",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "La Isabel"
+    },
+    {
+      "code": "30512",
+      "provinceName": "Cartago",
+      "cantonName": "Turrialba",
+      "districtName": "Chirripó"
+    },
+    {
+      "code": "30601",
+      "provinceName": "Cartago",
+      "cantonName": "Alvarado",
+      "districtName": "Pacayas"
+    },
+    {
+      "code": "30602",
+      "provinceName": "Cartago",
+      "cantonName": "Alvarado",
+      "districtName": "Cervantes"
+    },
+    {
+      "code": "30603",
+      "provinceName": "Cartago",
+      "cantonName": "Alvarado",
+      "districtName": "Capellades"
+    },
+    {
+      "code": "30701",
+      "provinceName": "Cartago",
+      "cantonName": "Oreamuno",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "30702",
+      "provinceName": "Cartago",
+      "cantonName": "Oreamuno",
+      "districtName": "Cot"
+    },
+    {
+      "code": "30703",
+      "provinceName": "Cartago",
+      "cantonName": "Oreamuno",
+      "districtName": "Potrero Cerrado"
+    },
+    {
+      "code": "30704",
+      "provinceName": "Cartago",
+      "cantonName": "Oreamuno",
+      "districtName": "Cipreses"
+    },
+    {
+      "code": "30705",
+      "provinceName": "Cartago",
+      "cantonName": "Oreamuno",
+      "districtName": "Santa Rosa"
+    },
+    {
+      "code": "30801",
+      "provinceName": "Cartago",
+      "cantonName": "El Guarco",
+      "districtName": "El Tejar"
+    },
+    {
+      "code": "30802",
+      "provinceName": "Cartago",
+      "cantonName": "El Guarco",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "30803",
+      "provinceName": "Cartago",
+      "cantonName": "El Guarco",
+      "districtName": "Tobosi"
+    },
+    {
+      "code": "30804",
+      "provinceName": "Cartago",
+      "cantonName": "El Guarco",
+      "districtName": "Patio de Agua"
+    },
+    {
+      "code": "40101",
+      "provinceName": "Heredia",
+      "cantonName": "Heredia",
+      "districtName": "Heredia"
+    },
+    {
+      "code": "40102",
+      "provinceName": "Heredia",
+      "cantonName": "Heredia",
+      "districtName": "Mercedes"
+    },
+    {
+      "code": "40103",
+      "provinceName": "Heredia",
+      "cantonName": "Heredia",
+      "districtName": "San Francisco"
+    },
+    {
+      "code": "40104",
+      "provinceName": "Heredia",
+      "cantonName": "Heredia",
+      "districtName": "Ulloa"
+    },
+    {
+      "code": "40105",
+      "provinceName": "Heredia",
+      "cantonName": "Heredia",
+      "districtName": "Varablanca"
+    },
+    {
+      "code": "40201",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "Barva"
+    },
+    {
+      "code": "40202",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "40203",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "San Pablo"
+    },
+    {
+      "code": "40204",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "San Roque"
+    },
+    {
+      "code": "40205",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "Santa Lucía"
+    },
+    {
+      "code": "40206",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "San José de la Montaña"
+    },
+    {
+      "code": "40207",
+      "provinceName": "Heredia",
+      "cantonName": "Barva",
+      "districtName": "Puente Salas"
+    },
+    {
+      "code": "40301",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Santo Domingo"
+    },
+    {
+      "code": "40302",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "San Vicente"
+    },
+    {
+      "code": "40303",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "San Miguel"
+    },
+    {
+      "code": "40304",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Paracito"
+    },
+    {
+      "code": "40305",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Santo Tomás"
+    },
+    {
+      "code": "40306",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Santa Rosa"
+    },
+    {
+      "code": "40307",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Tures"
+    },
+    {
+      "code": "40308",
+      "provinceName": "Heredia",
+      "cantonName": "Santo Domingo",
+      "districtName": "Pará"
+    },
+    {
+      "code": "40401",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "Santa Bárbara"
+    },
+    {
+      "code": "40402",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "San Pedro"
+    },
+    {
+      "code": "40403",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "40404",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "Jesús"
+    },
+    {
+      "code": "40405",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "Santo Domingo"
+    },
+    {
+      "code": "40406",
+      "provinceName": "Heredia",
+      "cantonName": "Santa Bárbara",
+      "districtName": "Purabá"
+    },
+    {
+      "code": "40501",
+      "provinceName": "Heredia",
+      "cantonName": "San Rafael",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "40502",
+      "provinceName": "Heredia",
+      "cantonName": "San Rafael",
+      "districtName": "San Josecito"
+    },
+    {
+      "code": "40503",
+      "provinceName": "Heredia",
+      "cantonName": "San Rafael",
+      "districtName": "Santiago"
+    },
+    {
+      "code": "40504",
+      "provinceName": "Heredia",
+      "cantonName": "San Rafael",
+      "districtName": "Ángeles"
+    },
+    {
+      "code": "40505",
+      "provinceName": "Heredia",
+      "cantonName": "San Rafael",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "40601",
+      "provinceName": "Heredia",
+      "cantonName": "San Isidro",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "40602",
+      "provinceName": "Heredia",
+      "cantonName": "San Isidro",
+      "districtName": "San José"
+    },
+    {
+      "code": "40603",
+      "provinceName": "Heredia",
+      "cantonName": "San Isidro",
+      "districtName": "Concepción"
+    },
+    {
+      "code": "40604",
+      "provinceName": "Heredia",
+      "cantonName": "San Isidro",
+      "districtName": "San Francisco"
+    },
+    {
+      "code": "40701",
+      "provinceName": "Heredia",
+      "cantonName": "Belén",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "40702",
+      "provinceName": "Heredia",
+      "cantonName": "Belén",
+      "districtName": "La Ribera"
+    },
+    {
+      "code": "40703",
+      "provinceName": "Heredia",
+      "cantonName": "Belén",
+      "districtName": "La Asunción"
+    },
+    {
+      "code": "40801",
+      "provinceName": "Heredia",
+      "cantonName": "Flores",
+      "districtName": "San Joaquín"
+    },
+    {
+      "code": "40802",
+      "provinceName": "Heredia",
+      "cantonName": "Flores",
+      "districtName": "Barrantes"
+    },
+    {
+      "code": "40803",
+      "provinceName": "Heredia",
+      "cantonName": "Flores",
+      "districtName": "Llorente"
+    },
+    {
+      "code": "40901",
+      "provinceName": "Heredia",
+      "cantonName": "San Pablo",
+      "districtName": "San Pablo"
+    },
+    {
+      "code": "40902",
+      "provinceName": "Heredia",
+      "cantonName": "San Pablo",
+      "districtName": "Rincón de Sabanilla"
+    },
+    {
+      "code": "41001",
+      "provinceName": "Heredia",
+      "cantonName": "Sarapiquí",
+      "districtName": "Puerto Viejo"
+    },
+    {
+      "code": "41002",
+      "provinceName": "Heredia",
+      "cantonName": "Sarapiquí",
+      "districtName": "La Virgen"
+    },
+    {
+      "code": "41003",
+      "provinceName": "Heredia",
+      "cantonName": "Sarapiquí",
+      "districtName": "Las Horquetas"
+    },
+    {
+      "code": "41004",
+      "provinceName": "Heredia",
+      "cantonName": "Sarapiquí",
+      "districtName": "Llanuras del Gaspar"
+    },
+    {
+      "code": "41005",
+      "provinceName": "Heredia",
+      "cantonName": "Sarapiquí",
+      "districtName": "Cureña"
+    },
+    {
+      "code": "50101",
+      "provinceName": "Guanacaste",
+      "cantonName": "Liberia",
+      "districtName": "Liberia"
+    },
+    {
+      "code": "50102",
+      "provinceName": "Guanacaste",
+      "cantonName": "Liberia",
+      "districtName": "Cañas Dulces"
+    },
+    {
+      "code": "50103",
+      "provinceName": "Guanacaste",
+      "cantonName": "Liberia",
+      "districtName": "Mayorga"
+    },
+    {
+      "code": "50104",
+      "provinceName": "Guanacaste",
+      "cantonName": "Liberia",
+      "districtName": "Nacascolo"
+    },
+    {
+      "code": "50105",
+      "provinceName": "Guanacaste",
+      "cantonName": "Liberia",
+      "districtName": "Curubandé"
+    },
+    {
+      "code": "50201",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Nicoya"
+    },
+    {
+      "code": "50202",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Mansión"
+    },
+    {
+      "code": "50203",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "San Antonio"
+    },
+    {
+      "code": "50204",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Quebrada Honda"
+    },
+    {
+      "code": "50205",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Sámara"
+    },
+    {
+      "code": "50206",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Nosara"
+    },
+    {
+      "code": "50207",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nicoya",
+      "districtName": "Belén de Nosarita"
+    },
+    {
+      "code": "50301",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Santa Cruz"
+    },
+    {
+      "code": "50302",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Bolsón"
+    },
+    {
+      "code": "50303",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Veintisiete de Abril"
+    },
+    {
+      "code": "50304",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Tempate"
+    },
+    {
+      "code": "50305",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Cartagena"
+    },
+    {
+      "code": "50306",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Cuajiniquil"
+    },
+    {
+      "code": "50307",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Diriá"
+    },
+    {
+      "code": "50308",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Cabo Velas"
+    },
+    {
+      "code": "50309",
+      "provinceName": "Guanacaste",
+      "cantonName": "Santa Cruz",
+      "districtName": "Tamarindo"
+    },
+    {
+      "code": "50401",
+      "provinceName": "Guanacaste",
+      "cantonName": "Bagaces",
+      "districtName": "Bagaces"
+    },
+    {
+      "code": "50402",
+      "provinceName": "Guanacaste",
+      "cantonName": "Bagaces",
+      "districtName": "La Fortuna"
+    },
+    {
+      "code": "50403",
+      "provinceName": "Guanacaste",
+      "cantonName": "Bagaces",
+      "districtName": "Mogote"
+    },
+    {
+      "code": "50404",
+      "provinceName": "Guanacaste",
+      "cantonName": "Bagaces",
+      "districtName": "Río Naranjo"
+    },
+    {
+      "code": "50405",
+      "provinceName": "Guanacaste",
+      "cantonName": "Bagaces",
+      "districtName": "Pijije"
+    },
+    {
+      "code": "50501",
+      "provinceName": "Guanacaste",
+      "cantonName": "Carrillo",
+      "districtName": "Filadelfia"
+    },
+    {
+      "code": "50502",
+      "provinceName": "Guanacaste",
+      "cantonName": "Carrillo",
+      "districtName": "Palmira"
+    },
+    {
+      "code": "50503",
+      "provinceName": "Guanacaste",
+      "cantonName": "Carrillo",
+      "districtName": "Sardinal"
+    },
+    {
+      "code": "50504",
+      "provinceName": "Guanacaste",
+      "cantonName": "Carrillo",
+      "districtName": "Belén"
+    },
+    {
+      "code": "50601",
+      "provinceName": "Guanacaste",
+      "cantonName": "Cañas",
+      "districtName": "Cañas"
+    },
+    {
+      "code": "50602",
+      "provinceName": "Guanacaste",
+      "cantonName": "Cañas",
+      "districtName": "Palmira"
+    },
+    {
+      "code": "50603",
+      "provinceName": "Guanacaste",
+      "cantonName": "Cañas",
+      "districtName": "San Miguel"
+    },
+    {
+      "code": "50604",
+      "provinceName": "Guanacaste",
+      "cantonName": "Cañas",
+      "districtName": "Bebedero"
+    },
+    {
+      "code": "50605",
+      "provinceName": "Guanacaste",
+      "cantonName": "Cañas",
+      "districtName": "Porozal"
+    },
+    {
+      "code": "50701",
+      "provinceName": "Guanacaste",
+      "cantonName": "Abangares",
+      "districtName": "Las Juntas"
+    },
+    {
+      "code": "50702",
+      "provinceName": "Guanacaste",
+      "cantonName": "Abangares",
+      "districtName": "Sierra"
+    },
+    {
+      "code": "50703",
+      "provinceName": "Guanacaste",
+      "cantonName": "Abangares",
+      "districtName": "San Juan"
+    },
+    {
+      "code": "50704",
+      "provinceName": "Guanacaste",
+      "cantonName": "Abangares",
+      "districtName": "Colorado"
+    },
+    {
+      "code": "50801",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Tilarán"
+    },
+    {
+      "code": "50802",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Quebrada Grande"
+    },
+    {
+      "code": "50803",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Tronadora"
+    },
+    {
+      "code": "50804",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Santa Rosa"
+    },
+    {
+      "code": "50805",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Líbano"
+    },
+    {
+      "code": "50806",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Tierras Morenas"
+    },
+    {
+      "code": "50807",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Arenal"
+    },
+    {
+      "code": "50808",
+      "provinceName": "Guanacaste",
+      "cantonName": "Tilarán",
+      "districtName": "Cabeceras"
+    },
+    {
+      "code": "50901",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "Carmona"
+    },
+    {
+      "code": "50902",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "Santa Rita"
+    },
+    {
+      "code": "50903",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "Zapotal"
+    },
+    {
+      "code": "50904",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "San Pablo"
+    },
+    {
+      "code": "50905",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "Porvenir"
+    },
+    {
+      "code": "50906",
+      "provinceName": "Guanacaste",
+      "cantonName": "Nandayure",
+      "districtName": "Bejuco"
+    },
+    {
+      "code": "51001",
+      "provinceName": "Guanacaste",
+      "cantonName": "La Cruz",
+      "districtName": "La Cruz"
+    },
+    {
+      "code": "51002",
+      "provinceName": "Guanacaste",
+      "cantonName": "La Cruz",
+      "districtName": "Santa Cecilia"
+    },
+    {
+      "code": "51003",
+      "provinceName": "Guanacaste",
+      "cantonName": "La Cruz",
+      "districtName": "La Garita"
+    },
+    {
+      "code": "51004",
+      "provinceName": "Guanacaste",
+      "cantonName": "La Cruz",
+      "districtName": "Santa Elena"
+    },
+    {
+      "code": "51101",
+      "provinceName": "Guanacaste",
+      "cantonName": "Hojancha",
+      "districtName": "Hojancha"
+    },
+    {
+      "code": "51102",
+      "provinceName": "Guanacaste",
+      "cantonName": "Hojancha",
+      "districtName": "Monte Romo"
+    },
+    {
+      "code": "51103",
+      "provinceName": "Guanacaste",
+      "cantonName": "Hojancha",
+      "districtName": "Puerto Carrillo"
+    },
+    {
+      "code": "51104",
+      "provinceName": "Guanacaste",
+      "cantonName": "Hojancha",
+      "districtName": "Huacas"
+    },
+    {
+      "code": "51105",
+      "provinceName": "Guanacaste",
+      "cantonName": "Hojancha",
+      "districtName": "Matambú"
+    },
+    {
+      "code": "60101",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Puntarenas"
+    },
+    {
+      "code": "60102",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Pitahaya"
+    },
+    {
+      "code": "60103",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Chomes"
+    },
+    {
+      "code": "60104",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Lepanto"
+    },
+    {
+      "code": "60105",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Paquera"
+    },
+    {
+      "code": "60106",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Manzanillo"
+    },
+    {
+      "code": "60107",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Guacimal"
+    },
+    {
+      "code": "60108",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Barranca"
+    },
+    {
+      "code": "60110",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Isla del Coco"
+    },
+    {
+      "code": "60111",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Cóbano"
+    },
+    {
+      "code": "60112",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Chacarita"
+    },
+    {
+      "code": "60113",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Chira"
+    },
+    {
+      "code": "60114",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Acapulco"
+    },
+    {
+      "code": "60115",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "El Roble"
+    },
+    {
+      "code": "60116",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puntarenas",
+      "districtName": "Arancibia"
+    },
+    {
+      "code": "60201",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "Espíritu Santo"
+    },
+    {
+      "code": "60202",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "San Juan Grande"
+    },
+    {
+      "code": "60203",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "Macacona"
+    },
+    {
+      "code": "60204",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "San Rafael"
+    },
+    {
+      "code": "60205",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "San Jerónimo"
+    },
+    {
+      "code": "60206",
+      "provinceName": "Puntarenas",
+      "cantonName": "Esparza",
+      "districtName": "Caldera"
+    },
+    {
+      "code": "60301",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Buenos Aires"
+    },
+    {
+      "code": "60302",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Volcán"
+    },
+    {
+      "code": "60303",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Potrero Grande"
+    },
+    {
+      "code": "60304",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Boruca"
+    },
+    {
+      "code": "60305",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Pilas"
+    },
+    {
+      "code": "60306",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Colinas"
+    },
+    {
+      "code": "60307",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Chánguena"
+    },
+    {
+      "code": "60308",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Biolley"
+    },
+    {
+      "code": "60309",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Brunka"
+    },
+    {
+      "code": "60310",
+      "provinceName": "Puntarenas",
+      "cantonName": "Buenos Aires",
+      "districtName": "Cabagra"
+    },
+    {
+      "code": "60401",
+      "provinceName": "Puntarenas",
+      "cantonName": "Montes de Oro",
+      "districtName": "Miramar"
+    },
+    {
+      "code": "60402",
+      "provinceName": "Puntarenas",
+      "cantonName": "Montes de Oro",
+      "districtName": "La Unión"
+    },
+    {
+      "code": "60403",
+      "provinceName": "Puntarenas",
+      "cantonName": "Montes de Oro",
+      "districtName": "San Isidro"
+    },
+    {
+      "code": "60501",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Puerto Cortés"
+    },
+    {
+      "code": "60502",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Palmar"
+    },
+    {
+      "code": "60503",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Sierpe"
+    },
+    {
+      "code": "60504",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Bahía Ballena"
+    },
+    {
+      "code": "60505",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Piedras Blancas"
+    },
+    {
+      "code": "60506",
+      "provinceName": "Puntarenas",
+      "cantonName": "Osa",
+      "districtName": "Bahía Drake"
+    },
+    {
+      "code": "60601",
+      "provinceName": "Puntarenas",
+      "cantonName": "Quepos",
+      "districtName": "Quepos"
+    },
+    {
+      "code": "60602",
+      "provinceName": "Puntarenas",
+      "cantonName": "Quepos",
+      "districtName": "Savegre"
+    },
+    {
+      "code": "60603",
+      "provinceName": "Puntarenas",
+      "cantonName": "Quepos",
+      "districtName": "Naranjito"
+    },
+    {
+      "code": "60701",
+      "provinceName": "Puntarenas",
+      "cantonName": "Golfito",
+      "districtName": "Golfito"
+    },
+    {
+      "code": "60703",
+      "provinceName": "Puntarenas",
+      "cantonName": "Golfito",
+      "districtName": "Guaycará"
+    },
+    {
+      "code": "60704",
+      "provinceName": "Puntarenas",
+      "cantonName": "Golfito",
+      "districtName": "Pavón"
+    },
+    {
+      "code": "60801",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "San Vito"
+    },
+    {
+      "code": "60802",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "Sabalito"
+    },
+    {
+      "code": "60803",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "Aguabuena"
+    },
+    {
+      "code": "60804",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "Limoncito"
+    },
+    {
+      "code": "60805",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "Pittier"
+    },
+    {
+      "code": "60806",
+      "provinceName": "Puntarenas",
+      "cantonName": "Coto Brus",
+      "districtName": "Gutiérrez Braun"
+    },
+    {
+      "code": "60901",
+      "provinceName": "Puntarenas",
+      "cantonName": "Parrita",
+      "districtName": "Parrita"
+    },
+    {
+      "code": "61001",
+      "provinceName": "Puntarenas",
+      "cantonName": "Corredores",
+      "districtName": "Corredor"
+    },
+    {
+      "code": "61002",
+      "provinceName": "Puntarenas",
+      "cantonName": "Corredores",
+      "districtName": "La Cuesta"
+    },
+    {
+      "code": "61003",
+      "provinceName": "Puntarenas",
+      "cantonName": "Corredores",
+      "districtName": "Canoas"
+    },
+    {
+      "code": "61004",
+      "provinceName": "Puntarenas",
+      "cantonName": "Corredores",
+      "districtName": "Laurel"
+    },
+    {
+      "code": "61101",
+      "provinceName": "Puntarenas",
+      "cantonName": "Garabito",
+      "districtName": "Jacó"
+    },
+    {
+      "code": "61102",
+      "provinceName": "Puntarenas",
+      "cantonName": "Garabito",
+      "districtName": "Tárcoles"
+    },
+    {
+      "code": "61103",
+      "provinceName": "Puntarenas",
+      "cantonName": "Garabito",
+      "districtName": "Lagunillas"
+    },
+    {
+      "code": "61201",
+      "provinceName": "Puntarenas",
+      "cantonName": "Monteverde",
+      "districtName": "Monteverde"
+    },
+    {
+      "code": "61301",
+      "provinceName": "Puntarenas",
+      "cantonName": "Puerto Jiménez",
+      "districtName": "Puerto Jiménez"
+    },
+    {
+      "code": "70101",
+      "provinceName": "Limón",
+      "cantonName": "Limón",
+      "districtName": "Limón"
+    },
+    {
+      "code": "70102",
+      "provinceName": "Limón",
+      "cantonName": "Limón",
+      "districtName": "Valle La Estrella"
+    },
+    {
+      "code": "70103",
+      "provinceName": "Limón",
+      "cantonName": "Limón",
+      "districtName": "Río Blanco"
+    },
+    {
+      "code": "70104",
+      "provinceName": "Limón",
+      "cantonName": "Limón",
+      "districtName": "Matama"
+    },
+    {
+      "code": "70201",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Guápiles"
+    },
+    {
+      "code": "70202",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Jiménez"
+    },
+    {
+      "code": "70203",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Rita"
+    },
+    {
+      "code": "70204",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Roxana"
+    },
+    {
+      "code": "70205",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Cariari"
+    },
+    {
+      "code": "70206",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "Colorado"
+    },
+    {
+      "code": "70207",
+      "provinceName": "Limón",
+      "cantonName": "Pococí",
+      "districtName": "La Colonia"
+    },
+    {
+      "code": "70301",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Siquirres"
+    },
+    {
+      "code": "70302",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Pacuarito"
+    },
+    {
+      "code": "70303",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Florida"
+    },
+    {
+      "code": "70304",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Germania"
+    },
+    {
+      "code": "70305",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "El Cairo"
+    },
+    {
+      "code": "70306",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Alegría"
+    },
+    {
+      "code": "70307",
+      "provinceName": "Limón",
+      "cantonName": "Siquirres",
+      "districtName": "Reventazón"
+    },
+    {
+      "code": "70401",
+      "provinceName": "Limón",
+      "cantonName": "Talamanca",
+      "districtName": "Bratsi"
+    },
+    {
+      "code": "70402",
+      "provinceName": "Limón",
+      "cantonName": "Talamanca",
+      "districtName": "Sixaola"
+    },
+    {
+      "code": "70403",
+      "provinceName": "Limón",
+      "cantonName": "Talamanca",
+      "districtName": "Cahuita"
+    },
+    {
+      "code": "70404",
+      "provinceName": "Limón",
+      "cantonName": "Talamanca",
+      "districtName": "Telire"
+    },
+    {
+      "code": "70501",
+      "provinceName": "Limón",
+      "cantonName": "Matina",
+      "districtName": "Matina"
+    },
+    {
+      "code": "70502",
+      "provinceName": "Limón",
+      "cantonName": "Matina",
+      "districtName": "Batán"
+    },
+    {
+      "code": "70503",
+      "provinceName": "Limón",
+      "cantonName": "Matina",
+      "districtName": "Carrandí"
+    },
+    {
+      "code": "70601",
+      "provinceName": "Limón",
+      "cantonName": "Guácimo",
+      "districtName": "Guácimo"
+    },
+    {
+      "code": "70602",
+      "provinceName": "Limón",
+      "cantonName": "Guácimo",
+      "districtName": "Mercedes"
+    },
+    {
+      "code": "70603",
+      "provinceName": "Limón",
+      "cantonName": "Guácimo",
+      "districtName": "Pocora"
+    },
+    {
+      "code": "70604",
+      "provinceName": "Limón",
+      "cantonName": "Guácimo",
+      "districtName": "Río Jiménez"
+    },
+    {
+      "code": "70605",
+      "provinceName": "Limón",
+      "cantonName": "Guácimo",
+      "districtName": "Duacarí"
+    }
+  ]
+}

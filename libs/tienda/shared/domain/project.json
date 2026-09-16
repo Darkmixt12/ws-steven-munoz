@@ -15,6 +15,12 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "build-dta": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -P libs/tienda/shared/domain/tsconfig.script.json libs/tienda/shared/domain/scripts/build-dta.ts"
+      }
     }
   }
 }
