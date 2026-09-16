@@ -8,7 +8,7 @@
     "test-rules": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx firebase emulators:exec --config firebase.tienda.json --project demo-tienda-cr --only firestore,storage,auth \"npx jest --config libs/tienda/backend/rules/jest.config.ts\""
+        "command": "node libs/tienda/backend/rules/tools/run-rules-tests.mjs"
       }
     }
   }
