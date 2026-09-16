@@ -78,9 +78,9 @@ buscar un proyecto que no está.
 
 ## Sembrar un proyecto real
 
-Es el paso humano de [#68](https://github.com/Darkmixt12/ws-steven-munoz/issues/68) y aquí no se ejecuta: el
-proyecto Firebase de la tienda todavía no existe. Cuando exista, el script se autentica con Application Default
-Credentials y la orden es la misma sin las variables de entorno, con el id real.
+Fue el paso humano de [#68](https://github.com/Darkmixt12/ws-steven-munoz/issues/68), **ya ejecutado contra
+`tienda-cr`**: los seis documentos están sembrados con los datos reales de la tienda. El script se autentica con
+Application Default Credentials y la orden es la misma sin las variables de entorno, con el id real.
 
 **Antes hay que reemplazar los marcadores.** Los valores de `storefront.json` (tarifas, SINPE, datos de contacto)
 y el texto del Aviso son borradores de trabajo. El Aviso, además, no se edita nunca una vez publicado: corregirlo
