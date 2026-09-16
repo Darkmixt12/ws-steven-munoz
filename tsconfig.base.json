@@ -18,6 +18,9 @@
       "steven-munoz/dashboard": [
         "libs/steven-munoz/frontend/dashboard/src/index.ts"
       ],
+      "tienda/admin-session": [
+        "libs/tienda/frontend/admin-session/src/index.ts"
+      ],
       "tienda/domain": ["libs/tienda/shared/domain/src/index.ts"],
       "tienda/ops": ["libs/tienda/backend/ops/src/index.ts"],
       "tienda/stores": ["libs/tienda/frontend/stores/src/index.ts"]

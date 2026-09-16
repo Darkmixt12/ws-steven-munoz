@@ -23,6 +23,16 @@
       ]
     }
   ],
+  "hosting": {
+    "public": "dist/apps/tienda/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "emulators": {
     "singleProjectMode": true,
     "auth": {

@@ -1,0 +1,11 @@
+/* Estilos base de la tienda. El tema lo pone PrimeNG (preset Aura) en tiempo de
+   ejecución, así que aquí no se importa ninguna hoja de tema. */
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
