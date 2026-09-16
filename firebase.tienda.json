@@ -1,6 +1,7 @@
 {
   "firestore": {
-    "rules": "libs/tienda/backend/rules/firestore.rules"
+    "rules": "libs/tienda/backend/rules/firestore.rules",
+    "indexes": "libs/tienda/backend/firestore.indexes.json"
   },
   "storage": {
     "rules": "libs/tienda/backend/rules/storage.rules"

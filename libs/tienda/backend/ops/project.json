@@ -1,0 +1,32 @@
+{
+  "name": "tienda-ops",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tienda/backend/ops/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "apply-ttl": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -P libs/tienda/backend/ops/tsconfig.script.json libs/tienda/backend/ops/src/apply-ttl.ts"
+      }
+    },
+    "deploy-indexes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx firebase deploy --config firebase.tienda.json --only firestore:indexes"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/tienda/backend/ops/jest.config.ts",
+        "tsConfig": "libs/tienda/backend/ops/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

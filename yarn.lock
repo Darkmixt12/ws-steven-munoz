@@ -9861,6 +9861,7 @@ __metadata:
     eslint-plugin-cypress: "npm:^3.5.0"
     firebase: "npm:^12.5.0"
     firebase-tools: "npm:^14.23.0"
+    google-auth-library: "npm:^10.5.0"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-preset-angular: "npm:~14.6.1"
