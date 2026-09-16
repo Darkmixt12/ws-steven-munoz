@@ -4,7 +4,13 @@
     "outDir": "../../../../dist/out-tsc",
     "module": "commonjs",
     "moduleResolution": "node10",
-    "types": ["node"]
+    "types": ["node"],
+    "resolveJsonModule": true
   },
-  "include": ["src/apply-ttl.ts", "src/ttl-policies.ts"]
+  "include": [
+    "src/apply-ttl.ts",
+    "src/ttl-policies.ts",
+    "src/seed.ts",
+    "src/seed-data.ts"
+  ]
 }

@@ -298,7 +298,7 @@ Evidencia append-only ([Ley 8968](https://github.com/Darkmixt12/ws-steven-munoz/
 | `purpose` | `accountAndOrders` \| `marketing` \| `panelAccess` | |
 | `granted` | boolean | una aceptación o una revocación es un documento nuevo |
 | `noticeVersion` | string | versión del Aviso de privacidad |
-| `noticeHash` | string | lo calcula el backend desde el texto del Aviso |
+| `noticeHash` | string | SHA-256 del texto del Aviso en UTF-8, en hexadecimal minúscula; lo calcula el backend con `privacyNoticeHash` de `tienda/domain` |
 | `channel` | `storefront` \| `panel` | |
 | `createdAt` | Timestamp | |
 | `expiresAt` | Timestamp \| null | TTL; ver abajo |

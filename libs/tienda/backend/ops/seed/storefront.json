@@ -1,0 +1,26 @@
+{
+  "shippingRates": {
+    "1": 2500,
+    "2": 3000,
+    "3": 3000,
+    "4": 3500,
+    "5": 4000,
+    "6": 4000,
+    "7": 4500
+  },
+  "shippingVatRateCode": "08",
+  "paymentTimeouts": {
+    "cardMinutes": 60,
+    "sinpeMovilMinutes": 1440
+  },
+  "sinpeMovilNumber": "+50600000000",
+  "storeInfo": {
+    "name": "Tienda CR",
+    "contactEmail": "tienda@example.com",
+    "contactPhone": "+50600000000"
+  },
+  "pickupInfo": {
+    "address": "San José",
+    "hours": "L–V 9:00–17:00"
+  }
+}
