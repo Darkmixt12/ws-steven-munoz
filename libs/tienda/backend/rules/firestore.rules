@@ -371,16 +371,97 @@ service cloud.firestore {
 
     // ─── Configuración ───────────────────────────────────────────────────
 
+    // Toda la Configuración la escribe el Administrador ("Configuración") directo, y la audita
+    // el trigger. La matriz §13 solo le da `U`, pero `settings/issuer` no tiene semilla: sin
+    // `create` nadie podría llenarlo la primera vez desde el Panel, porque un `set` sobre un
+    // documento que no existe es `create`. Se abren los dos, nunca el borrado.
+    // Presupuesto (§14): la escritura de `settings/storefront` lee `employees/{uid}` y
+    // `privacyNotices/{version}`; la del emisor, solo el Empleado.
+
+    // Claves exactas de un mapa anidado: ni de más ni de menos, como `keysAre` con el documento.
+    function mapKeysAre(value, fields) {
+      return value.keys().hasOnly(fields) && value.keys().hasAll(fields);
+    }
+
+    function storefrontFields() {
+      return ['shippingRates', 'shippingVatRateCode', 'paymentTimeouts', 'sinpeMovilNumber',
+        'storeInfo', 'pickupInfo', 'currentPrivacyNoticeVersion', 'updatedAt', 'updatedBy'];
+    }
+
+    // El Aviso vigente tiene que existir: a su texto apunta la evidencia de Consentimiento.
+    function privacyNoticeExists(version) {
+      return exists(/databases/$(database)/documents/privacyNotices/$(version));
+    }
+
+    // Forma de §7.1: las claves del modelo, los mapas anidados con sus claves exactas y una
+    // tarifa de envío por código de provincia (1–7).
+    function storefrontShape() {
+      let settings = request.resource.data;
+      return keysAre(storefrontFields())
+        && settings.shippingRates.keys().hasOnly(['1', '2', '3', '4', '5', '6', '7'])
+        && mapKeysAre(settings.paymentTimeouts, ['cardMinutes', 'sinpeMovilMinutes'])
+        && mapKeysAre(settings.storeInfo, ['name', 'contactEmail', 'contactPhone'])
+        && mapKeysAre(settings.pickupInfo, ['address', 'hours'])
+        && privacyNoticeExists(settings.currentPrivacyNoticeVersion);
+    }
+
+    function issuerFields() {
+      return ['idType', 'idNumber', 'name', 'economicActivityCode', 'branch', 'terminal',
+        'location', 'email', 'updatedAt', 'updatedBy'];
+    }
+
+    // Forma de §7.2: identificación de Hacienda (cédula física, jurídica, DIMEX o NITE),
+    // sucursal de 3 dígitos, terminal de 5 y la ubicación con su código de distrito del
+    // catálogo territorial. `idNumber` es texto: la jurídica admite alfanuméricos.
+    function issuerShape() {
+      let issuer = request.resource.data;
+      return keysAre(issuerFields())
+        && issuer.idType in ['01', '02', '03', '04']
+        && issuer.branch.matches('^[0-9]{3}$')
+        && issuer.terminal.matches('^[0-9]{5}$')
+        && mapKeysAre(issuer.location,
+          ['districtCode', 'provinceName', 'cantonName', 'districtName', 'otherSigns'])
+        && issuer.location.districtCode.matches('^[0-9]{5}$')
+        && issuer.location.otherSigns.size() >= 5
+        && issuer.location.otherSigns.size() <= 160;
+    }
+
+    function privacyNoticeFields() {
+      return ['text', 'purposes', 'publishedAt', 'updatedBy'];
+    }
+
+    // Finalidades del glosario: espejo de `Purpose` en la librería compartida.
+    function purposeValues() {
+      return ['accountAndOrders', 'marketing', 'panelAccess'];
+    }
+
     match /settings/storefront {
       allow read: if true;
+
+      allow create, update: if can('manageSettings')
+        && stamped()
+        && storefrontShape();
     }
 
     match /settings/issuer {
       allow read: if can('manageSettings');
+
+      allow create, update: if can('manageSettings')
+        && stamped()
+        && issuerShape();
     }
 
+    // Versión inmutable: se crea y nunca se edita ni se borra, así la evidencia de
+    // Consentimiento apunta siempre al mismo texto; una versión nueva es un documento nuevo.
+    // Su sello de hora es `publishedAt`, porque el Aviso no lleva `updatedAt` (§7.3).
     match /privacyNotices/{version} {
       allow read: if true;
+
+      allow create: if can('manageSettings')
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.publishedAt == request.time
+        && keysAre(privacyNoticeFields())
+        && request.resource.data.purposes.hasOnly(purposeValues());
     }
 
     // ─── Reportes y Bitácora ─────────────────────────────────────────────
