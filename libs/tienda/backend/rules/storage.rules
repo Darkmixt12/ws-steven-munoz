@@ -1,10 +1,104 @@
 rules_version = '2';
 
-// Reglas de Storage de la Tienda CR. Por ahora todo queda denegado: la lectura
-// pública de `products/**` y la subida desde el Panel llegan con su ticket
-// (docs/modelo-de-datos-firestore.md §10).
+// Reglas de Storage de la Tienda CR: las Imágenes de Producto (§10 del Modelo de datos).
+// Las fotos del catálogo se leen sin token; solo un Empleado Activo con el Permiso
+// "Crear y editar Productos" sube archivos nuevos, y nadie los cambia ni los borra desde
+// el navegador.
 service firebase.storage {
   match /b/{bucket}/o {
+
+    // ─── Empleado y Permisos (ADR 0002) ──────────────────────────────────
+
+    // Tercer espejo de ROLE_PERMISSIONS en libs/tienda/shared/domain/src/permissions.ts;
+    // role-permissions-mirror.spec.ts falla si los tres dejan de ser iguales.
+    // BEGIN ROLE_PERMISSIONS
+    function rolePermissions() {
+      return {
+        'administrator': [
+          'viewDraftsAndArchived',
+          'editProducts',
+          'publishProducts',
+          'manageCategoriesAndTags',
+          'recordStockMovements',
+          'viewOrders',
+          'advanceOrderStatus',
+          'cancelOrReturnOrders',
+          'viewCustomers',
+          'disableCustomers',
+          'handleDataRequests',
+          'viewEmployees',
+          'manageEmployees',
+          'viewReports',
+          'exportReports',
+          'viewAuditLog',
+          'manageSettings'
+        ],
+        'operator': [
+          'viewDraftsAndArchived',
+          'recordStockMovements',
+          'viewOrders',
+          'advanceOrderStatus',
+          'cancelOrReturnOrders',
+          'viewCustomers',
+          'disableCustomers',
+          'viewReports',
+          'exportReports'
+        ],
+        'catalogEditor': [
+          'viewDraftsAndArchived',
+          'editProducts',
+          'publishProducts',
+          'manageCategoriesAndTags',
+          'recordStockMovements',
+          'viewReports',
+          'exportReports'
+        ]
+      };
+    }
+    // END ROLE_PERMISSIONS
+
+    // Documento de Empleado de la Cuenta, leído en Firestore: 1 `firestore.get` por subida
+    // (§14). Si no existe, el `get` falla y la regla niega.
+    function employee() {
+      return firestore.get(/databases/(default)/documents/employees/$(request.auth.uid)).data;
+    }
+
+    // Empleado Activo con correo verificado y un Rol de la tabla. Sin custom claims: se lee
+    // su documento, así que deshabilitarlo corta la siguiente subida aunque el token siga vigente.
+    function isActiveEmployee() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && employee().status == 'active'
+        && employee().role in rolePermissions();
+    }
+
+    // ¿El Empleado Activo tiene el Permiso? Se pregunta por el Permiso, nunca por el Rol.
+    function can(permission) {
+      return isActiveEmployee() && permission in rolePermissions()[employee().role];
+    }
+
+    // ─── Archivo que llega ───────────────────────────────────────────────
+
+    // Archivo nuevo: nunca sobrescribe uno existente, de un tipo que el front sabe mostrar
+    // y de hasta 5 MB. Vale igual para el original y para cada miniatura.
+    function isNewImageFile() {
+      return resource == null
+        && request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp']
+        && request.resource.size <= 5 * 1024 * 1024;
+    }
+
+    // ─── Imágenes de Producto ────────────────────────────────────────────
+
+    // `products/{productId}/{imageId}.webp` y `products/{productId}/thumbs/{imageId}_{n}x{n}.webp`,
+    // las rutas que arma images.ts. La regla no comprueba la forma del nombre: los tamaños
+    // nuevos se agregan junto a los viejos y el script de regeneración parte de los originales.
+    match /products/{productId}/{imageFile=**} {
+      allow read: if true;
+      allow create: if can('editProducts') && isNewImageFile();
+      // Actualizar y borrar: nunca desde el cliente. Sin `allow`, quedan denegados.
+    }
+
+    // Todo lo que no sea una Imagen de Producto queda denegado.
     match /{allPaths=**} {
       allow read, write: if false;
     }

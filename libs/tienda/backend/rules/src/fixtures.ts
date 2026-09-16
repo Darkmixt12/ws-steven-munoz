@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { productThumbnailPath } from 'tienda/domain';
 import type {
   Address,
   AddressDetails,
@@ -411,7 +412,7 @@ export function order(
         productName: 'Camiseta',
         optionValues: { Talla: 'S' },
         optionLabel: 'Talla S',
-        thumbPath: 'products/published/v1/400.webp',
+        thumbPath: productThumbnailPath('published', 'img-1', 400),
         cabysCode: '1234567890123',
         unitOfMeasure: 'Unid',
         vatRateCode: '08',

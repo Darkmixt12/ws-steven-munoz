@@ -1,6 +1,7 @@
 export * from './shared';
 export * from './permissions';
 export * from './catalog';
+export * from './images';
 export * from './stock';
 export * from './customers';
 export * from './staff';
