@@ -5,7 +5,13 @@ import {
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import {
+  Functions,
+  connectFunctionsEmulator,
+  getFunctions,
+  provideFunctions,
+} from '@angular/fire/functions';
 import { Auth, connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
 import {
   Firestore,
@@ -48,6 +54,19 @@ export const appConfig: ApplicationConfig = {
         );
       }
       return firestore;
+    }),
+    provideFunctions(() => {
+      // La región se declara aquí y en la callable: si no coinciden, la llamada
+      // no encuentra la función.
+      const functions: Functions = getFunctions(getApp(), 'us-central1');
+      if (environment.useEmulators) {
+        connectFunctionsEmulator(
+          functions,
+          environment.emulators.host,
+          environment.emulators.functionsPort
+        );
+      }
+      return functions;
     }),
   ],
 };

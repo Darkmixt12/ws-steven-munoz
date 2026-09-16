@@ -27,6 +27,12 @@
         "tsConfig": "libs/tienda/backend/functions/tsconfig.spec.json"
       }
     },
+    "test-functions": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node libs/tienda/backend/functions/tools/run-functions-tests.mjs"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint"
     }

@@ -28,5 +28,6 @@ export const environment = {
     host: 'localhost',
     authPort: 9099,
     firestorePort: 8080,
+    functionsPort: 5001,
   },
 };

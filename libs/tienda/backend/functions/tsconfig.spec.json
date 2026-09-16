@@ -5,7 +5,9 @@
     "module": "commonjs",
     "moduleResolution": "node10",
     "types": ["jest", "node"],
-    "noEmit": false
+    "noEmit": false,
+    "resolveJsonModule": true
   },
-  "include": ["jest.config.ts", "src/**/*.ts"]
+  "include": ["jest.config.ts", "jest.emulator.config.ts", "src/**/*.ts"],
+  "exclude": []
 }

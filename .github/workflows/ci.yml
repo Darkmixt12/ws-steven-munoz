@@ -45,6 +45,8 @@ jobs:
       - run: npx nx run-many -t lint test build e2e
       # Reglas de la tienda contra los emuladores (target aparte: `yarn build` del CRM corre `-t test`)
       - run: npx nx run tienda-rules:test-rules
+      # Callables de la tienda contra el emulador de Firestore, por lo mismo que las reglas
+      - run: npx nx run tienda-functions:test-functions
       # Nx Cloud recommends fixes for failures to help you get CI green faster. Learn more: https://nx.dev/ci/features/self-healing-ci
       - run: npx nx fix-ci
         if: always()
