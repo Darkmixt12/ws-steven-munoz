@@ -2,16 +2,12 @@
 
 **Versión 2026-01**
 
-Este es el texto que se siembra como primera versión del Aviso de privacidad. Es un borrador de
-trabajo: hay que reemplazarlo por el texto que apruebe la persona responsable antes de sembrar un
-proyecto real (#68). Una vez publicado, el Aviso no se edita nunca: una corrección es una versión
-nueva.
-
 ## Quién trata sus datos
 
-Tienda CR trata los datos personales que usted proporciona al crear su cuenta, hacer un Pedido o
-aceptar recibir comunicaciones comerciales. La responsable de la base de datos es Tienda CR, con los
-datos de contacto publicados en la tienda.
+Tienda Noctis Caell trata los datos personales que usted proporciona al crear su cuenta, hacer un Pedido o
+aceptar recibir comunicaciones comerciales. La responsable de la base de datos es Tienda Noctis Caell, con local
+en San José, Coronado, frente a la iglesia de Coronado, local color rojo. Para cualquier consulta sobre el
+tratamiento de sus datos puede escribir a testingadrianbadilla@gmail.com o llamar al +50671379119.
 
 ## Para qué los usamos
 
@@ -26,7 +22,8 @@ datos de contacto publicados en la tienda.
 
 Usted puede solicitar el acceso, la rectificación o la supresión de sus datos personales, conforme a
 la Ley 8968 de Protección de la Persona frente al tratamiento de sus datos personales. Las
-solicitudes se atienden en un plazo de cinco días hábiles.
+solicitudes se reciben en testingadrianbadilla@gmail.com y se atienden en un plazo de cinco días
+hábiles.
 
 ## Conservación
 

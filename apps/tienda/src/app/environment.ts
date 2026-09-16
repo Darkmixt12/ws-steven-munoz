@@ -3,10 +3,9 @@ import { isDevMode } from '@angular/core';
 /**
  * Configuración de Firebase de la tienda.
  *
- * El proyecto Firebase real todavía no existe: lo crea el paso humano de
- * https://github.com/Darkmixt12/ws-steven-munoz/issues/68, que reemplaza estos
- * marcadores. Mientras tanto el id empieza por `demo-`, que solo existe en los
- * emuladores, así que estos valores no alcanzan ningún proyecto de Internet.
+ * Son los valores del proyecto real `tienda-cr`, creado en el paso humano de
+ * https://github.com/Darkmixt12/ws-steven-munoz/issues/68. No se escriben a mano: se
+ * obtienen con `npx firebase apps:sdkconfig WEB --project tienda-cr`.
  *
  * Los puertos salen de `firebase.tienda.json`.
  */
@@ -18,12 +17,12 @@ export const environment = {
    */
   useEmulators: isDevMode(),
   firebase: {
-    apiKey: 'demo-api-key', // marcador: #68
-    authDomain: 'demo-tienda-cr.firebaseapp.com', // marcador: #68
-    projectId: 'demo-tienda-cr', // marcador: #68
-    storageBucket: 'demo-tienda-cr.firebasestorage.app', // marcador: #68
-    messagingSenderId: '000000000000', // marcador: #68
-    appId: '1:000000000000:web:0000000000000000000000', // marcador: #68
+    apiKey: 'AIzaSyAW9q3UKjAF-TV_a5Jd1MMRY4sBOUNF1bc',
+    authDomain: 'tienda-cr.firebaseapp.com',
+    projectId: 'tienda-cr',
+    storageBucket: 'tienda-cr.firebasestorage.app',
+    messagingSenderId: '250524909607',
+    appId: '1:250524909607:web:36717073922571d71b0e02',
   },
   emulators: {
     host: 'localhost',

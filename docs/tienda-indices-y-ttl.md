@@ -19,8 +19,7 @@ La prueba corre sin emuladores en `nx run tienda-ops:test` y falla si el JSON se
 ## Aplicarlo a un proyecto real
 
 Los dos comandos son el paso humano de
-[#68](https://github.com/Darkmixt12/ws-steven-munoz/issues/68); aquí no se ejecutan contra nada real porque el
-proyecto Firebase de la tienda todavía no existe.
+[#68](https://github.com/Darkmixt12/ws-steven-munoz/issues/68), ya aplicado sobre el proyecto real `tienda-cr`.
 
 **1. Los índices**, que sí sabe desplegar `firebase-tools`:
 
@@ -28,9 +27,9 @@ proyecto Firebase de la tienda todavía no existe.
 npx nx run tienda-ops:deploy-indexes
 ```
 
-El comando lleva `--project tienda`, el alias de `.firebaserc`. Hasta #68 ese alias apunta a `demo-tienda-cr`, un
-id que solo existe en los emuladores, así que un despliegue por descuido falla en vez de acertarle al proyecto del
-CRM; #68 lo reemplaza por el id real.
+El comando lleva `--project tienda`, el alias de `.firebaserc`, que desde #68 apunta a `tienda-cr`. Antes apuntaba
+a `demo-tienda-cr`, un id que solo existe en los emuladores, para que un despliegue por descuido fallara en vez de
+acertarle al proyecto del CRM.
 
 **2. El TTL**, que `firebase-tools` no sabe hacer: el script habla directo con la API Admin de Firestore
 (`PATCH …/collectionGroups/{colección}/fields/expiresAt?updateMask=ttlConfig`). Se autentica con Application

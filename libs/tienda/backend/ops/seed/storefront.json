@@ -1,26 +1,26 @@
 {
   "shippingRates": {
-    "1": 2500,
-    "2": 3000,
-    "3": 3000,
-    "4": 3500,
-    "5": 4000,
-    "6": 4000,
-    "7": 4500
+    "1": 1500,
+    "2": 1500,
+    "3": 1500,
+    "4": 1500,
+    "5": 1500,
+    "6": 1500,
+    "7": 1500
   },
   "shippingVatRateCode": "08",
   "paymentTimeouts": {
     "cardMinutes": 60,
     "sinpeMovilMinutes": 1440
   },
-  "sinpeMovilNumber": "+50600000000",
+  "sinpeMovilNumber": "+50671379119",
   "storeInfo": {
-    "name": "Tienda CR",
-    "contactEmail": "tienda@example.com",
-    "contactPhone": "+50600000000"
+    "name": "Tienda Noctis Caell",
+    "contactEmail": "testingadrianbadilla@gmail.com",
+    "contactPhone": "+50671379119"
   },
   "pickupInfo": {
-    "address": "San José",
-    "hours": "L–V 9:00–17:00"
+    "address": "San José, Coronado, frente a la iglesia de Coronado, local color rojo",
+    "hours": "L–D 7:00–17:00"
   }
 }
