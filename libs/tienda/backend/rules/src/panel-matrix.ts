@@ -8,6 +8,13 @@ import * as fixtures from './fixtures';
 /** Empleado cuyo documento nadie más que el Administrador debería leer. */
 export const OTHER_EMPLOYEE_UID = 'other-employee-1';
 
+/**
+ * Cliente del que ninguna persona de las pruebas tiene sesión: sus datos personales solo los
+ * abre el Permiso, nunca el hecho de ser su dueño. Con `customer-1` las filas de abajo darían
+ * por buena una lectura que en realidad concede `isOwner`.
+ */
+export const PANEL_CUSTOMER_UID = 'panel-customer-1';
+
 /** Documentos sembrados en las pruebas del Panel. */
 export function panelDocs(): Record<string, DocumentData> {
   return {
@@ -24,11 +31,13 @@ export function panelDocs(): Record<string, DocumentData> {
     [`employees/${OTHER_EMPLOYEE_UID}`]: fixtures.employee('operator', 'active'),
     'invitations/persona@example.com': fixtures.invitation(),
     [`staffDirectory/${OTHER_EMPLOYEE_UID}`]: fixtures.staffDirectoryEntry(),
-    'consents/c1': fixtures.consent(),
-    'dataRequests/r1': fixtures.dataRequest(),
+    'consents/c1': fixtures.consent(PANEL_CUSTOMER_UID),
+    'dataRequests/r1': fixtures.dataRequest(PANEL_CUSTOMER_UID),
     'customers/customer-1': fixtures.customer(),
-    // El tipo del Pedido llega con su ticket.
-    'orders/o1': { customerId: 'customer-1' },
+    [`customers/${PANEL_CUSTOMER_UID}`]: fixtures.customer(),
+    [`customers/${PANEL_CUSTOMER_UID}/addresses/a1`]: fixtures.address(),
+    [`customers/${PANEL_CUSTOMER_UID}/billingProfiles/b1`]: fixtures.billingProfile(),
+    'orders/o1': fixtures.order(PANEL_CUSTOMER_UID),
     'counters/orderNumber': fixtures.orderNumberCounter(),
     'settings/storefront': fixtures.storefrontSettings(),
     'settings/issuer': fixtures.issuerSettings(),
@@ -62,6 +71,18 @@ export const PANEL_READS: readonly PanelRead[] = [
   { path: `staffDirectory/${OTHER_EMPLOYEE_UID}`, permission: null, list: true },
   { path: 'consents/c1', permission: 'handleDataRequests', list: true },
   { path: 'dataRequests/r1', permission: 'handleDataRequests', list: true },
+  { path: `customers/${PANEL_CUSTOMER_UID}`, permission: 'viewCustomers', list: true },
+  {
+    path: `customers/${PANEL_CUSTOMER_UID}/addresses/a1`,
+    permission: 'viewCustomers',
+    list: true,
+  },
+  {
+    path: `customers/${PANEL_CUSTOMER_UID}/billingProfiles/b1`,
+    permission: 'viewCustomers',
+    list: true,
+  },
+  { path: 'orders/o1', permission: 'viewOrders', list: true },
   // `settings` no se lista: sus documentos tienen reglas propias, sin comodín.
   { path: 'settings/issuer', permission: 'manageSettings', list: false },
   { path: 'salesDaily/2026-01-15', permission: 'viewReports', list: true },

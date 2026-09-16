@@ -2,6 +2,7 @@ export * from './shared';
 export * from './permissions';
 export * from './catalog';
 export * from './stock';
+export * from './customers';
 export * from './staff';
 export * from './privacy';
 export * from './purchase';

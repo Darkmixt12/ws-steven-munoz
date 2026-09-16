@@ -16,6 +16,12 @@ export const PROJECT_ID = 'demo-tienda-cr';
 /** `uid` del Cliente de las pruebas. */
 export const CUSTOMER_UID = 'customer-1';
 
+/** `uid` del segundo Cliente, para probar el aislamiento entre Clientes. */
+export const SECOND_CUSTOMER_UID = 'customer-2';
+
+/** `uid` de la Cuenta que tiene sesión pero todavía no completó su registro. */
+export const NO_CUSTOMER_UID = 'no-customer-1';
+
 const rulesDir = resolve(__dirname, '..');
 
 /**
@@ -73,6 +79,30 @@ export async function asCustomer(
   await seed(env, { [`customers/${CUSTOMER_UID}`]: customer() });
   return env.authenticatedContext(CUSTOMER_UID, {
     email: 'cliente@example.com',
+    email_verified: true,
+  });
+}
+
+/** Segundo Cliente con sesión y correo verificado; siembra su `customers/{uid}`. */
+export async function asSecondCustomer(
+  env: RulesTestEnvironment,
+): Promise<RulesTestContext> {
+  await seed(env, { [`customers/${SECOND_CUSTOMER_UID}`]: customer() });
+  return env.authenticatedContext(SECOND_CUSTOMER_UID, {
+    email: 'segundo-cliente@example.com',
+    email_verified: true,
+  });
+}
+
+/**
+ * Cuenta con sesión y correo verificado, pero sin `customers/{uid}`: no completó el registro,
+ * así que no puede crear ningún dato personal en Firestore (Ley 8968).
+ */
+export async function asAccountWithoutCustomer(
+  env: RulesTestEnvironment,
+): Promise<RulesTestContext> {
+  return env.authenticatedContext(NO_CUSTOMER_UID, {
+    email: 'sin-cliente@example.com',
     email_verified: true,
   });
 }

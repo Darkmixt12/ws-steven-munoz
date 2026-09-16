@@ -1,9 +1,17 @@
 import { Timestamp } from 'firebase/firestore';
 import type {
+  Address,
+  AddressDetails,
   AuditEvent,
+  BillingProfile,
+  BillingProfileDetails,
+  Cart,
+  CartLine,
   CatalogIndex,
   Category,
   Consent,
+  Customer,
+  CustomerStatus,
   DataRequest,
   Employee,
   EmployeeStatus,
@@ -12,6 +20,7 @@ import type {
   Notification,
   NotificationOrigin,
   NotificationType,
+  Order,
   OrderNumberCounter,
   PrivacyNotice,
   Product,
@@ -32,6 +41,7 @@ import type {
 
 const at = Timestamp.fromDate(new Date('2026-01-15T12:00:00-06:00'));
 const employeeUid = 'employee-1';
+const customerUid = 'customer-1';
 
 export function product(status: ProductStatus): Product {
   return {
@@ -224,10 +234,10 @@ export function staffDirectoryEntry(): StaffDirectoryEntry {
   return { name: 'Empleado' };
 }
 
-export function consent(): Consent {
+export function consent(subjectId = customerUid): Consent {
   return {
     subjectType: 'customer',
-    subjectId: 'customer-1',
+    subjectId,
     purpose: 'accountAndOrders',
     granted: true,
     noticeVersion: '2026-01',
@@ -238,10 +248,10 @@ export function consent(): Consent {
   };
 }
 
-export function dataRequest(): DataRequest {
+export function dataRequest(subjectId = customerUid): DataRequest {
   return {
     type: 'access',
-    subject: { type: 'customer', id: 'customer-1' },
+    subject: { type: 'customer', id: subjectId },
     contactEmail: 'cliente@example.com',
     channel: 'email',
     status: 'open',
@@ -313,15 +323,130 @@ export function notification(origin: NotificationOrigin): Notification {
   };
 }
 
-/** `customers/{uid}`; su tipo llega con el ticket del Cliente. */
-export function customer() {
+export function customer(status: CustomerStatus = 'active'): Customer {
   return {
     name: 'Cliente',
     email: 'cliente@example.com',
     phone: '+50600000000',
-    status: 'active',
-    statusReason: null,
+    status,
+    statusReason: status === 'disabled' ? { code: 'suspectedFraud', note: null } : null,
     defaultAddressId: null,
+    createdAt: at,
+    updatedAt: at,
+  };
+}
+
+/** Forma de la Dirección sin sellos: también es la copia congelada del Pedido. */
+export function addressDetails(): AddressDetails {
+  return {
+    recipientName: 'Cliente',
+    phone: '+50688888888',
+    districtCode: '10101',
+    provinceName: 'San José',
+    cantonName: 'San José',
+    districtName: 'Carmen',
+    neighborhood: null,
+    otherSigns: 'Frente al parque',
+    dtaVersion: 'DTA-2026',
+  };
+}
+
+export function address(): Address {
+  return { ...addressDetails(), createdAt: at, updatedAt: at };
+}
+
+/** Forma del Perfil de facturación sin sellos: también es la copia congelada del Pedido. */
+export function billingProfileDetails(): BillingProfileDetails {
+  return {
+    idType: '01',
+    idNumber: '100000000',
+    legalName: 'Cliente Pérez',
+    email: 'cliente@example.com',
+    location: null,
+  };
+}
+
+export function billingProfile(): BillingProfile {
+  return { ...billingProfileDetails(), createdAt: at, updatedAt: at };
+}
+
+export function cartLine(productId = 'published'): CartLine {
+  return { productId, quantity: 1, addedAt: at };
+}
+
+export function cart(lines: Record<string, CartLine> = { v1: cartLine() }): Cart {
+  return { lines, updatedAt: at };
+}
+
+/**
+ * `orders/{orderId}`. `buyerUid` se pasa aparte porque sobrevive a la baja de la cuenta:
+ * un Pedido desasociado tiene `customerId` nulo y conserva el `uid` del comprador.
+ */
+export function order(
+  customerId: string | null = customerUid,
+  buyerUid: string | null = customerId,
+): Order {
+  return {
+    orderNumber: 1_001,
+    customerId,
+    buyerUid,
+    status: 'toFulfill',
+    statusHistory: [
+      { status: 'pendingPayment', at, actor: { type: 'customer', id: customerUid } },
+      { status: 'toFulfill', at, actor: { type: 'system', id: 'cardWebhook' } },
+    ],
+    contact: { name: 'Cliente', email: 'cliente@example.com', phone: '+50600000000' },
+    delivery: {
+      method: 'homeDelivery',
+      shippingCost: 2_500,
+      shippingVatRateCode: '08',
+      address: addressDetails(),
+      tracking: null,
+    },
+    lines: [
+      {
+        productId: 'published',
+        variantId: 'v1',
+        sku: 'CAM-S',
+        productName: 'Camiseta',
+        optionValues: { Talla: 'S' },
+        optionLabel: 'Talla S',
+        thumbPath: 'products/published/v1/400.webp',
+        cabysCode: '1234567890123',
+        unitOfMeasure: 'Unid',
+        vatRateCode: '08',
+        unitPrice: 9_500,
+        quantity: 1,
+        lineDiscount: 0,
+        lineTotal: 9_500,
+      },
+    ],
+    totals: {
+      subtotal: 9_500,
+      discountTotal: 0,
+      shipping: 2_500,
+      total: 12_000,
+      vatIncluded: 1_380,
+    },
+    billing: { documentType: 'invoice', profile: billingProfileDetails() },
+    payment: {
+      method: 'card',
+      status: 'confirmed',
+      amount: 12_000,
+      reference: 'auth-123',
+      confirmedBy: null,
+      confirmedAt: at,
+      refunds: [],
+    },
+    returns: [],
+    taxDocuments: [],
+    paymentDeadlineAt: at,
+    paymentConfirmedAt: at,
+    cancelledAt: null,
+    returnDays: [],
+    retentionUntil: at,
+    legalHold: false,
+    anonymizedAt: null,
     createdAt: at,
     updatedAt: at,
   };

@@ -77,6 +77,25 @@ service cloud.firestore {
       return isActiveEmployee() && permission in rolePermissions()[employee().role];
     }
 
+    // ─── Forma y claves que cambian ──────────────────────────────────────
+
+    // Exactamente las claves del Modelo de datos: ni de más ni de menos.
+    function keysAre(fields) {
+      return request.resource.data.keys().hasOnly(fields)
+        && request.resource.data.keys().hasAll(fields);
+    }
+
+    // Claves exactas de un mapa anidado: ni de más ni de menos, como `keysAre` con el documento.
+    function mapKeysAre(value, fields) {
+      return value.keys().hasOnly(fields) && value.keys().hasAll(fields);
+    }
+
+    // Claves que cambian en una actualización. Es un Set, así que se combina con operaciones
+    // de conjunto (`hasOnly`, `difference`) y nunca por índice: los Set no se indexan.
+    function affected() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
     // ─── Escrituras del Panel directo (ADR 0005) ─────────────────────────
 
     // Toda escritura del Panel lleva su Autor y la hora del servidor: de ahí saca el Autor
@@ -86,17 +105,29 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
     }
 
-    // Exactamente las claves del Modelo de datos: ni de más ni de menos.
-    function keysAre(fields) {
-      return request.resource.data.keys().hasOnly(fields)
-        && request.resource.data.keys().hasAll(fields);
+    // Claves que cambian, sin los sellos que van en toda escritura del Panel.
+    function changed() {
+      return affected().difference(['updatedAt', 'updatedBy'].toSet());
     }
 
-    // Claves que cambian, sin los sellos que van en toda escritura.
-    // `affectedKeys()` da un Set, así que se restan con `difference`, no con `removeAll`.
-    function changed() {
-      return request.resource.data.diff(resource.data).affectedKeys()
-        .difference(['updatedAt', 'updatedBy'].toSet());
+    // ─── Escrituras del Cliente directo (ADR 0005) ───────────────────────
+
+    // El Cliente escribe lo suyo y nada más. No sella Autor: `updatedBy` es solo del Panel,
+    // y estas escrituras no se auditan, así que `changed()` no aplica aquí.
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // El Cliente sella la hora del servidor, sin Autor.
+    function touched() {
+      return request.resource.data.updatedAt == request.time;
+    }
+
+    // Una Cuenta sin Cliente no crea ningún dato personal (Ley 8968). Hace falta comprobarlo
+    // porque Firestore permite crear un documento de subcolección bajo un padre que no existe,
+    // así que `isOwner` por sí solo dejaría escribir Direcciones y Carrito sin Cliente.
+    function customerExists(uid) {
+      return exists(/databases/$(database)/documents/customers/$(uid));
     }
 
     // ─── Catálogo ────────────────────────────────────────────────────────
@@ -345,6 +376,107 @@ service cloud.firestore {
 
     // ─── Personas ────────────────────────────────────────────────────────
 
+    // Presupuesto (§14): la lectura del Cliente no lee ningún otro documento; el `create` de
+    // una Dirección o de un Perfil de facturación lee `customers/{uid}` y nada más.
+
+    // Lo único que mueve el dueño (nota 6 de §13): `status` y `statusReason` van por
+    // `setCustomerStatus`, y `email` lo refresca el backend.
+    function ownCustomerFields() {
+      return ['name', 'phone', 'defaultAddressId', 'updatedAt'];
+    }
+
+    function addressFields() {
+      return ['recipientName', 'phone', 'districtCode', 'provinceName', 'cantonName',
+        'districtName', 'neighborhood', 'otherSigns', 'dtaVersion', 'createdAt', 'updatedAt'];
+    }
+
+    // Forma de §5.2: el código de distrito del catálogo territorial, el teléfono de Costa Rica
+    // y las señas dentro de su rango. `dtaVersion` queda libre a propósito: la regla no se ata
+    // a una versión del catálogo, y las callables del Pedido revalidan contra él.
+    function addressShape() {
+      let address = request.resource.data;
+      return keysAre(addressFields())
+        && address.recipientName is string
+        && address.phone.matches('^[+]506[0-9]{8}$')
+        && address.districtCode.matches('^[0-9]{5}$')
+        && (address.neighborhood == null || address.neighborhood is string)
+        && address.otherSigns.size() >= 5
+        && address.otherSigns.size() <= 250
+        && address.dtaVersion is string;
+    }
+
+    function billingProfileFields() {
+      return ['idType', 'idNumber', 'legalName', 'email', 'location', 'createdAt', 'updatedAt'];
+    }
+
+    // Forma de §5.3: identificación de Hacienda y, si trae ubicación, la misma que la Dirección.
+    // `idNumber` es texto: la jurídica admite alfanuméricos. Aquí las señas admiten hasta 250,
+    // más que el tope de 160 que el Comprobante impone a `settings/issuer`.
+    function billingProfileShape() {
+      let profile = request.resource.data;
+      return keysAre(billingProfileFields())
+        && profile.idType in ['01', '02', '03', '04']
+        && profile.idNumber is string
+        && profile.legalName is string
+        && profile.email is string
+        && (profile.location == null
+          || (mapKeysAre(profile.location,
+              ['districtCode', 'provinceName', 'cantonName', 'districtName', 'otherSigns'])
+            && profile.location.districtCode.matches('^[0-9]{5}$')
+            && profile.location.otherSigns.size() >= 5
+            && profile.location.otherSigns.size() <= 250));
+    }
+
+    // El Cliente lo crea `completeRegistration` y lo borra `deleteMyAccount`: desde el cliente
+    // no hay `create` ni `delete`, solo la edición acotada del dueño.
+    match /customers/{uid} {
+      allow read: if isOwner(uid) || can('viewCustomers');
+
+      allow update: if isOwner(uid)
+        && affected().hasOnly(ownCustomerFields())
+        && touched()
+        && request.resource.data.name is string
+        && request.resource.data.phone.matches('^[+][0-9]{8,15}$')
+        && (request.resource.data.defaultAddressId == null
+          || request.resource.data.defaultAddressId is string);
+
+      // La Dirección predeterminada no se comprueba con `exists()`: la referencia puede quedar
+      // colgante si se borra, y no vale bloquear el borrado por eso (§16).
+      match /addresses/{addressId} {
+        allow read: if isOwner(uid) || can('viewCustomers');
+
+        allow create: if isOwner(uid)
+          && customerExists(uid)
+          && addressShape()
+          && request.resource.data.createdAt == request.time
+          && touched();
+
+        allow update: if isOwner(uid)
+          && addressShape()
+          && request.resource.data.createdAt == resource.data.createdAt
+          && touched();
+
+        allow delete: if isOwner(uid);
+      }
+
+      match /billingProfiles/{profileId} {
+        allow read: if isOwner(uid) || can('viewCustomers');
+
+        allow create: if isOwner(uid)
+          && customerExists(uid)
+          && billingProfileShape()
+          && request.resource.data.createdAt == request.time
+          && touched();
+
+        allow update: if isOwner(uid)
+          && billingProfileShape()
+          && request.resource.data.createdAt == resource.data.createdAt
+          && touched();
+
+        allow delete: if isOwner(uid);
+      }
+    }
+
     // El propio documento se lee siempre, en cualquier estado: el Panel lo observa para
     // salir en cuanto deja de estar Activo. Todos, con "Ver Empleados".
     match /employees/{uid} {
@@ -360,13 +492,89 @@ service cloud.firestore {
       allow read: if isActiveEmployee();
     }
 
-    // Lectura del Panel; la del dueño llega con el ticket del Cliente.
+    // Su evidencia la lee el titular, y el Administrador con "Atender Solicitudes de derechos".
     match /consents/{consentId} {
-      allow read: if can('handleDataRequests');
+      allow read: if isOwner(resource.data.subjectId) || can('handleDataRequests');
     }
 
+    // §5.8 abre la Solicitud al dueño "mientras exista su Cliente", pero la regla no exige
+    // `customers/{uid}`: `deleteMyAccount` borra el Cliente y deja la Solicitud de supresión
+    // que confirma la baja, y quien se dio de baja tiene que poder leerla.
     match /dataRequests/{requestId} {
-      allow read: if can('handleDataRequests');
+      allow read: if isOwner(resource.data.subject.id) || can('handleDataRequests');
+    }
+
+    // ─── Compra ──────────────────────────────────────────────────────────
+
+    // Presupuesto (§14): el Carrito lee `customers/{uid}` solo al crearse; cada cambio de
+    // cantidad posterior no lee nada. El Pedido no lee ningún otro documento.
+
+    // Forma de §6.1: las dos claves del modelo, el sello de hora del Cliente y el tope de líneas.
+    function cartShape() {
+      return keysAre(['lines', 'updatedAt'])
+        && touched()
+        && request.resource.data.lines.size() <= 50;
+    }
+
+    // Forma de una línea: su Variante, la cantidad dentro del rango y la hora en que entró.
+    function cartLineIsValid(line) {
+      return mapKeysAre(line, ['productId', 'quantity', 'addedAt'])
+        && line.productId is string
+        && line.quantity is int
+        && line.quantity >= 1
+        && line.quantity <= 99;
+    }
+
+    // Líneas que cambian. Se diferencian los mapas `lines`, no los documentos: las claves del
+    // documento son siempre `lines` y `updatedAt`, así que diferenciarlo daría siempre 2 (§6.1).
+    function changedCartLines() {
+      return request.resource.data.lines.diff(resource.data.lines).affectedKeys();
+    }
+
+    // Valores de línea que no estaban antes. La clave cambiada no se puede nombrar, porque
+    // `affectedKeys()` da un Set y los Set no se indexan; `values()` sí da una List, que se
+    // indexa y admite `removeAll`.
+    function newCartLines() {
+      return request.resource.data.lines.values().removeAll(resource.data.lines.values());
+    }
+
+    // Una sola línea por escritura. Si la línea se quitó, o si su valor nuevo coincide con el de
+    // otra que ya estaba, no queda nada por revisar: ese valor ya pasó esta misma validación en
+    // su propia escritura, o lo escribió `mergeCart` desde el backend.
+    function oneValidCartLine() {
+      let lines = newCartLines();
+      return changedCartLines().size() == 1
+        && (lines.size() == 0 || cartLineIsValid(lines[0]));
+    }
+
+    // Solo el dueño, en las cuatro operaciones: ningún Rol del Panel lee el Carrito (§6.1).
+    // `mergeCart`, `createOrder` y `deleteMyAccount` lo tocan desde el backend, sin pasar por aquí.
+    match /carts/{uid} {
+      allow read: if isOwner(uid);
+
+      // Nace con su primera línea, o vacío.
+      allow create: if isOwner(uid)
+        && customerExists(uid)
+        && cartShape()
+        && (request.resource.data.lines.size() == 0
+          || (request.resource.data.lines.size() == 1
+            && cartLineIsValid(request.resource.data.lines.values()[0])));
+
+      // Una línea por escritura, o el vaciado completo. Quitar una línea es borrar su clave,
+      // que es como se expresa la cantidad 0.
+      allow update: if isOwner(uid)
+        && cartShape()
+        && (request.resource.data.lines.size() == 0 || oneValidCartLine());
+
+      allow delete: if isOwner(uid);
+    }
+
+    // El Pedido solo lo escribe el backend (ADR 0004): aquí no hay `allow write`. La regla del
+    // Cliente mira `customerId`, no `buyerUid`, así que obliga a filtrar la consulta por ese
+    // campo y deja invisible el Pedido que quedó desasociado al eliminar la cuenta, aunque la
+    // Cuenta conserve su `uid` por ser Empleado (§6.2).
+    match /orders/{orderId} {
+      allow read: if isOwner(resource.data.customerId) || can('viewOrders');
     }
 
     // ─── Configuración ───────────────────────────────────────────────────
@@ -377,11 +585,6 @@ service cloud.firestore {
     // documento que no existe es `create`. Se abren los dos, nunca el borrado.
     // Presupuesto (§14): la escritura de `settings/storefront` lee `employees/{uid}` y
     // `privacyNotices/{version}`; la del emisor, solo el Empleado.
-
-    // Claves exactas de un mapa anidado: ni de más ni de menos, como `keysAre` con el documento.
-    function mapKeysAre(value, fields) {
-      return value.keys().hasOnly(fields) && value.keys().hasAll(fields);
-    }
 
     function storefrontFields() {
       return ['shippingRates', 'shippingVatRateCode', 'paymentTimeouts', 'sinpeMovilNumber',
