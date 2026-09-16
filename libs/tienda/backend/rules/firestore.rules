@@ -104,6 +104,8 @@ service cloud.firestore {
     // Presupuesto (§14). Peor caso previsto, el batch de renombrado que además mueve la
     // Categoría: la escritura del Producto lee `employees/{uid}`, `categories/{categoryId}`
     // y `slugs/{nuevo}`; cada escritura del índice lee `employees/{uid}` y `products/{id}`.
+    // La escritura de una Variante lee `employees/{uid}` y `skus/{nuevo}`; cada escritura
+    // del índice de SKU lee `employees/{uid}` y la Variante.
     // Ninguna evaluación pasa de 4 documentos distintos.
 
     function productFields() {
@@ -152,6 +154,34 @@ service cloud.firestore {
 
     function productClaims(productId, slug) {
       return productAfter(productId).slug == slug;
+    }
+
+    function variantFields() {
+      return ['sku', 'price', 'optionValues', 'weightGrams', 'active', 'imageId', 'stock',
+        'hasHistory', 'createdAt', 'updatedAt', 'updatedBy'];
+    }
+
+    // Forma de la Variante: las claves del modelo y un SKU ya normalizado (mayúsculas, sin
+    // espacios), porque el mismo string es el id de `skus/{sku}`. La regla no normaliza:
+    // lo hace el Panel con `normalizeSku` de la librería compartida.
+    function variantShape() {
+      return keysAre(variantFields())
+        && request.resource.data.sku.matches('^[A-Z0-9][A-Z0-9._-]*$');
+    }
+
+    // El índice apunta a la Variante al terminar el batch, y la Variante reclama ese SKU.
+    function skuPointsTo(sku, productId, variantId) {
+      let index = getAfter(/databases/$(database)/documents/skus/$(sku)).data;
+      return index.productId == productId && index.variantId == variantId;
+    }
+
+    function variantAfter(productId, variantId) {
+      return getAfter(
+        /databases/$(database)/documents/products/$(productId)/variants/$(variantId)).data;
+    }
+
+    function variantClaims(productId, variantId, sku) {
+      return variantAfter(productId, variantId).sku == sku;
     }
 
     function categoryExists(categoryId) {
@@ -211,6 +241,28 @@ service cloud.firestore {
       match /variants/{variantId} {
         allow read: if get(/databases/$(database)/documents/products/$(productId)).data.status == 'published'
           || can('viewDraftsAndArchived');
+
+        // Nace en cero y sin historial: un "stock inicial" se registra como Entrada vía
+        // callable (ADR 0003). Reclama su SKU en el mismo batch.
+        allow create: if can('editProducts')
+          && stamped()
+          && variantShape()
+          && request.resource.data.stock == 0
+          && request.resource.data.hasHistory == false
+          && request.resource.data.createdAt == request.time
+          && skuPointsTo(request.resource.data.sku, productId, variantId);
+
+        // `stock` y `hasHistory` los mueve solo el backend. El SKU se edita mientras la
+        // Variante no tenga historial, y el índice nuevo va en el mismo batch (§3.2).
+        allow update: if can('editProducts')
+          && stamped()
+          && variantShape()
+          && !changed().hasAny(['stock', 'hasHistory', 'createdAt'])
+          && (!changed().hasAny(['sku'])
+            || (resource.data.hasHistory == false
+              && skuPointsTo(request.resource.data.sku, productId, variantId)));
+
+        // Sin borrado: borrar una Variante es cosa de `deleteVariant`.
       }
     }
 
@@ -247,6 +299,18 @@ service cloud.firestore {
     // El Panel verifica la disponibilidad del SKU.
     match /skus/{sku} {
       allow read: if isActiveEmployee();
+
+      // Se crea en el mismo batch que la Variante, solo si está libre (un `set` sobre uno
+      // existente es `update`, y no hay `allow update`) y solo si la Variante lo reclama.
+      allow create: if can('editProducts')
+        && keysAre(['productId', 'variantId'])
+        && variantClaims(request.resource.data.productId, request.resource.data.variantId, sku);
+
+      // Como en `slugs`: solo el índice viejo de un renombrado, y solo si la Variante ya no
+      // lo reclama y no tiene historial (§3.4, nota 5 de §13).
+      allow delete: if can('editProducts')
+        && !variantClaims(resource.data.productId, resource.data.variantId, sku)
+        && variantAfter(resource.data.productId, resource.data.variantId).hasHistory == false;
     }
 
     match /slugs/{slug} {

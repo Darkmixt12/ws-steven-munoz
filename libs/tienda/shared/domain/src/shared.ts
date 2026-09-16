@@ -32,3 +32,12 @@ export interface VariantRef {
   productId: string;
   variantId: string;
 }
+
+/**
+ * SKU normalizado: mayúsculas y sin espacios. Es el id de `skus/{sku}` y el valor que se
+ * guarda en la Variante, así que el Panel normaliza antes de escribir y la regla exige que
+ * los dos coincidan; las reglas no normalizan.
+ */
+export function normalizeSku(value: string): string {
+  return value.replace(/\s+/gu, '').toUpperCase();
+}
