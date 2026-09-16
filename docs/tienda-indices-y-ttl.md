@@ -25,8 +25,12 @@ proyecto Firebase de la tienda todavía no existe.
 **1. Los índices**, que sí sabe desplegar `firebase-tools`:
 
 ```sh
-npx nx run tienda-ops:deploy-indexes -- --project=<id-del-proyecto>
+npx nx run tienda-ops:deploy-indexes
 ```
+
+El comando lleva `--project tienda`, el alias de `.firebaserc`. Hasta #68 ese alias apunta a `demo-tienda-cr`, un
+id que solo existe en los emuladores, así que un despliegue por descuido falla en vez de acertarle al proyecto del
+CRM; #68 lo reemplaza por el id real.
 
 **2. El TTL**, que `firebase-tools` no sabe hacer: el script habla directo con la API Admin de Firestore
 (`PATCH …/collectionGroups/{colección}/fields/expiresAt?updateMask=ttlConfig`). Se autentica con Application

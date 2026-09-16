@@ -1,3 +1,5 @@
+import { isDevMode } from '@angular/core';
+
 /**
  * Configuración de Firebase de la tienda.
  *
@@ -9,7 +11,12 @@
  * Los puertos salen de `firebase.tienda.json`.
  */
 export const environment = {
-  useEmulators: true,
+  /**
+   * Los emuladores solo en desarrollo: `isDevMode()` es falso en una compilación de
+   * producción, así que el bundle desplegado nunca llama a `localhost`. Para trabajar
+   * contra los emuladores basta la configuración de omisión (`development`).
+   */
+  useEmulators: isDevMode(),
   firebase: {
     apiKey: 'demo-api-key', // marcador: #68
     authDomain: 'demo-tienda-cr.firebaseapp.com', // marcador: #68

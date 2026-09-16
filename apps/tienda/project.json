@@ -54,6 +54,13 @@
       },
       "defaultConfiguration": "development"
     },
+    "deploy-hosting": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "npx firebase deploy --config firebase.tienda.json --project tienda --only hosting"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint"
     },

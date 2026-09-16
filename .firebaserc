@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "steven-munoz-firebase"
+    "default": "steven-munoz-firebase",
+    "tienda": "demo-tienda-cr"
   }
 }

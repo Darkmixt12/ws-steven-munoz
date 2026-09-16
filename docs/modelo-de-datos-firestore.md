@@ -632,11 +632,11 @@ Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDay
 | `orders` | — | R⁹ | R | R | — | C U |
 | `counters` | — | — | — | — | — | R U |
 | `settings/storefront` | R | R | R U | R | R | — |
-| `settings/issuer` | — | — | R U | — | — | R |
+| `settings/issuer` | — | — | R C U¹⁰ | — | — | R |
 | `privacyNotices` | R | R | R C | R | R | — |
 | `salesDaily` | — | — | R | R | R | C U |
 | `auditEvents` | — | — | R | — | — | C (TTL borra) |
-| `notifications` | — | — | R | R¹⁰ | — | C U (TTL borra) |
+| `notifications` | — | — | R | R¹¹ | — | C U (TTL borra) |
 
 1. Solo `status == 'published'`; la consulta debe filtrarlo.
 2. Solo `summary` y `hasHistory`; borrar, por `deleteProduct`.
@@ -647,7 +647,8 @@ Las consultas por un solo campo (`paymentConfirmedAt`, `cancelledAt`, `returnDay
 7. Solo su propio documento. El Administrador lee todos, incluido el suyo.
 8. Solo `expiresAt`.
 9. Solo los suyos (`customerId == uid`).
-10. Solo las de Pedidos (`ref.collection == 'orders'`); la consulta debe filtrarlo. El reenvío es por `resendNotification`.
+10. `C` solo la primera vez: `settings/issuer` no se siembra, y un `set` sobre un documento que no existe es `create`. `settings/storefront` sí se siembra, y por eso no lleva `C`.
+11. Solo las de Pedidos (`ref.collection == 'orders'`); la consulta debe filtrarlo. El reenvío es por `resendNotification`.
 
 ## 14. Presupuesto de reglas
 

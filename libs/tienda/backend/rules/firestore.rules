@@ -580,9 +580,10 @@ service cloud.firestore {
     // ─── Configuración ───────────────────────────────────────────────────
 
     // Toda la Configuración la escribe el Administrador ("Configuración") directo, y la audita
-    // el trigger. La matriz §13 solo le da `U`, pero `settings/issuer` no tiene semilla: sin
-    // `create` nadie podría llenarlo la primera vez desde el Panel, porque un `set` sobre un
-    // documento que no existe es `create`. Se abren los dos, nunca el borrado.
+    // el trigger. `settings/storefront` lo siembra #67, así que solo se actualiza, como dice la
+    // matriz §13. `settings/issuer` no tiene semilla: sin `create` nadie podría llenarlo la
+    // primera vez desde el Panel, porque un `set` sobre un documento que no existe es `create`,
+    // y por eso la §13 le da `C`. Nunca el borrado.
     // Presupuesto (§14): la escritura de `settings/storefront` lee `employees/{uid}` y
     // `privacyNotices/{version}`; la del emisor, solo el Empleado.
 
@@ -641,7 +642,7 @@ service cloud.firestore {
     match /settings/storefront {
       allow read: if true;
 
-      allow create, update: if can('manageSettings')
+      allow update: if can('manageSettings')
         && stamped()
         && storefrontShape();
     }

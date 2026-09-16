@@ -379,7 +379,8 @@ describe('as the administrator', () => {
   });
 
   // `settings/issuer` no tiene semilla: el Administrador lo llena desde el Panel, y eso es un
-  // `create`, no un `update`.
+  // `create`, no un `update`. `settings/storefront` sí la tiene (#67), así que la §13 no le da
+  // `C` y la regla no lo deja crear ni siquiera con la base vacía.
   describe('creating the configuration the first time', () => {
     let emptyDb: Firestore;
 
@@ -395,8 +396,8 @@ describe('as the administrator', () => {
       await assertSucceeds(setDoc(doc(emptyDb, 'settings/issuer'), newIssuer(uid)));
     });
 
-    it('creates the storefront settings', async () => {
-      await assertSucceeds(setDoc(doc(emptyDb, 'settings/storefront'), newStorefront(uid)));
+    it('cannot create the storefront settings, which the seed already wrote', async () => {
+      await assertFails(setDoc(doc(emptyDb, 'settings/storefront'), newStorefront(uid)));
     });
 
     it('still rejects an invalid shape', async () => {
